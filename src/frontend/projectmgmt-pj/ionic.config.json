@@ -1,0 +1,7 @@
+{
+  "name": "projectmgmt-pj",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
