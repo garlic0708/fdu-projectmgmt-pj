@@ -11,20 +11,16 @@ import { EventsNearbyPageModule } from "../pages/events-nearby/events-nearby.mod
 import { NotifListPageModule } from "../pages/notif-list/notif-list.module";
 import { PersonalPageModule } from "../pages/personal/personal.module";
 import { SuperTabsModule } from "ionic2-super-tabs";
+import { StartupPageModule } from "../pages/startup/startup.module";
 
 @NgModule({
   declarations: [
     MyApp,
   ],
   imports: [
-    HomePageModule,
-    EventDetailPageModule,
-    EventsNearbyPageModule,
-    NotifListPageModule,
-    PersonalPageModule,
+    StartupPageModule,
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    SuperTabsModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

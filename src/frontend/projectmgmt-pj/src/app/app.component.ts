@@ -8,15 +8,14 @@ import { HomePage } from "../pages/home/home";
 import { EventsNearbyPage } from "../pages/events-nearby/events-nearby";
 import { NotifListPage } from "../pages/notif-list/notif-list";
 import { PersonalPage } from "../pages/personal/personal";
+import { StartupPage } from "../pages/startup/startup";
 
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  @ViewChild(Nav) nav: Nav;
-
-  pages: Array<{title: string, component: any}>;
+  rootPage: any = StartupPage;
 
   constructor(
     public platform: Platform,
@@ -24,14 +23,6 @@ export class MyApp {
     public splashScreen: SplashScreen
   ) {
     this.initializeApp();
-
-    // set our app's pages
-    this.pages = [
-      { title: '主页', component: HomePage },
-      { title: '附近', component: EventsNearbyPage },
-      { title: '消息列表', component: NotifListPage },
-      { title: '我的', component: PersonalPage },
-    ];
   }
 
   initializeApp() {
