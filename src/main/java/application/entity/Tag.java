@@ -1,9 +1,6 @@
 package application.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Creator: DreamBoy
@@ -15,6 +12,7 @@ public class Tag {
     private String tagname;
 
     @Id
+    @GeneratedValue
     @Column(name = "t_id")
     public int gettId() {
         return tId;

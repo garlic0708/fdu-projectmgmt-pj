@@ -29,4 +29,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query(value = "select * from user", nativeQuery = true)
     List<User> allStudents();
+
 }

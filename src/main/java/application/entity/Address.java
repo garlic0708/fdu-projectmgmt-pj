@@ -1,9 +1,6 @@
 package application.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Creator: DreamBoy
@@ -17,6 +14,7 @@ public class Address {
     private Double positionY;
 
     @Id
+    @GeneratedValue
     @Column(name = "addr_id")
     public int getAddrId() {
         return addrId;

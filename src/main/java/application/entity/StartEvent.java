@@ -14,6 +14,7 @@ public class StartEvent {
     private Integer eId;
 
     @Id
+    @GeneratedValue
     @Column(name = "se_id")
     public int getSeId() {
         return seId;

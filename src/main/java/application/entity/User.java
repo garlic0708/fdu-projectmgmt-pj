@@ -1,9 +1,6 @@
 package application.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Creator: DreamBoy
@@ -19,6 +16,7 @@ public class User {
     private String image;
 
     @Id
+    @GeneratedValue
     @Column(name = "u_id")
     public int getuId() {
         return uId;

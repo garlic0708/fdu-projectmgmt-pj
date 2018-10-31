@@ -14,6 +14,7 @@ public class EventTag {
     private Integer tId;
 
     @Id
+    @GeneratedValue
     @Column(name = "et_id")
     public int getEtId() {
         return etId;

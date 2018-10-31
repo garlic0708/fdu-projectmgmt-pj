@@ -33,11 +33,11 @@ public class UserRepositoryTest {
         User user = new User();
         user.setUsername("txh");
         userRepository.save(user);
-//        User user2 = new User();
-//        user2.setUsername("hxt");
-//        userRepository.save(user2);
+        User user2 = new User();
+        user2.setUsername("hxt");
+        userRepository.save(user2);
 
-        assertEquals(userRepository.allStudents().size(),1 );
+        assertEquals(userRepository.allStudents().size(),2 );
     }
 
 

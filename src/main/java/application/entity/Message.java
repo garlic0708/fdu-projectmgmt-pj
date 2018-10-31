@@ -1,9 +1,6 @@
 package application.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Creator: DreamBoy
@@ -18,6 +15,7 @@ public class Message {
     private String messagestate;
 
     @Id
+    @GeneratedValue
     @Column(name = "m_id")
     public int getmId() {
         return mId;

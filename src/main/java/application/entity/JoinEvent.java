@@ -15,6 +15,7 @@ public class JoinEvent {
     private String jeState;
 
     @Id
+    @GeneratedValue
     @Column(name = "je_id")
     public int getJeId() {
         return jeId;
