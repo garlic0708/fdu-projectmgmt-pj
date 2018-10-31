@@ -6,31 +6,37 @@ import application.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 /**
  * Creator: DreamBoy
  * Date: 2018/10/31.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = {SpringBootWebApplication.class})
+@RunWith(SpringRunner.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = NONE)
 public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
     @Test
+    // 测试的时候记得加上rollback,数据库不应该留下测试的内容
     @Rollback()
     public void findByUId() throws Exception {
         User user = new User();
         user.setUsername("txh");
-        user = userRepository.save(user);
-        User test = userRepository.findByUId(user.getuId());
+        user.setEmail("test@163.com");
+        user.setPassword("123456");
+        userRepository.save(user);
+        User test = userRepository.findByEmailAndPassword("test@163.com", "123456");
         assertEquals(test.getUsername(), "txh");
     }
 
