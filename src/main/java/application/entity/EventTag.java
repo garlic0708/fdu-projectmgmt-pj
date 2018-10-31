@@ -7,7 +7,7 @@ import javax.persistence.*;
  * Date: 2018/10/31.
  */
 @Entity
-@Table(name = "event_tag", schema = "yueya", catalog = "")
+@Table(name = "event_tag", schema = "yueya")
 public class EventTag {
     private int etId;
     private Integer eId;
