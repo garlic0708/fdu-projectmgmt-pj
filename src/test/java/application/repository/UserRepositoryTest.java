@@ -39,5 +39,4 @@ public class UserRepositoryTest {
         User test = userRepository.findByEmailAndPassword("test@163.com", "123456");
         assertEquals(test.getUsername(), "txh");
     }
-
 }
