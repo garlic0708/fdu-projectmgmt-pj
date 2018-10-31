@@ -28,6 +28,21 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
+    @Rollback
+    public void allStudents() throws Exception {
+        User user = new User();
+        user.setUsername("txh");
+        userRepository.save(user);
+//        User user2 = new User();
+//        user2.setUsername("hxt");
+//        userRepository.save(user2);
+
+        assertEquals(userRepository.allStudents().size(),1 );
+    }
+
+
+
+    @Test
     // 测试的时候记得加上rollback,数据库不应该留下测试的内容
     @Rollback()
     public void findByUId() throws Exception {
