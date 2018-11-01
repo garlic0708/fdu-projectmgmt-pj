@@ -45,7 +45,7 @@ public class UserRepositoryTest {
     @Test
     // 测试的时候记得加上rollback,数据库不应该留下测试的内容
     @Rollback()
-    public void findByUId() throws Exception {
+    public void findByEmailAndPassword() throws Exception {
         User user = new User();
         user.setUsername("txh");
         user.setEmail("test@163.com");
