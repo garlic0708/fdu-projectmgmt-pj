@@ -15,14 +15,24 @@ import {lbs_msg} from "../../lbs_msg";
 
 @IonicPage()
 declare var AMap;
-declare var LocationPlugin;
+var self_location=[];
+var map;
+function show_self(){
+  var marker = new AMap.Marker({
+    position: new AMap.LngLat(self_location[0]*1, self_location[1]*1),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+  });
+
+// 将创建的点标记添加到已有的地图实例：
+  map.add(marker);
+  map.setZoomAndCenter(17, [self_location[0]*1, self_location[1]*1]);
+}
 @Component({
   selector: 'page-events-nearby',
   templateUrl: 'events-nearby.html',
 })
 export class EventsNearbyPage {
   @ViewChild('map_container') map_container: ElementRef;
-  map: any;//地图对象
+
 
   searchQuery: string = '';
   items: lbs_msg[];
@@ -63,7 +73,7 @@ export class EventsNearbyPage {
 
 
   ionViewDidLoad() {
-    this.map = new AMap.Map(this.map_container.nativeElement, {
+    map = new AMap.Map(this.map_container.nativeElement, {
       view: new AMap.View2D({//创建地图二维视口
         zoom: 11, //设置地图缩放级别
         rotateEnable: true,
@@ -73,6 +83,7 @@ export class EventsNearbyPage {
     console.log('ionViewDidLoad EventsNearbyPage');
 
   }
+
 
   showLoaction(item: lbs_msg){
     console.log(item.location.indexOf(","));
@@ -85,22 +96,33 @@ export class EventsNearbyPage {
     });
 
 // 将创建的点标记添加到已有的地图实例：
-    this.map.add(marker);
-    this.map.setZoomAndCenter(17, [x*1, y*1]);
+    map.add(marker);
+    map.setZoomAndCenter(17, [x*1, y*1]);
 
   }
   showSelfLocation(){
-    LocationPlugin.getLocation(data=>{
-      alert(JSON.stringify(data));
-    },msg=>{
-      alert(JSON.stringify(msg));
-    });
-  }
-  onComplete(data) {
-    console.log(data.position);
-  }
-  onError(data) {
+    var geolocation = new AMap.Geolocation({
+      enableHighAccuracy: true,//是否使用高精度定位，默认:true
+      timeout: 10000,          //超过10秒后停止定位，默认：5s
+      buttonPosition:'RB',    //定位按钮的停靠位置
+      buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+      zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
 
+    });
+    map.addControl(geolocation);
+    geolocation.getCurrentPosition(function(status,result){
+      if(status=='complete'){
+        console.log(result);
+        var a =JSON.stringify(result);
+        a = JSON.parse(a);
+        console.log(a);
+        console.log(a.position.N);
+        self_location=[];
+        self_location.push(a.position.N,a.position.O);
+        console.log(self_location);
+        show_self();
+      }
+    });
   }
 
 }
