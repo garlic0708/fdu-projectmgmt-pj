@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { DataProvider } from "../../providers/data/data";
+import { Observable } from "rxjs";
 
 /**
  * Generated class for the EventDetailPage page.
@@ -15,7 +17,19 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class EventDetailPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  detail: Observable<any>;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private data: DataProvider,
+              private loading: LoadingController) {
+    let loadingView = this.loading.create({content: '加载中……'});
+    loadingView.present();
+    this.detail = this.data.getDetail(this.navParams.get('eventId')).pipe(
+      detail => {
+        loadingView.dismiss();
+        return detail
+      }
+    );
   }
 
   ionViewDidLoad() {
