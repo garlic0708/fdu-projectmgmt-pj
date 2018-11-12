@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { App, IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { EventDetailPage } from "../event-detail/event-detail";
 
 /**
@@ -16,16 +16,25 @@ import { EventDetailPage } from "../event-detail/event-detail";
 })
 export class HomePage {
 
+  imgs: Array<{ path: string, title: string }>; // todo
+
+  @ViewChild(Slides) slides: Slides;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private appCtrl: App) {
+    this.imgs = [
+      {path: './assets/imgs/logo.png', title: 'Title 1'},
+      {path: './assets/imgs/logo.png', title: 'Title 2'},
+      {path: './assets/imgs/logo.png', title: 'Title 3'},
+    ];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
   }
 
-  test() {
-    this.appCtrl.getRootNav().push(EventDetailPage)
+  goToEventDetail(id) {
+    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
   }
 
 }

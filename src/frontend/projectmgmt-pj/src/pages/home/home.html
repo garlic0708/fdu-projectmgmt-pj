@@ -14,5 +14,11 @@
 
 
 <ion-content padding>
-  <button ion-button (click)="test()">Push</button>
+  <ion-slides [loop]="true" [autoplay]="2000">
+    <ion-slide *ngFor="let img of imgs">
+      <img src="{{img.path}}"> <!-- todo -->
+      <p>{{img.title}}</p>
+    </ion-slide>
+  </ion-slides>
+  <button ion-button (click)="goToEventDetail(1)">Go to detail</button>
 </ion-content>

@@ -14,5 +14,8 @@
 
 
 <ion-content padding>
-
+  <ion-list *ngIf="detail | async as _detail">
+    <ion-item><img src="{{_detail.image}}"></ion-item>
+    <ion-item></ion-item>
+  </ion-list>
 </ion-content>
