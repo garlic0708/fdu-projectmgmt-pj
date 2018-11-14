@@ -61,6 +61,18 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     List<Event> listEvents();
 
     /**
+     * 通过两组xy坐标，找到在该坐标内的活动列表
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return 活动列表
+     */
+    @Query(value = "SELECT * FROM event INNER JOIN address on event.address = address.addr_id " +
+            "WHERE positionX > ? AND positionY > ? AND positionX < ? AND positionY < ?" ,nativeQuery = true)
+    List<Event> getEventsInASquare(double x1, double y1, double x2, double y2);
+
+    /**
      * 根据eId删除活动
      *
      * @param eId
