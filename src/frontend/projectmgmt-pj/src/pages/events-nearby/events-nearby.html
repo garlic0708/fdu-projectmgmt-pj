@@ -14,12 +14,8 @@
 
 
 <ion-content padding>
+  <!--<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>-->
+  <ion-searchbar #searchbar (ionFocus)="goLocation_search()" placeholder={{searchbar_value}}></ion-searchbar>
   <div #map_container class="map_container"></div>
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-  <ion-list>
-    <ion-item *ngFor="let item of items" onclick>
-      <a (click)="showLoaction(item)">{{ item.name }}</a>
-    </ion-item>
-  </ion-list>
-  <ion-icon name="ios-paper-plane" (click)="showSelfLocation()"></ion-icon>
+  <!--<ion-icon name="ios-paper-plane" (click)="showSelfLocation()"></ion-icon>-->
 </ion-content>

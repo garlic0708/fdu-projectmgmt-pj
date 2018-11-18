@@ -14,11 +14,12 @@ import { NotifListPageModule } from "../pages/notif-list/notif-list.module";
 import { PersonalPageModule } from "../pages/personal/personal.module";
 import { SuperTabsModule } from "ionic2-super-tabs";
 import { StartupPageModule } from "../pages/startup/startup.module";
-
+import { LocationSearchPage } from "../pages/location-search/location-search";
 
 @NgModule({
   declarations: [
     MyApp,
+    LocationSearchPage,
   ],
   imports: [
     StartupPageModule,
@@ -30,6 +31,7 @@ import { StartupPageModule } from "../pages/startup/startup.module";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LocationSearchPage,
   ],
   providers: [
     StatusBar,
