@@ -14,11 +14,32 @@
 
 
 <ion-content padding>
-  <ion-slides [loop]="true" [autoplay]="2000">
-    <ion-slide *ngFor="let img of imgs">
-      <img src="{{img.path}}"> <!-- todo -->
-      <p>{{img.title}}</p>
-    </ion-slide>
-  </ion-slides>
-  <button ion-button (click)="goToEventDetail(1)">Go to detail</button>
+  <div class="slides-container">
+    <ion-slides pager loop="true" class="aspect-ratio-inner">
+      <ion-slide *ngFor="let slideItem of slideItems | async"
+                 (click)="goToEventDetail(slideItem.id)">
+        <!--<div class="aspect-ratio-inner">-->
+        <div class="flexbox-center">
+          <img-loader src="{{slideItem.path}}" useImg></img-loader>
+        </div>
+        <p class="slides-title">{{slideItem.title}}</p>
+        <!--</div>-->
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <div class="flow-container">
+    <ion-card class="flow-item" *ngFor="let flowItem of flowItems | async"
+              (click)="goToEventDetail(flowItem.id)">
+      <div class="flow-item-image">
+        <div class="aspect-ratio-inner">
+          <div class="flexbox-center">
+            <img-loader src="{{flowItem.path}}" useImg></img-loader>
+          </div>
+        </div>
+      </div>
+      <ion-card-content>
+        {{flowItem.title}}
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

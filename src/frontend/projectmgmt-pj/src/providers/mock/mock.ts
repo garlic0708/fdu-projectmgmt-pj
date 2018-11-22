@@ -22,8 +22,8 @@ import escapeRegExp from 'lodash/escapeRegExp'
 @Injectable()
 export class MockProvider implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.startsWith("http"))
-      return next.handle(req);
+    // if (req.url.startsWith("http"))
+    //   return next.handle(req);
     // console.log(req);
     const key = `${req.method} ${req.url}`;
     const mockDatum = mockData[

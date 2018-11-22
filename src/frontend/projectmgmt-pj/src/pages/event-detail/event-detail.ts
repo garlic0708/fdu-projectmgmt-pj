@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataProvider } from "../../providers/data/data";
-import { Observable } from "rxjs";
+import { Observable} from "rxjs";
+import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
+import * as moment from 'moment';
 
 /**
  * Generated class for the EventDetailPage page.
@@ -21,16 +23,13 @@ export class EventDetailPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private data: DataProvider,
-              private loading: LoadingController) {
-    let loadingView = this.loading.create({content: '加载中……'});
-    loadingView.present();
-    this.detail = this.data.getDetail(this.navParams.get('eventId')).pipe(
-      detail => {
-        loadingView.dismiss();
-        return detail
-      }
-    );
+              private loading: LoadingCoverProvider) {
+    [this.detail] = this.loading.fetchData(this.data.getDetail(this.navParams.get('eventId')));
   }
+
+  formatTime = (utcTime) => {
+    return moment(utcTime).format('YYYY-MM-DD HH:mm')
+  };
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventDetailPage');

@@ -7,6 +7,7 @@ import { EventsNearbyPageModule } from "../events-nearby/events-nearby.module";
 import { NotifListPageModule } from "../notif-list/notif-list.module";
 import { PersonalPageModule } from "../personal/personal.module";
 import { SuperTabsModule } from "ionic2-super-tabs";
+import { NewEventPageModule } from "../new-event/new-event.module";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SuperTabsModule } from "ionic2-super-tabs";
     HomePageModule,
     EventDetailPageModule,
     EventsNearbyPageModule,
+    NewEventPageModule,
     NotifListPageModule,
     PersonalPageModule,
     IonicPageModule.forChild(StartupPage),

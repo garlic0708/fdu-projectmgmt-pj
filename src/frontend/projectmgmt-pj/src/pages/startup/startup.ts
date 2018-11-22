@@ -4,6 +4,7 @@ import { HomePage } from "../home/home";
 import { EventsNearbyPage } from "../events-nearby/events-nearby";
 import { NotifListPage } from "../notif-list/notif-list";
 import { PersonalPage } from "../personal/personal";
+import { NewEventPage } from "../new-event/new-event";
 
 /**
  * Generated class for the StartupPage page.
@@ -18,15 +19,16 @@ import { PersonalPage } from "../personal/personal";
   templateUrl: 'startup.html',
 })
 export class StartupPage {
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any, tabIcon: string }>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // set our app's pages
     this.pages = [
-      { title: '主页', component: HomePage },
-      { title: '附近', component: EventsNearbyPage },
-      { title: '消息列表', component: NotifListPage },
-      { title: '我的', component: PersonalPage },
+      { title: '主页', component: HomePage, tabIcon: 'home' },
+      { title: '附近', component: EventsNearbyPage, tabIcon: 'pin' },
+      { title: '新建活动', component: NewEventPage, tabIcon: 'add' },
+      { title: '消息列表', component: NotifListPage, tabIcon: 'notifications' },
+      { title: '我的', component: PersonalPage, tabIcon: 'person' },
     ];
   }
 
