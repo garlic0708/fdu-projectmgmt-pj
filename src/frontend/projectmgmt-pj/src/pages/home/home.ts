@@ -1,6 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { App, IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { EventDetailPage } from "../event-detail/event-detail";
+import { Observable, Subject } from "rxjs";
+import { DataProvider } from "../../providers/data/data";
+import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
+import { EventPreview } from "./event-preview";
 
 /**
  * Generated class for the HomePage page.
@@ -16,17 +20,17 @@ import { EventDetailPage } from "../event-detail/event-detail";
 })
 export class HomePage {
 
-  imgs: Array<{ path: string, title: string }>; // todo
+  slideItems: Observable<EventPreview[]>;
+  flowItems: Observable<EventPreview[]>;
 
   @ViewChild(Slides) slides: Slides;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private appCtrl: App) {
-    this.imgs = [
-      {path: './assets/imgs/logo.png', title: 'Title 1'},
-      {path: './assets/imgs/logo.png', title: 'Title 2'},
-      {path: './assets/imgs/logo.png', title: 'Title 3'},
-    ];
+              private appCtrl: App,
+              private data: DataProvider,
+              private loading: LoadingCoverProvider) {
+    [this.slideItems, this.flowItems] =
+      this.loading.fetchData(this.data.getHomeSlides(), this.data.getHomeFlow());
   }
 
   ionViewDidLoad() {

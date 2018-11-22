@@ -10,6 +10,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { StartupPageModule } from "../pages/startup/startup.module";
 import { MockProvider } from '../providers/mock/mock';
 import { DataProvider } from "../providers/data/data";
+import { IonicImageLoader } from "ionic-image-loader";
+import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
+import { ComponentsModule } from "../components/components.module";
+import { ImagePicker } from "@ionic-native/image-picker";
 
 
 @NgModule({
@@ -17,10 +21,11 @@ import { DataProvider } from "../providers/data/data";
     MyApp,
   ],
   imports: [
+    IonicModule.forRoot(MyApp),
     StartupPageModule,
     BrowserModule,
+    IonicImageLoader.forRoot(),
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -33,9 +38,11 @@ import { DataProvider } from "../providers/data/data";
       multi: true,
     },
     DataProvider,
+    ImagePicker,
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+    LoadingCoverProvider,
   ]
 })
 export class AppModule {
