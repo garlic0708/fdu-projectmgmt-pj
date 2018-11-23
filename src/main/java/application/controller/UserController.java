@@ -20,7 +20,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> getUsers() {
         return (userService.getAllUsers());

@@ -28,10 +28,10 @@ public class UserRepositoryTest {
     @Rollback
     public void allStudents() throws Exception {
         User user = new User();
-        user.setUsername("txh");
+        user.setNickname("txh");
         userRepository.save(user);
         User user2 = new User();
-        user2.setUsername("hxt");
+        user2.setNickname("hxt");
         userRepository.save(user2);
 
         assertEquals(userRepository.allStudents().size(),2 );
@@ -44,7 +44,7 @@ public class UserRepositoryTest {
     @Rollback()
     public void findByEmailAndPassword() throws Exception {
         User user = new User();
-        user.setUsername("txh");
+        user.setNickname("txh");
         user.setEmail("test@163.com");
         user.setPassword("123456");
         userRepository.save(user);

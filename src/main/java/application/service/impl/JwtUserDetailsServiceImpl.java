@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * Creator: DreamBoy
  * Date: 2018/11/23.
@@ -20,12 +22,12 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //虽然看起来很不舒服，但必须接受，我们的App使用email和password，但是官方API是username
-        User user = userRepository.findByEmail(username);
+        Optional<User> user = userRepository.findByEmail(username);
 
-        if (user == null) {
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException(String.format("No user found with email '%s'.", username));
         } else {
-            return JwtUserFactory.create(user);
+            return JwtUserFactory.create(user.get());
         }
     }
 }

@@ -3,16 +3,16 @@ package application.controller;
 import application.controller.security.JwtAuthenticationRequest;
 import application.controller.security.JwtAuthenticationResponse;
 import application.entity.User;
+import application.exception.RegisterException;
 import application.service.AuthService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Creator: DreamBoy
@@ -23,16 +23,27 @@ public class AuthController {
     @Value("${jwt.header}")
     private String tokenHeader;
 
-    @Autowired
     private AuthService authService;
+
+
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
 
     @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
-        final String token = authService.login(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+        try {
+            final String token = authService.login(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
-        // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+            // Return the token
+            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        }
+        catch (BadCredentialsException e) {
+            return ResponseEntity.status(401).body("Bad email or password");
+        }
     }
 
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
@@ -48,7 +59,13 @@ public class AuthController {
     }
 
     @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
-    public User register(@RequestBody User addedUser) throws AuthenticationException{
-        return authService.register(addedUser);
+    public ResponseEntity<?> register(@RequestBody User addedUser) throws AuthenticationException{
+        try {
+            authService.register(addedUser);
+            return ResponseEntity.ok("register success");
+        }
+        catch (RegisterException e) {
+            return ResponseEntity.status(422).body(e.getMessage());
+        }
     }
 }

@@ -1,18 +1,16 @@
 package application.service.impl;
 
 
-import application.config.JwtTokenUtil;
+import application.component.JwtTokenUtil;
 import application.entity.User;
-import application.entity.userSecurity.JwtUser;
 import application.entity.userSecurity.Role;
+import application.exception.RegisterException;
 import application.repository.UserRepository;
 import application.service.AuthService;
-import org.apache.catalina.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,6 +33,9 @@ public class AuthServiceImpl implements AuthService {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    @Value("${emails}")
+    private String[] emails;
+
     @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
@@ -48,15 +49,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User register(User userToAdd) {
+    public void register(User userToAdd) throws RegisterException{
         final String email = userToAdd.getEmail();
+        if (validateEmailFormat(email))
+            throw new RegisterException("Email format is wrong");
+        if (validateEmailSource(email))
+            throw new RegisterException("Email domain is wrong");
         if (userRepository.findByEmail(email) != null)
-            return null;
+            throw new RegisterException("Email already exists");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String password = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(password));
         userToAdd.setRole(Role.USER);
-        return userRepository.save(userToAdd);
+        userRepository.save(userToAdd);
     }
 
     @Override
@@ -64,6 +69,7 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken uptoken = new UsernamePasswordAuthenticationToken(email, password);
         final Authentication authentication = authenticationManager.authenticate(uptoken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String token = jwtTokenUtil.generateToken(userDetails);
@@ -76,5 +82,18 @@ public class AuthServiceImpl implements AuthService {
         final String token = oldToken.substring(tokenHead.length());
         return jwtTokenUtil.refreshToken(token);
 
+    }
+
+    private boolean validateEmailFormat(String email) {
+        final String format = "\\w+@\\w+(\\.\\w{2,3})*\\.\\w{2,3}";
+        return email.matches(format);
+    }
+
+    private boolean validateEmailSource(String email) {
+        for (String sourceEmail: emails) {
+            if (email.endsWith(sourceEmail))
+                return true;
+        }
+        return false;
     }
 }

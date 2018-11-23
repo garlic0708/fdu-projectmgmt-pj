@@ -1,4 +1,4 @@
-package application.config;
+package application.component;
 
 import application.entity.userSecurity.JwtUser;
 import io.jsonwebtoken.Claims;

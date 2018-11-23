@@ -8,6 +8,9 @@ spring:
   jackson:
     serialization:
       INDENT_OUTPUT: true
+  datasource:
+    dbcp2:
+      fast-fail-validation:
 #  data.mongodb:
 #    host: localhost
 #    port: 27017
@@ -20,10 +23,13 @@ logging:
       data: DEBUG
       security: DEBUG
 
+#
+emails: ["@fudan.edu.cn"]
+
 # JWT
 jwt:
   header: Authorization
-  secret: mySecret
+  secret: "fduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpj"
   expiration: 604800
   tokenHead: "Bearer "
   route:

@@ -16,7 +16,7 @@ public class User {
     private int uId;
     private String email;
     private String password;
-    private String username;
+    private String nickname;
     private Integer vredict;
     private String image;
     private Role role;
@@ -56,13 +56,13 @@ public class User {
     }
 
     @Basic
-    @Column(name = "username")
-    public String getUsername() {
-        return username;
+    @Column(name = "nickname")
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String username) {
+        this.nickname = username;
     }
 
     @Basic
@@ -105,7 +105,7 @@ public class User {
         if (uId != user.uId) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (nickname != null ? !nickname.equals(user.nickname) : user.nickname != null) return false;
         if (vredict != null ? !vredict.equals(user.vredict) : user.vredict != null) return false;
         if (image != null ? !image.equals(user.image) : user.image != null) return false;
         if (role != null ? !role.equals(user.role) : user.role != null) return false;
@@ -118,7 +118,7 @@ public class User {
         int result = uId;
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
         result = 31 * result + (vredict != null ? vredict.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
