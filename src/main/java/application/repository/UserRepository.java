@@ -27,6 +27,13 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User findByUsername(String username);
 
     /**
+     *
+     * @param email
+     * @return
+     */
+    User findByEmail(String email);
+
+    /**
      * 通过email和password返回用户
      * @param email
      * @param password
