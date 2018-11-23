@@ -14,6 +14,19 @@ page-new-event {
   .slide-from-above {
     height: 65px;
     transition: all 0.5s;
+
+    .item-inner {
+      padding-right: 0 !important;
+    }
+
+    .label-md {
+      max-width: 0;
+      margin: 0;
+    }
+
+    .stepper-container {
+      width: 100%;
+    }
   }
 
   .slide-from-above.collapsed {

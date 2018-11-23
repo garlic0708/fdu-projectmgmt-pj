@@ -3,6 +3,10 @@ page-home {
     @include aspect-ratio-center
   }
 
+  .slides-container {
+    margin-bottom: 20px;
+  }
+
   .slides-title {
     position: absolute;
     left: 0;
