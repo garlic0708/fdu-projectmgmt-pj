@@ -1,10 +1,15 @@
 package application.entity;
 
-import javax.persistence.*;
+import application.entity.userSecurity.Role;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * Creator: DreamBoy
- * Date: 2018/10/31.
+ * Date: 2018/11/23.
  */
 @Entity
 public class User {
@@ -14,9 +19,13 @@ public class User {
     private String username;
     private Integer vredict;
     private String image;
+    private Role role;
+
+    public User() {
+        this.role = Role.USER;
+    }
 
     @Id
-    @GeneratedValue
     @Column(name = "u_id")
     public int getuId() {
         return uId;
@@ -76,6 +85,16 @@ public class User {
         this.image = image;
     }
 
+    @Basic
+    @Column(name = "role")
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +108,7 @@ public class User {
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
         if (vredict != null ? !vredict.equals(user.vredict) : user.vredict != null) return false;
         if (image != null ? !image.equals(user.image) : user.image != null) return false;
+        if (role != null ? !role.equals(user.role) : user.role != null) return false;
 
         return true;
     }
@@ -101,6 +121,7 @@ public class User {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (vredict != null ? vredict.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 }

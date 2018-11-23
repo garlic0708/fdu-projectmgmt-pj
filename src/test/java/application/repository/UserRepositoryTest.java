@@ -1,16 +1,13 @@
 package application.repository;
 
-import application.SpringBootWebApplication;
-
 import application.entity.User;
+import application.entity.userSecurity.Role;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -52,6 +49,6 @@ public class UserRepositoryTest {
         user.setPassword("123456");
         userRepository.save(user);
         User test = userRepository.findByEmailAndPassword("test@163.com", "123456");
-        assertEquals(test.getUsername(), "txh");
+        assertEquals(test.getRole(), Role.USER);
     }
 }

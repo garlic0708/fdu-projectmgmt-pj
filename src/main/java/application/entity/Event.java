@@ -1,11 +1,14 @@
 package application.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 /**
  * Creator: DreamBoy
- * Date: 2018/10/31.
+ * Date: 2018/11/23.
  */
 @Entity
 public class Event {
@@ -17,9 +20,12 @@ public class Event {
     private Integer address;
     private Integer initiator;
     private String eventstate;
+    private Byte limited;
+    private Integer credictLimit;
+    private Integer upperLimit;
+    private Integer lowerLimit;
 
     @Id
-    @GeneratedValue
     @Column(name = "e_id")
     public int geteId() {
         return eId;
@@ -99,6 +105,46 @@ public class Event {
         this.eventstate = eventstate;
     }
 
+    @Basic
+    @Column(name = "limited")
+    public Byte getLimited() {
+        return limited;
+    }
+
+    public void setLimited(Byte limited) {
+        this.limited = limited;
+    }
+
+    @Basic
+    @Column(name = "credictLimit")
+    public Integer getCredictLimit() {
+        return credictLimit;
+    }
+
+    public void setCredictLimit(Integer credictLimit) {
+        this.credictLimit = credictLimit;
+    }
+
+    @Basic
+    @Column(name = "upperLimit")
+    public Integer getUpperLimit() {
+        return upperLimit;
+    }
+
+    public void setUpperLimit(Integer upperLimit) {
+        this.upperLimit = upperLimit;
+    }
+
+    @Basic
+    @Column(name = "lowerLimit")
+    public Integer getLowerLimit() {
+        return lowerLimit;
+    }
+
+    public void setLowerLimit(Integer lowerLimit) {
+        this.lowerLimit = lowerLimit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,6 +160,10 @@ public class Event {
         if (address != null ? !address.equals(event.address) : event.address != null) return false;
         if (initiator != null ? !initiator.equals(event.initiator) : event.initiator != null) return false;
         if (eventstate != null ? !eventstate.equals(event.eventstate) : event.eventstate != null) return false;
+        if (limited != null ? !limited.equals(event.limited) : event.limited != null) return false;
+        if (credictLimit != null ? !credictLimit.equals(event.credictLimit) : event.credictLimit != null) return false;
+        if (upperLimit != null ? !upperLimit.equals(event.upperLimit) : event.upperLimit != null) return false;
+        if (lowerLimit != null ? !lowerLimit.equals(event.lowerLimit) : event.lowerLimit != null) return false;
 
         return true;
     }
@@ -128,6 +178,10 @@ public class Event {
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (initiator != null ? initiator.hashCode() : 0);
         result = 31 * result + (eventstate != null ? eventstate.hashCode() : 0);
+        result = 31 * result + (limited != null ? limited.hashCode() : 0);
+        result = 31 * result + (credictLimit != null ? credictLimit.hashCode() : 0);
+        result = 31 * result + (upperLimit != null ? upperLimit.hashCode() : 0);
+        result = 31 * result + (lowerLimit != null ? lowerLimit.hashCode() : 0);
         return result;
     }
 }
