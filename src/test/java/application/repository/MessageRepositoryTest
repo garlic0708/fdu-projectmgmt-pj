@@ -1,0 +1,83 @@
+package application.repository;
+
+import application.SpringBootWebApplication;
+
+import application.entity.Message;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+
+/**
+ * Creator: DreamBoy
+ * Date: 2018/10/31.
+ */
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = NONE)
+public class MessageRepositoryTest {
+    @Autowired
+    private MessageRepository messageRepository;
+
+    @Test
+    @Rollback
+    public void findByMId() throws Exception {
+        Message message = new Message();
+        message.setSender("txh");
+        message.setReceiver("xcx");
+        message.setContent("123");
+        message.setMessagestate("0");
+        messageRepository.save(message);
+        int id = message.getmId();
+        Message test = messageRepository.findByMId(id);
+        assertEquals(message.getContent(),"123" );
+    }
+
+    @Test
+    @Rollback
+    public void findByMessagestate() throws Exception {
+        Message message0 = new Message();
+        message.setSender("txh");
+        message.setReceiver("xcx");
+        message.setContent("123");
+        message.setMessagestate("0");
+        messageRepository.save(message0);
+
+        Message message1 = new Message();
+        message.setSender("txh");
+        message.setReceiver("xcx");
+        message.setContent("123");
+        message.setMessagestate("1");
+        messageRepository.save(message1);
+
+        Message message2 = new Message();
+        message.setSender("xcx");
+        message.setReceiver("txh");
+        message.setContent("456");
+        message.setMessagestate("1");
+        messageRepository.save(message2);
+
+        List<Message> list = messageRepository.findByMessagestate("1");
+        Message test1 = list.get(0);
+        Message test2 = list.get(1);
+        assertEquals(test1.getSender(), new String("txh"));
+        assertEquals(test1.getReceiver(), new String("xcx"));
+        assertEquals(test1.getContent(), new String("123"));
+        assertEquals(test2.getSender(), new String("xcx"));
+        assertEquals(test2.getReceiver(), new String("txh"));
+        assertEquals(test2.getContent(), new String("456"));
+
+    }
+
+
+
+
+}

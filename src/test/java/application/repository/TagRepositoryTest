@@ -1,0 +1,58 @@
+package application.repository;
+
+import application.SpringBootWebApplication;
+
+import application.entity.Tag;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+
+/**
+ * Creator: DreamBoy
+ * Date: 2018/10/31.
+ */
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = NONE)
+public class TagRepositoryTest {
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Test
+    @Rollback
+    public void findByTId() throws Exception {
+        Tag tag = new Tag();
+        tag.setTagname("football");
+
+        tagRepository.save(tag);
+        int id = tag.gettId();
+        Tag test = tagRepository.findByTId(id);
+        assertEquals(tag.gettID(),"football" );
+
+    }
+
+    @Test
+    @Rollback
+    public void deleteTag() {
+        Tag tag = new Tag();
+        tag.setTagname("Basketball");
+
+        tagRepository.save(tag);
+        int id = tag.gettId();
+        tagRepository.delete(tag);
+        assertEquals(tagRepository.findByTId(id), null);
+    }
+
+
+
+
+}
