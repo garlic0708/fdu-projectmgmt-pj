@@ -9,6 +9,7 @@ spring:
     serialization:
       INDENT_OUTPUT: true
   datasource:
+
     dbcp2:
       fast-fail-validation:
 #  data.mongodb:
@@ -23,8 +24,9 @@ logging:
       data: DEBUG
       security: DEBUG
 
-#
-emails: ["@fudan.edu.cn"]
+emailList: >
+  @fudan.edu.cn,
+  @qq.com
 
 # JWT
 jwt:

@@ -9,6 +9,7 @@ import application.repository.UserRepository;
 import application.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,7 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -33,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
-    @Value("${emails}")
+    @Value("${emailList}")
     private String[] emails;
 
     @Autowired
@@ -51,11 +55,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void register(User userToAdd) throws RegisterException{
         final String email = userToAdd.getEmail();
-        if (validateEmailFormat(email))
+        if (!validateEmailFormat(email))
             throw new RegisterException("Email format is wrong");
-        if (validateEmailSource(email))
+        if (!validateEmailSource(email))
             throw new RegisterException("Email domain is wrong");
-        if (userRepository.findByEmail(email) != null)
+        if (userRepository.findByEmail(email).isPresent())
             throw new RegisterException("Email already exists");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String password = userToAdd.getPassword();
@@ -85,8 +89,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private boolean validateEmailFormat(String email) {
-        final String format = "\\w+@\\w+(\\.\\w{2,3})*\\.\\w{2,3}";
-        return email.matches(format);
+        return (email.matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*"));
     }
 
     private boolean validateEmailSource(String email) {
