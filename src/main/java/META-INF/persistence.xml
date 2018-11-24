@@ -10,6 +10,8 @@
         <class>application.entity.StartEvent</class>
         <class>application.entity.Tag</class>
         <class>application.entity.User</class>
+        <class>application.entity.Event</class>
+        <class>application.entity.userSecurity.VerificationToken</class>
         <properties>
             <property name="toplink.jdbc.url" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
             <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>

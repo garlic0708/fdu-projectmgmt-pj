@@ -4,7 +4,9 @@ import application.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Creator: DreamBoy
@@ -18,6 +20,22 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @return
      */
     User findByUId(int uid);
+
+    /**
+     *
+     * @param nickname
+     * @return
+     */
+    User findByNickname(String nickname);
+
+    /**
+     *
+     * @param email
+     * @return
+     */
+    Optional<User> findByEmail(String email);
+
+    User getByEmail(String email);
 
     /**
      * 通过email和password返回用户
