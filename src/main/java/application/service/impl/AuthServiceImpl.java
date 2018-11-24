@@ -5,13 +5,15 @@ import application.component.JwtTokenUtil;
 import application.entity.User;
 import application.entity.userSecurity.Role;
 import application.entity.userSecurity.UpdatePasswordForm;
+import application.entity.userSecurity.VerificationToken;
 import application.exception.RegisterException;
 import application.exception.UpdatePasswordException;
+import application.exception.VerificationExecption;
 import application.repository.UserRepository;
+import application.repository.VerificationTokenRepository;
 import application.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,11 +21,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
-import java.util.List;
+import java.time.Instant;
+import java.util.Date;
 
 
 /**
@@ -36,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
     private UserRepository userRepository;
+    private VerificationTokenRepository verificationTokenRepository;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -48,15 +50,17 @@ public class AuthServiceImpl implements AuthService {
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
             JwtTokenUtil jwtTokenUtil,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            VerificationTokenRepository verificationTokenRepository) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
+        this.verificationTokenRepository = verificationTokenRepository;
     }
 
     @Override
-    public void register(User userToAdd) throws RegisterException{
+    public VerificationToken register(User userToAdd) throws RegisterException{
         final String email = userToAdd.getEmail();
         if (!validateEmailFormat(email))
             throw new RegisterException("Email format is wrong");
@@ -65,10 +69,35 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(email).isPresent())
             throw new RegisterException("Email already exists");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        final String password = userToAdd.getPassword();
-        userToAdd.setPassword(encoder.encode(password));
-        userToAdd.setRole(Role.USER);
-        userRepository.save(userToAdd);
+
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setEmail(userToAdd.getEmail());
+        verificationToken.setPassword(encoder.encode(userToAdd.getPassword()));
+        verificationToken.setNickname(userToAdd.getNickname());
+        verificationToken.setImage(userToAdd.getImage());
+        verificationToken.setVredict(100);
+        verificationToken.setRole(Role.USER);
+        return verificationToken;
+    }
+
+    @Override
+    public void registrationConfirm(String token) throws VerificationExecption {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if (verificationToken == null)
+            throw new VerificationExecption("Invalid token");
+        else if (verificationToken.getExpiryDate().before(Date.from(Instant.now())))
+            throw new VerificationExecption("Token has expired");
+        else {
+            User user = new User();
+            user.setEmail(verificationToken.getEmail());
+            user.setPassword(verificationToken.getPassword());
+            user.setNickname(verificationToken.getNickname());
+//            user.setImage(verificationToken.getImage());
+//            user.setRole(Role.USER);
+            user.setVredict(verificationToken.getVredict());
+            verificationTokenRepository.delete(verificationToken);
+            userRepository.save(user);
+        }
     }
 
     @Override

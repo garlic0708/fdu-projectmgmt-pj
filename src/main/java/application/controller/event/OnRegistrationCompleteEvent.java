@@ -1,28 +1,26 @@
 package application.controller.event;
 
 import application.entity.User;
+import application.entity.userSecurity.VerificationToken;
 import org.springframework.context.ApplicationEvent;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
-    private User user;
+    private VerificationToken verificationToken;
     private Locale locale;
     private String url;
 
-    public OnRegistrationCompleteEvent(HttpServletRequest request, User user, Locale locale) {
-        super(user);
+    public OnRegistrationCompleteEvent(HttpServletRequest request, VerificationToken verificationToken, Locale locale) {
+        super(verificationToken);
 
-        this.user = user;
+        this.verificationToken = verificationToken;
         this.locale = locale;
         url = String.format("%s://%s:%d", request.getScheme(), request.getServerName(),
                 request.getServerPort());
     }
 
-    public User getUser() {
-        return user;
-    }
 
     public Locale getLocale() {
         return locale;
@@ -30,5 +28,9 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
     public String getUrl() {
         return url;
+    }
+
+    public VerificationToken getVerificationToken() {
+        return verificationToken;
     }
 }
