@@ -4,7 +4,9 @@ package application.service.impl;
 import application.component.JwtTokenUtil;
 import application.entity.User;
 import application.entity.userSecurity.Role;
+import application.entity.userSecurity.UpdatePasswordForm;
 import application.exception.RegisterException;
+import application.exception.UpdatePasswordException;
 import application.repository.UserRepository;
 import application.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 
@@ -66,6 +69,25 @@ public class AuthServiceImpl implements AuthService {
         userToAdd.setPassword(encoder.encode(password));
         userToAdd.setRole(Role.USER);
         userRepository.save(userToAdd);
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordForm upf) throws UpdatePasswordException{
+        final String email = upf.getEmail();
+        final String oldPass = upf.getOldPassword();
+        final String newPass = upf.getNewPassword();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+
+        if (!userRepository.findByEmail(email).isPresent())
+            throw new UpdatePasswordException("No such user");
+        User user = userRepository.findByEmail(email).get();
+        if (!encoder.matches(oldPass, user.getPassword()))
+            throw new UpdatePasswordException("Password is wrong");
+        if (newPass == null || newPass.equals(""))
+            throw new UpdatePasswordException("New password can not be empty");
+        user.setPassword(encoder.encode(newPass));
+        userRepository.save(user);
     }
 
     @Override

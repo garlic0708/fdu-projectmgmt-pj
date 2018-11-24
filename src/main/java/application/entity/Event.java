@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 /**
  * Creator: DreamBoy
- * Date: 2018/11/23.
+ * Date: 2018/11/24.
  */
 @Entity
 public class Event {
@@ -24,6 +24,7 @@ public class Event {
     private Integer credictLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
+    private String image;
 
     @Id
     @Column(name = "e_id")
@@ -145,6 +146,16 @@ public class Event {
         this.lowerLimit = lowerLimit;
     }
 
+    @Basic
+    @Column(name = "image")
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,6 +175,7 @@ public class Event {
         if (credictLimit != null ? !credictLimit.equals(event.credictLimit) : event.credictLimit != null) return false;
         if (upperLimit != null ? !upperLimit.equals(event.upperLimit) : event.upperLimit != null) return false;
         if (lowerLimit != null ? !lowerLimit.equals(event.lowerLimit) : event.lowerLimit != null) return false;
+        if (image != null ? !image.equals(event.image) : event.image != null) return false;
 
         return true;
     }
@@ -182,6 +194,7 @@ public class Event {
         result = 31 * result + (credictLimit != null ? credictLimit.hashCode() : 0);
         result = 31 * result + (upperLimit != null ? upperLimit.hashCode() : 0);
         result = 31 * result + (lowerLimit != null ? lowerLimit.hashCode() : 0);
+        result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }
 }

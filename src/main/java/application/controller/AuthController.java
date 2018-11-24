@@ -2,8 +2,11 @@ package application.controller;
 
 import application.controller.security.JwtAuthenticationRequest;
 import application.controller.security.JwtAuthenticationResponse;
+import application.entity.ResultMessage;
 import application.entity.User;
+import application.entity.userSecurity.UpdatePasswordForm;
 import application.exception.RegisterException;
+import application.exception.UpdatePasswordException;
 import application.service.AuthService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +44,7 @@ public class AuthController {
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
         }
         catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Bad email or password");
+            return ResponseEntity.status(401).body(new ResultMessage("Bad email or password"));
         }
     }
 
@@ -61,10 +64,21 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody User addedUser) throws AuthenticationException{
         try {
             authService.register(addedUser);
-            return ResponseEntity.ok("register success");
+            return ResponseEntity.ok(new ResultMessage("register success"));
         }
         catch (RegisterException e) {
-            return ResponseEntity.status(422).body(e.getMessage());
+            return ResponseEntity.status(422).body(new ResultMessage(e.getMessage()));
+        }
+    }
+
+    @RequestMapping(value = "${jwt.route.authentication.updatePass}", method = RequestMethod.POST)
+    public ResponseEntity<?> updatePass(@RequestBody UpdatePasswordForm upf) throws UpdatePasswordException {
+        try {
+            authService.updatePassword(upf);
+            return ResponseEntity.ok(new ResultMessage("update success"));
+        }
+        catch (UpdatePasswordException e) {
+            return ResponseEntity.status(423).body(new ResultMessage(e.getMessage()));
         }
     }
 }

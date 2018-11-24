@@ -38,4 +38,5 @@ jwt:
     authentication:
       path: auth/login
       refresh: refresh
-      register: "auth/register"
+      register: auth/register
+      updatePass: auth/update
