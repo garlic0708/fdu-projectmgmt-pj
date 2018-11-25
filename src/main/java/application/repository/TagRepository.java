@@ -1,13 +1,17 @@
-import application.entity.User;
+package application.repository;
+
+import application.entity.Tag;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-
 public interface TagRepository extends CrudRepository<Tag, Long> {
     /**
      * 通过tID返回标签
+     *
      * @param tID
      * @return
      */
@@ -20,3 +24,6 @@ public interface TagRepository extends CrudRepository<Tag, Long> {
      */
     @Override
     void delete(Tag tag);
+
+    List<Tag> findAll();
+}

@@ -41,3 +41,12 @@ jwt:
       register: auth/register
       registrationConfirm: auth/registrationConfirm
       updatePass: auth/update
+
+# Other api routes
+api:
+  event:
+    detail: api/event/deatil
+    home-slides: api/event/home-slides
+    home-flow: api/event/home-flow
+  tag:
+    list: api/tag/list

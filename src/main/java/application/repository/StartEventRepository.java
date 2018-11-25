@@ -9,7 +9,7 @@ import java.util.List;
 public interface StartEventRepository extends CrudRepository<StartEvent, Long> {
     /**
      * 通过se_id返回开始活动
-     * @param seId
+     * @param seID
      * @return
      */
     StartEvent findBySeId(int seID);
