@@ -1,12 +1,11 @@
 import {
-  HTTP_INTERCEPTORS,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { Observable } from "rxjs";
 import { delay, mapTo } from "rxjs/operators";
 import { of } from "rxjs/observable/of";

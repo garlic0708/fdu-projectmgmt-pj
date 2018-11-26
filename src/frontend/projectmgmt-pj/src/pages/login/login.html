@@ -6,5 +6,43 @@
 -->
 
 <ion-content padding>
-
+  <!--<div class="spinner-wrapper">-->
+    <!--<div class="spinner pie"></div>-->
+    <!--<div class="filler pie"></div>-->
+    <!--<div class="mask"></div>-->
+  <!--</div>-->
+  <form [formGroup]="loginGroup" (ngSubmit)="login()">
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>密码</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-item no-lines>
+      <ion-label>记住我</ion-label>
+      <ion-checkbox formControlName="rememberMe"></ion-checkbox>
+    </ion-item>
+    <button ion-button type="submit" [disabled]="!loginGroup.valid">登录</button>
+  </form>
+  <form [formGroup]="registerGroup" (ngSubmit)="register()">
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>密码</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>重复密码</ion-label>
+      <ion-input type="password" formControlName="passwordRepeat"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>昵称</ion-label>
+      <ion-input formControlName="nickname"></ion-input>
+    </ion-item>
+    <button ion-button type="submit" [disabled]="!registerGroup.valid">登录</button>
+  </form>
 </ion-content>

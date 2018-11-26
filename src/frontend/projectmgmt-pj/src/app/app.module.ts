@@ -5,15 +5,16 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-// import { HttpModule } from "@angular/http";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { StartupPageModule } from "../pages/startup/startup.module";
 import { MockProvider } from '../providers/mock/mock';
 import { DataProvider } from "../providers/data/data";
 import { IonicImageLoader } from "ionic-image-loader";
 import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
-import { ComponentsModule } from "../components/components.module";
+import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ImagePicker } from "@ionic-native/image-picker";
+import { CurrentUserProvider } from '../providers/current-user/current-user';
+import { LoginPageModule } from "../pages/login/login.module";
 
 
 @NgModule({
@@ -22,10 +23,14 @@ import { ImagePicker } from "@ionic-native/image-picker";
   ],
   imports: [
     IonicModule.forRoot(MyApp),
+    LoginPageModule,
     StartupPageModule,
     BrowserModule,
     IonicImageLoader.forRoot(),
     HttpClientModule,
+    Ng2UiAuthModule.forRoot({
+      signupUrl: '/auth/register',
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -43,6 +48,7 @@ import { ImagePicker } from "@ionic-native/image-picker";
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     LoadingCoverProvider,
+    CurrentUserProvider,
   ]
 })
 export class AppModule {

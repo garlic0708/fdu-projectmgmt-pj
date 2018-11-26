@@ -51,7 +51,7 @@ export class NewEventPage {
     this.endTimeMinLimit = now.add(1, "minute").format();
     this.timeMaxLimit = now.add(5, "y").format("YYYY");
 
-    [this.eventTypeList] = this.loading.fetchData(data.getEventTypeList())
+    [this.eventTypeList] = this.loading.fetchData(this.data.getEventTypeList())
   }
 
   get startTime() {
