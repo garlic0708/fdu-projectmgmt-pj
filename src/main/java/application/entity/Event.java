@@ -1,9 +1,6 @@
 package application.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -12,6 +9,7 @@ import java.sql.Timestamp;
  */
 @Entity
 public class Event {
+    @GeneratedValue
     private int eId;
     private String eventname;
     private String content;
@@ -27,6 +25,7 @@ public class Event {
     private String image;
 
     @Id
+    @GeneratedValue
     @Column(name = "e_id")
     public int geteId() {
         return eId;
