@@ -104,11 +104,22 @@ public class EventServiceTest {
 
     @Test
     @Rollback
-    public void getHomeSlides() throws Exception{
+    public void getHomeSlides() throws Exception {
         List<EventSlide> eventSlides = eventService.getHomeSlides();
+        assertEquals(eventSlides.size(), 3);
         assertEquals(eventSlides.get(0).getPath(), "path/image1");
         assertEquals(eventSlides.get(1).getPath(), "path/image2");
         assertEquals(eventSlides.get(2).getPath(), "path/image3");
+    }
+
+    @Test
+    @Rollback
+    public void getHomeFlow() throws Exception {
+        List<EventSlide> eventSlides = eventService.getHomeFlow();
+        assertEquals(eventSlides.size(), 10);
+        for (int i = 1; i <= 10; i++) {
+            assertEquals(eventSlides.get(i-1).getPath(), "path/image" + i);
+        }
     }
 
     @After
