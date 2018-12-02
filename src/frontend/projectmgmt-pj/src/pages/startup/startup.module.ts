@@ -8,6 +8,7 @@ import { NotifListPageModule } from "../notif-list/notif-list.module";
 import { PersonalPageModule } from "../personal/personal.module";
 import { SuperTabsModule } from "ionic2-super-tabs";
 import { NewEventPageModule } from "../new-event/new-event.module";
+import { ChangePasswordPageModule } from "../change-password/change-password.module";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NewEventPageModule } from "../new-event/new-event.module";
     NewEventPageModule,
     NotifListPageModule,
     PersonalPageModule,
+    ChangePasswordPageModule,
     IonicPageModule.forChild(StartupPage),
     SuperTabsModule.forRoot(),
   ],

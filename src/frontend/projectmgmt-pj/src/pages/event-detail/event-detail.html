@@ -27,6 +27,16 @@
       <span class="event-type-caption" *ngFor="let eventType of _detail.types">
         {{eventType.name}}</span>
     </p>
+    <ng-container [ngSwitch]="getDisplayStatus(_detail)">
+      <button ion-button full *ngSwitchCase="'canCheck'" color="secondary">活动已开始，点击进入签到页面</button>
+      <button ion-button full *ngSwitchCase="'aboutToCheck'" color="secondary" disabled>活动尚未开始，开始后可点击进行签到</button>
+      <button ion-button full *ngSwitchCase="'canJoin'">加入活动</button>
+      <button ion-button full *ngSwitchCase="'joined'" disabled>已加入</button>
+      <button ion-button full *ngSwitchCase="'full'" disabled>人数已满</button>
+      <button ion-button full *ngSwitchCase="'alreadyStarted'" disabled>活动已开始</button>
+      <button ion-button full *ngSwitchCase="'ended'" color="light" disabled>活动已结束</button>
+      <button ion-button full *ngSwitchCase="'canceled'" color="light" disabled>活动已取消</button>
+    </ng-container>
     <button ion-item no-lines detail-push>
       <ion-icon name="pin" item-start></ion-icon>
       {{_detail.address}}

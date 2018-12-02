@@ -15,6 +15,7 @@ import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ImagePicker } from "@ionic-native/image-picker";
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { LoginPageModule } from "../pages/login/login.module";
+import { ChangePasswordPageModule } from "../pages/change-password/change-password.module";
 
 
 @NgModule({

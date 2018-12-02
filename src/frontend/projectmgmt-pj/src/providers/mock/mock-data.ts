@@ -17,8 +17,10 @@ export const mockData: any = {
     'endTime': '2018-12-15T20:00:00.000+08:00',
     'address': '1000 Some road',
     'lowerBound': 5,
-    'upperBound': 14,
+    'upperBound': 6,
     'currentAttendants': 6,
+    'status': 'notStarted',
+    'joined': false,
   },
   'GET /api/event/home-slides': [
     { path: './assets/imgs/placeholder.png', title: 'Title 1', id: 1 },

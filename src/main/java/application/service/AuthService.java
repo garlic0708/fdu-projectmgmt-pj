@@ -1,0 +1,20 @@
+package application.service;
+
+import application.entity.User;
+import application.entity.userSecurity.UpdatePasswordForm;
+import application.entity.userSecurity.VerificationToken;
+import application.exception.RegisterException;
+import application.exception.UpdatePasswordException;
+import application.exception.VerificationExecption;
+
+/**
+ * Creator: DreamBoy
+ * Date: 2018/11/23.
+ */
+public interface AuthService {
+    VerificationToken register(User userToAdd) throws RegisterException;
+    void registrationConfirm(String token) throws VerificationExecption;
+    void updatePassword(UpdatePasswordForm upf)  throws UpdatePasswordException;
+    String login(String email, String password);
+    String refresh(String oldToken);
+}

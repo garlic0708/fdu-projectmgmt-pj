@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <class>application.entity.Address</class>
+        <class>application.entity.Event</class>
+        <class>application.entity.EventTag</class>
+        <class>application.entity.JoinEvent</class>
+        <class>application.entity.Message</class>
+        <class>application.entity.StartEvent</class>
+        <class>application.entity.Tag</class>
+        <class>application.entity.User</class>
+        <class>application.entity.Event</class>
+        <class>application.entity.userSecurity.VerificationToken</class>
+        <properties>
+            <property name="toplink.jdbc.url" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
+            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+</persistence>

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataProvider } from "../../providers/data/data";
-import { Observable} from "rxjs";
+import { Observable } from "rxjs";
 import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import * as moment from 'moment';
+import { map } from "rxjs/operators/map";
 
 /**
  * Generated class for the EventDetailPage page.
@@ -11,6 +12,10 @@ import * as moment from 'moment';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+
+type DisplayStatus = 'canCheck' | 'aboutToCheck' | 'canJoin' | 'joined' | 'full' |
+  'alreadyStarted' | 'ended' | 'canceled';
+type EventStatus = 'notStarted' | 'started' | 'ended' | 'canceled';
 
 @IonicPage()
 @Component({
@@ -33,6 +38,31 @@ export class EventDetailPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventDetailPage');
+  }
+
+  private amIInitiator(): boolean {
+    return false; // todo
+  }
+
+  test() {
+
+  }
+
+  getDisplayStatus(d: {
+    status: EventStatus, upperBound: number,
+    currentAttendants: number, joined: boolean,
+  }): DisplayStatus {
+    console.log(d);
+    const eventStatus = d.status;
+    if (eventStatus === "ended") return "ended";
+    if (eventStatus === "canceled") return "canceled";
+    return this.amIInitiator() ?
+      eventStatus === "started" ? "canCheck" : "aboutToCheck" :
+      d.joined ?
+        "joined" :
+        eventStatus === "started" ?
+          "alreadyStarted" :
+          d.currentAttendants === d.upperBound ? "full" : "canJoin";
   }
 
 }

@@ -1,0 +1,52 @@
+# Server configuration
+server:
+  port: 8090
+  contextPath:
+
+# Spring configuration
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  datasource:
+
+    dbcp2:
+      fast-fail-validation:
+#  data.mongodb:
+#    host: localhost
+#    port: 27017
+#    database: springboot
+
+# Logging configuration
+logging:
+  level:
+    org.springframework:
+      data: DEBUG
+      security: DEBUG
+
+emailList: >
+  @fudan.edu.cn,
+  @qq.com
+
+# JWT
+jwt:
+  header: Authorization
+  secret: "fduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpjfduprojectmgmtpj"
+  expiration: 604800
+  tokenHead: "Bearer "
+  route:
+    authentication:
+      login: auth/login
+      refresh: refresh
+      register: auth/register
+      registrationConfirm: auth/registrationConfirm
+      updatePass: auth/update
+
+# Other api routes
+api:
+  event:
+    detail: api/event/deatil
+    home-slides: api/event/home-slides
+    home-flow: api/event/home-flow
+  tag:
+    list: api/tag/list

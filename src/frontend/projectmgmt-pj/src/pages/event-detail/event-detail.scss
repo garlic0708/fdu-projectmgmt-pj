@@ -16,6 +16,10 @@ page-event-detail {
       text-align: center;
       margin: 0.5rem 0;
     }
+
+    p {
+      font-size: .9em;
+    }
   }
 
   .event-attendants-number:not(:last-child) {
