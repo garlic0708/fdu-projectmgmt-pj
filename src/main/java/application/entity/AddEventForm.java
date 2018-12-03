@@ -1,5 +1,7 @@
 package application.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 /**
@@ -9,7 +11,9 @@ import java.sql.Timestamp;
 public class AddEventForm {
     private String eventname;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp starttime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp endtime;
     private String addressName;
     private double addressPx;

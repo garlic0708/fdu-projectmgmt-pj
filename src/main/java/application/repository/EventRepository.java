@@ -17,18 +17,18 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     /**
      * 通过活动名称返回活动列表
      *
-     * @param eventname
+     * @param eventName
      * @return
      */
-    List<Event> findByEventname(String eventname);
+    List<Event> findByEventName(String eventName);
 
     /**
      * 通过活动内容返回活动列表
      *
-     * @param eventname
+     * @param content
      * @return
      */
-    List<Event> findByContent(String eventname);
+    List<Event> findByContent(String content);
 
     /**
      * 通过活动发起者返回活动列表
@@ -52,7 +52,7 @@ public interface EventRepository extends CrudRepository<Event, Long> {
      * @param state
      * @return
      */
-    List<Event> findByEventstate(String state);
+    List<Event> findByEventState(String state);
 
     /**
      * 列出所有活动
@@ -97,9 +97,9 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     /**
      * 根据活动发起者删除活动
      *
-     * @param eventstate
+     * @param eventState
      */
-    void deleteByEventstate(String eventstate);
+    void deleteByEventState(String eventState);
 
     /**
      * 删除活动

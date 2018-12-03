@@ -40,9 +40,9 @@ public class QuartzEventServiceImpl implements QuartzEventService {
             markAsEndedJobDataMap.put("eid", event.geteId());
             markAsEndedJobDataMap.put("type", "markAsEnded");
 
-            Date cancelDate = new Date(event.getStarttime().getTime() + 1000L); // 60*60*1000L
-            Date startDate = event.getStarttime();
-            Date endDate = event.getEndtime();
+            Date cancelDate = new Date(event.getStartTime().getTime() + 1000L); // 60*60*1000L
+            Date startDate = event.getStartTime();
+            Date endDate = event.getEndTime();
 
             JobBuilder jobBuilder = JobBuilder.newJob(EventJob.class).
                     withIdentity(event.geteId() + "", JOB_GROUP);

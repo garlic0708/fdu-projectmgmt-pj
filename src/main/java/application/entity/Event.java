@@ -11,15 +11,17 @@ import java.sql.Timestamp;
 public class Event {
     @GeneratedValue
     private int eId;
-    private String eventname;
+    private String eventName;
+
     private String content;
-    private Timestamp starttime;
-    private Timestamp endtime;
+    private Timestamp startTime;
+    private Timestamp endTime;
     private Integer address;
     private Integer initiator;
-    private String eventstate; // notStarted , started, ended, canceled
+    private String eventState; // notStarted , started, ended, canceled
+
     private Boolean limited;
-    private Integer credictLimit;
+    private Integer creditLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
     private String image;
@@ -37,12 +39,12 @@ public class Event {
 
     @Basic
     @Column(name = "eventname")
-    public String getEventname() {
-        return eventname;
+    public String getEventName() {
+        return eventName;
     }
 
-    public void setEventname(String eventname) {
-        this.eventname = eventname;
+    public void setEventName(String eventname) {
+        this.eventName = eventname;
     }
 
     @Basic
@@ -57,22 +59,22 @@ public class Event {
 
     @Basic
     @Column(name = "starttime")
-    public Timestamp getStarttime() {
-        return starttime;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Timestamp starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Timestamp starttime) {
+        this.startTime = starttime;
     }
 
     @Basic
     @Column(name = "endtime")
-    public Timestamp getEndtime() {
-        return endtime;
+    public Timestamp getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Timestamp endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Timestamp endtime) {
+        this.endTime = endtime;
     }
 
     @Basic
@@ -97,12 +99,12 @@ public class Event {
 
     @Basic
     @Column(name = "eventstate")
-    public String getEventstate() {
-        return eventstate;
+    public String getEventState() {
+        return eventState;
     }
 
-    public void setEventstate(String eventstate) {
-        this.eventstate = eventstate;
+    public void setEventState(String eventstate) {
+        this.eventState = eventstate;
     }
 
     @Basic
@@ -116,17 +118,17 @@ public class Event {
     }
 
     @Basic
-    @Column(name = "credictLimit")
-    public Integer getCredictLimit() {
-        return credictLimit;
+    @Column(name = "credit_limit")
+    public Integer getCreditLimit() {
+        return creditLimit;
     }
 
-    public void setCredictLimit(Integer credictLimit) {
-        this.credictLimit = credictLimit;
+    public void setCreditLimit(Integer credictLimit) {
+        this.creditLimit = credictLimit;
     }
 
     @Basic
-    @Column(name = "upperLimit")
+    @Column(name = "upper_limit")
     public Integer getUpperLimit() {
         return upperLimit;
     }
@@ -136,7 +138,7 @@ public class Event {
     }
 
     @Basic
-    @Column(name = "lowerLimit")
+    @Column(name = "lower_limit")
     public Integer getLowerLimit() {
         return lowerLimit;
     }
@@ -163,15 +165,15 @@ public class Event {
         Event event = (Event) o;
 
         if (eId != event.eId) return false;
-        if (eventname != null ? !eventname.equals(event.eventname) : event.eventname != null) return false;
+        if (eventName != null ? !eventName.equals(event.eventName) : event.eventName != null) return false;
         if (content != null ? !content.equals(event.content) : event.content != null) return false;
-        if (starttime != null ? !starttime.equals(event.starttime) : event.starttime != null) return false;
-        if (endtime != null ? !endtime.equals(event.endtime) : event.endtime != null) return false;
+        if (startTime != null ? !startTime.equals(event.startTime) : event.startTime != null) return false;
+        if (endTime != null ? !endTime.equals(event.endTime) : event.endTime != null) return false;
         if (address != null ? !address.equals(event.address) : event.address != null) return false;
         if (initiator != null ? !initiator.equals(event.initiator) : event.initiator != null) return false;
-        if (eventstate != null ? !eventstate.equals(event.eventstate) : event.eventstate != null) return false;
+        if (eventState != null ? !eventState.equals(event.eventState) : event.eventState != null) return false;
         if (limited != null ? !limited.equals(event.limited) : event.limited != null) return false;
-        if (credictLimit != null ? !credictLimit.equals(event.credictLimit) : event.credictLimit != null) return false;
+        if (creditLimit != null ? !creditLimit.equals(event.creditLimit) : event.creditLimit != null) return false;
         if (upperLimit != null ? !upperLimit.equals(event.upperLimit) : event.upperLimit != null) return false;
         if (lowerLimit != null ? !lowerLimit.equals(event.lowerLimit) : event.lowerLimit != null) return false;
         if (image != null ? !image.equals(event.image) : event.image != null) return false;
@@ -182,15 +184,15 @@ public class Event {
     @Override
     public int hashCode() {
         int result = eId;
-        result = 31 * result + (eventname != null ? eventname.hashCode() : 0);
+        result = 31 * result + (eventName != null ? eventName.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (starttime != null ? starttime.hashCode() : 0);
-        result = 31 * result + (endtime != null ? endtime.hashCode() : 0);
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (initiator != null ? initiator.hashCode() : 0);
-        result = 31 * result + (eventstate != null ? eventstate.hashCode() : 0);
+        result = 31 * result + (eventState != null ? eventState.hashCode() : 0);
         result = 31 * result + (limited != null ? limited.hashCode() : 0);
-        result = 31 * result + (credictLimit != null ? credictLimit.hashCode() : 0);
+        result = 31 * result + (creditLimit != null ? creditLimit.hashCode() : 0);
         result = 31 * result + (upperLimit != null ? upperLimit.hashCode() : 0);
         result = 31 * result + (lowerLimit != null ? lowerLimit.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);

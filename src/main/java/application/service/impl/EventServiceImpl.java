@@ -12,11 +12,6 @@ import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +56,7 @@ public class EventServiceImpl implements EventService {
         List<EventSlide> eventSlides=new LinkedList<>();
         for (int i=0;i<3;i++) {
             String path=events.get(i).getImage();
-            String title=events.get(i).getEventname();
+            String title=events.get(i).getEventName();
             int id=events.get(i).geteId();
             EventSlide eventSlide = new EventSlide(path,title,id);
             eventSlides.add(eventSlide);
@@ -91,7 +86,7 @@ public class EventServiceImpl implements EventService {
             List<Integer> list = getParticipants(eid);
 
             if (event.getLimited() && event.getLowerLimit() > list.size()) {
-                event.setEventstate("canceled");
+                event.setEventState("canceled");
 
                 for (Integer uid: list) {
                     Message message = new Message();
@@ -116,14 +111,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public void markAsStarted(int eid) {
         Event event = eventRepository.findByEId(eid);
-        event.setEventstate("started");
+        event.setEventState("started");
         eventRepository.save(event);
     }
 
     @Override
     public void markAsEnded(int eid) {
         Event event = eventRepository.findByEId(eid);
-        event.setEventstate("ended");
+        event.setEventState("ended");
         eventRepository.save(event);
     }
 
@@ -146,13 +141,13 @@ public class EventServiceImpl implements EventService {
 //            throw new AddEventException("StartTime or endTime is wrong");
         else {
             Event event = new Event();
-            event.setEventname(form.getEventname());
+            event.setEventName(form.getEventname());
             event.setContent(form.getContent());
-            event.setStarttime(form.getStarttime());
-            event.setEndtime(form.getEndtime());
+            event.setStartTime(form.getStarttime());
+            event.setEndTime(form.getEndtime());
             event.setAddress(address.getAddrId());
             event.setInitiator(uid);
-            event.setEventstate("notStarted");
+            event.setEventState("notStarted");
             if (form.getUpperLimit() == null || form.getLowerLimit() == null) {
                 event.setLimited(false);
             }
@@ -160,7 +155,7 @@ public class EventServiceImpl implements EventService {
                 event.setLimited(true);
                 event.setLowerLimit(form.getLowerLimit());
                 event.setUpperLimit(form.getUpperLimit());
-                event.setCredictLimit(form.getCredictLimit());
+                event.setCreditLimit(form.getCredictLimit());
             }
             event.setImage(form.getImage());
 
