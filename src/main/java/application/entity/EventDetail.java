@@ -15,17 +15,17 @@ public class EventDetail {
     private String content;
     private Timestamp starttime;
     private Timestamp endtime;
-    private Integer address;
+    private String address; // addressName
     private String eventstate;
-    private Byte limited;
+    private Boolean limited;  // 如果这一个是false，下面三个limit不需要设置
     private Integer credictLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
     private String image;
 
-    private List<Tag> tags;
-    private Map<String, String> initiator;
-    private int currentAttendants;
+    private List<Tag> tags; //从数据库表tag和eventTag中获取
+    private Map<String, String> initiator; //参考下面的注释
+    private int currentAttendants; //当前参加人数
 
 //    public EventDetail() {
 //        initiator = new HashMap<>();
@@ -89,11 +89,11 @@ public class EventDetail {
         this.credictLimit = credictLimit;
     }
 
-    public Byte getLimited() {
+    public Boolean getLimited() {
         return limited;
     }
 
-    public void setLimited(Byte limited) {
+    public void setLimited(Boolean limited) {
         this.limited = limited;
     }
 
@@ -105,11 +105,11 @@ public class EventDetail {
         this.eventstate = eventstate;
     }
 
-    public Integer getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Integer address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
