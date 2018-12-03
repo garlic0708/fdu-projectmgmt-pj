@@ -1,6 +1,9 @@
 package application.service.impl;
 
 import application.entity.*;
+import application.entity.forms.AddEventForm;
+import application.entity.forms.EventDetail;
+import application.entity.forms.EventSlide;
 import application.exception.AddEventException;
 import application.repository.AddressRepository;
 import application.repository.EventRepository;
@@ -10,6 +13,7 @@ import application.service.EventService;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -25,6 +29,9 @@ public class EventServiceImpl implements EventService {
     private MessageRepository messageRepository;
     private AddressRepository addressRepository;
     private Scheduler scheduler;
+
+    @Value("${checkTime}")
+    private long checkTime;
 
     @Autowired
     public EventServiceImpl(EventRepository eventRepository,
@@ -99,7 +106,8 @@ public class EventServiceImpl implements EventService {
                 }
 
                 eventRepository.save(event);
-                scheduler.deleteJob(JobKey.jobKey(eid+"", JOB_GROUP));
+                scheduler.deleteJob(JobKey.jobKey(eid + " markAsStarted", JOB_GROUP));
+                scheduler.deleteJob(JobKey.jobKey(eid + " markAsEnded", JOB_GROUP));
             }
 
         }
@@ -134,11 +142,9 @@ public class EventServiceImpl implements EventService {
         Date end = form.getEndtime();
         Date now = new Date();
 
-        if (now.getTime() + 60*60*1000 > start.getTime() || start.getTime() > end.getTime())
+        if (now.getTime() + checkTime > start.getTime() || start.getTime() > end.getTime())
             throw new AddEventException("StartTime or endTime is wrong");
 
-//        if (start.getTime() > end.getTime())
-//            throw new AddEventException("StartTime or endTime is wrong");
         else {
             Event event = new Event();
             event.setEventName(form.getEventname());

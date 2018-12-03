@@ -1,4 +1,6 @@
-package application.entity;
+package application.entity.forms;
+
+import application.entity.Tag;
 
 import java.sql.Timestamp;
 import java.util.HashMap;

@@ -24,13 +24,8 @@ import org.springframework.stereotype.Component;
 public class EventJob extends QuartzJobBean {
     private static Logger LOGGER = LoggerFactory.getLogger(EventJob.class);
     private int eventId;
-    private EventService eventService;
-
     @Autowired
-    public EventJob(EventService eventService) {
-        this.eventService = eventService;
-    }
-
+    private EventService eventService;
 
     public int getEventId() {
         return eventId;

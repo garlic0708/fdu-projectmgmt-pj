@@ -1,6 +1,7 @@
 package application.service;
 
 import application.entity.User;
+import application.exception.JoinEventException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface UserService {
 
     Optional<User> getByEmail(String email);
 
-    void joinEvent(int uid, int eid);
+    void joinEvent(int uid, int eid) throws JoinEventException;
 }

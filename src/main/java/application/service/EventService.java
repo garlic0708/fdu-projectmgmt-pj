@@ -1,9 +1,9 @@
 package application.service;
 
-import application.entity.AddEventForm;
+import application.entity.forms.AddEventForm;
 import application.entity.Event;
-import application.entity.EventDetail;
-import application.entity.EventSlide;
+import application.entity.forms.EventDetail;
+import application.entity.forms.EventSlide;
 import application.exception.AddEventException;
 
 import java.util.List;

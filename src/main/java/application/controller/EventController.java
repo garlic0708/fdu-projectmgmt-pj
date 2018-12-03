@@ -1,11 +1,9 @@
 package application.controller;
 
 import application.component.JwtTokenUtil;
-import application.controller.security.JwtAuthenticationRequest;
-import application.controller.security.JwtAuthenticationResponse;
-import application.entity.AddEventForm;
+import application.entity.forms.AddEventForm;
 import application.entity.Event;
-import application.entity.ResultMessage;
+import application.entity.forms.ResultMessage;
 import application.entity.User;
 import application.exception.AddEventException;
 import application.service.EventService;
@@ -52,13 +50,12 @@ public class EventController {
     @RequestMapping(value = "${api.event.add}", method = RequestMethod.POST)
     public ResponseEntity<?> addEvent(HttpServletRequest httpServletRequest, @RequestBody AddEventForm addEventForm) {
         String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = userService.getByEmail(jwtTokenUtil.getUsernameFromToken(token)).orElse(null);
-
+        User user = jwtTokenUtil.getUserByToken(token);
         try {
             if (user != null) {
                 Event event = eventService.addEvent(addEventForm, user.getuId());
                 quartzEventService.addEventJob(event);
-                return ResponseEntity.ok("Add event success");
+                return ResponseEntity.ok(new ResultMessage("Add event success"));
             }
             else {
                 return ResponseEntity.status(424).body(new ResultMessage("Add event failed, no such user"));

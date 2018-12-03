@@ -3,7 +3,7 @@ package application.controller;
 import application.controller.event.OnRegistrationCompleteEvent;
 import application.controller.security.JwtAuthenticationRequest;
 import application.controller.security.JwtAuthenticationResponse;
-import application.entity.ResultMessage;
+import application.entity.forms.ResultMessage;
 import application.entity.User;
 import application.entity.userSecurity.UpdatePasswordForm;
 import application.entity.userSecurity.VerificationToken;

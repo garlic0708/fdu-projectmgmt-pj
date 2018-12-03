@@ -70,4 +70,6 @@ public interface JoinEventRepository extends CrudRepository<JoinEvent, Long> {
 
     @Query(value = "SELECT u_id FROM join_event WHERE e_id = ?", nativeQuery = true)
     List<Integer> getParticipantsByEId(int eid);
+
+    JoinEvent findByUIdAndEId(int uid, int eid);
 }

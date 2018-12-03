@@ -1,7 +1,10 @@
 package application.service.impl;
 
+import application.entity.Event;
 import application.entity.JoinEvent;
 import application.entity.User;
+import application.exception.JoinEventException;
+import application.repository.EventRepository;
 import application.repository.JoinEventRepository;
 import application.repository.UserRepository;
 import application.service.UserService;
@@ -19,11 +22,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private JoinEventRepository joinEventRepository;
+    private EventRepository eventRepository;
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           JoinEventRepository joinEventRepository) {
+                           JoinEventRepository joinEventRepository,
+                           EventRepository eventRepository) {
         this.userRepository = userRepository;
         this.joinEventRepository = joinEventRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
@@ -37,7 +43,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void joinEvent(int uid, int eid) {
+    public void joinEvent(int uid, int eid)  throws JoinEventException {
+        Event event = eventRepository.findByEId(eid);
+        if (event == null)
+            throw new JoinEventException("No such event");
+        if (!event.getEventState().equals("notStarted"))
+            throw new JoinEventException("You can not join the event at now");
+        if (joinEventRepository.findByUIdAndEId(uid, eid) != null)
+            throw new JoinEventException("You have joined the event");
+        if (joinEventRepository.getParticipantsByEId(eid).size() >= event.getUpperLimit())
+            throw new JoinEventException("Full");
         JoinEvent joinEvent = new JoinEvent();
         joinEvent.setuId(uid);
         joinEvent.seteId(eid);

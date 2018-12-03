@@ -42,6 +42,9 @@ jwt:
       registrationConfirm: auth/registrationConfirm
       updatePass: auth/update
 
+# check time
+checkTime: 180000
+
 # Other api routes
 api:
   event:

@@ -2,7 +2,7 @@ package application.service;
 
 import application.SpringBootWebApplication;
 import application.entity.Event;
-import application.entity.EventSlide;
+import application.entity.forms.EventSlide;
 import application.repository.EventRepository;
 import org.junit.After;
 import org.junit.Before;

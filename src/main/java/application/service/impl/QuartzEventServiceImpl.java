@@ -5,6 +5,7 @@ import application.entity.Event;
 import application.service.QuartzEventService;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,6 +18,9 @@ import java.util.Date;
 public class QuartzEventServiceImpl implements QuartzEventService {
     static final String JOB_GROUP = "event_job_group";
     private static final String TRIGGER_GROUP = "event_trigger_group";
+
+    @Value("${checkTime}")
+    private long checkTime;
 
     private Scheduler scheduler;
 
@@ -40,30 +44,29 @@ public class QuartzEventServiceImpl implements QuartzEventService {
             markAsEndedJobDataMap.put("eid", event.geteId());
             markAsEndedJobDataMap.put("type", "markAsEnded");
 
-            Date cancelDate = new Date(event.getStartTime().getTime() + 1000L); // 60*60*1000L
+            Date cancelDate = new Date(event.getStartTime().getTime() - checkTime); // 60*60*1000L
             Date startDate = event.getStartTime();
             Date endDate = event.getEndTime();
 
-            JobBuilder jobBuilder = JobBuilder.newJob(EventJob.class).
-                    withIdentity(event.geteId() + "", JOB_GROUP);
-
-            TriggerBuilder triggerBuilder = TriggerBuilder.newTrigger().
-                    withIdentity(event.geteId()+"", TRIGGER_GROUP);
-
             if (event.getLimited()) { // 有人数限制的活动才需要自动取消的功能
-                JobDetail autoCancelJob = jobBuilder.usingJobData(autoCancelJobDataMap).build();
-                Trigger autoCancelTrigger = triggerBuilder.startAt(cancelDate).build();
+                JobDetail autoCancelJob = JobBuilder.newJob(EventJob.class).
+                        withIdentity(event.geteId() + " autoCancel", JOB_GROUP).usingJobData(autoCancelJobDataMap).build();
+                Trigger autoCancelTrigger = TriggerBuilder.newTrigger().
+                        withIdentity(event.geteId()+" autoCancel", TRIGGER_GROUP).startAt(cancelDate).build();
                 scheduler.scheduleJob(autoCancelJob, autoCancelTrigger);
             }
 
-            JobDetail markAsStartedJob = jobBuilder.usingJobData(markAsStartedJobDataMap).build();
-            Trigger markAsStartedTrigger = triggerBuilder.startAt(startDate).build();
+            JobDetail markAsStartedJob = JobBuilder.newJob(EventJob.class).
+                    withIdentity(event.geteId() + " markAsStarted", JOB_GROUP).usingJobData(markAsStartedJobDataMap).build();
+            Trigger markAsStartedTrigger = TriggerBuilder.newTrigger().
+                    withIdentity(event.geteId()+" markAsStarted", TRIGGER_GROUP).startAt(startDate).build();
             scheduler.scheduleJob(markAsStartedJob, markAsStartedTrigger);
 
-            JobDetail markAsEndedJob = jobBuilder.usingJobData(markAsEndedJobDataMap).build();
-            Trigger markAsEndedTrigger = triggerBuilder.startAt(endDate).build();
+            JobDetail markAsEndedJob = JobBuilder.newJob(EventJob.class).
+                    withIdentity(event.geteId() + " markAsEnded", JOB_GROUP).usingJobData(markAsEndedJobDataMap).build();
+            Trigger markAsEndedTrigger = TriggerBuilder.newTrigger().
+                    withIdentity(event.geteId()+" markAsEnded", TRIGGER_GROUP).startAt(endDate).build();
             scheduler.scheduleJob(markAsEndedJob, markAsEndedTrigger);
-
         }
        catch (Exception e) {
             e.printStackTrace();
