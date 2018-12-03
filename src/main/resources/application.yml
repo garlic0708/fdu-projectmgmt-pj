@@ -51,3 +51,6 @@ api:
     add: api/event/add
   tag:
     list: api/tag/list
+  user:
+    join: api/user/join
+    getDetail: api/user/get

@@ -141,6 +141,9 @@ public class EventServiceImpl implements EventService {
 
         if (now.getTime() + 60*60*1000 > start.getTime() || start.getTime() > end.getTime())
             throw new AddEventException("StartTime or endTime is wrong");
+
+//        if (start.getTime() > end.getTime())
+//            throw new AddEventException("StartTime or endTime is wrong");
         else {
             Event event = new Event();
             event.setEventname(form.getEventname());
@@ -160,7 +163,17 @@ public class EventServiceImpl implements EventService {
                 event.setCredictLimit(form.getCredictLimit());
             }
             event.setImage(form.getImage());
-            return eventRepository.save(event);
+
+            event = eventRepository.save(event);
+
+            // 为创建者添加参与情况
+            JoinEvent joinEvent = new JoinEvent();
+            joinEvent.seteId(event.geteId());
+            joinEvent.setuId(uid);
+            joinEvent.setJeState("initiator");
+            joinEventRepository.save(joinEvent);
+
+            return event;
         }
     }
 }

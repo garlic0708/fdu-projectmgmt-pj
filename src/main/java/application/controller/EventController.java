@@ -1,6 +1,7 @@
 package application.controller;
 
 import application.component.JwtTokenUtil;
+import application.controller.security.JwtAuthenticationRequest;
 import application.controller.security.JwtAuthenticationResponse;
 import application.entity.AddEventForm;
 import application.entity.Event;
@@ -49,11 +50,9 @@ public class EventController {
     }
 
     @RequestMapping(value = "${api.event.add}", method = RequestMethod.POST)
-    public ResponseEntity<?> addEvent(@RequestBody HttpServletRequest request, AddEventForm addEventForm) {
-        String authHeader = request.getHeader(this.tokenHeader);
-        final String authToken = authHeader.substring(tokenHead.length()); // The part after "Bearer "
-        String email = jwtTokenUtil.getUsernameFromToken(authToken);
-        User user = userService.getByEmail(email).orElse(null);
+    public ResponseEntity<?> addEvent(HttpServletRequest httpServletRequest, @RequestBody AddEventForm addEventForm) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = userService.getByEmail(jwtTokenUtil.getUsernameFromToken(token)).orElse(null);
 
         try {
             if (user != null) {

@@ -50,9 +50,11 @@ public class QuartzEventServiceImpl implements QuartzEventService {
             TriggerBuilder triggerBuilder = TriggerBuilder.newTrigger().
                     withIdentity(event.geteId()+"", TRIGGER_GROUP);
 
-            JobDetail autoCancelJob = jobBuilder.usingJobData(autoCancelJobDataMap).build();
-            Trigger autoCancelTrigger = triggerBuilder.startAt(cancelDate).build();
-            scheduler.scheduleJob(autoCancelJob, autoCancelTrigger);
+            if (event.getLimited()) { // 有人数限制的活动才需要自动取消的功能
+                JobDetail autoCancelJob = jobBuilder.usingJobData(autoCancelJobDataMap).build();
+                Trigger autoCancelTrigger = triggerBuilder.startAt(cancelDate).build();
+                scheduler.scheduleJob(autoCancelJob, autoCancelTrigger);
+            }
 
             JobDetail markAsStartedJob = jobBuilder.usingJobData(markAsStartedJobDataMap).build();
             Trigger markAsStartedTrigger = triggerBuilder.startAt(startDate).build();

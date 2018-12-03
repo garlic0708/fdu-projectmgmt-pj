@@ -14,4 +14,6 @@ public interface UserService {
     List<User> getAllUsers();
 
     Optional<User> getByEmail(String email);
+
+    void joinEvent(int uid, int eid);
 }
