@@ -21,7 +21,7 @@ export const mockData: any = {
     'currentAttendants': 6,
   },
   'GET /api/event/home-slides': [
-    { path: './assets/imgs/placeholder.png', title: 'Title 1', id: 1 },
+    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 },
     { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2 },
     { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3 },
   ],
@@ -35,5 +35,38 @@ export const mockData: any = {
   ],
   'GET /api/event-type/list': range(5).map(n => {
     return { id: n + 1, name: `Type ${n + 1}` }
-  })
+  }),
+  'GET /api/notif/notif-list': [
+    { type: 1, title:'Title 1', content: 'Content 1', id: 1 },
+    { type: 2, title:'Title 2', content: 'Content 2', id: 2 },
+    { type: 3, title:'Title 3, testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest', content: 'Content 3, testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest', id: 3 },
+  ],
+  'GET /api/notif/notif-detail/:id': {
+    'type': 1,
+    'title': 'Title 1',
+    'content': 'Content 1',
+  },
+  'GET /api/personal/events-join': [
+    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5 },
+  ],
+  'GET /api/personal/events-release': [
+    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5 },
+    { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 6 },
+  ],
+  'GET /api/event/register': [
+    { name: 'student1', type: 0, id: 1 },
+    { name: 'student2', type: 1, id: 1 },
+    { name: 'student3', type: 0, id: 1 },
+    { name: 'student4', type: 1, id: 1 },
+    { name: 'student5', type: 0, id: 1 },
+    { name: 'student6', type: 0, id: 1 },
+  ]
 };

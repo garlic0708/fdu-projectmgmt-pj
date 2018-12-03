@@ -14,11 +14,19 @@ import { IonicImageLoader } from "ionic-image-loader";
 import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
 import { ComponentsModule } from "../components/components.module";
 import { ImagePicker } from "@ionic-native/image-picker";
+import { NotifDetailPage} from "../pages/notif-detail/notif-detail";
+import {EventsJoinPage} from "../pages/events-join/events-join";
+import {EventsReleasePage} from "../pages/events-release/events-release";
+import {RegisterPage} from "../pages/register/register";
 
 
 @NgModule({
   declarations: [
     MyApp,
+    NotifDetailPage,
+    EventsJoinPage,
+    EventsReleasePage,
+    RegisterPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -30,6 +38,10 @@ import { ImagePicker } from "@ionic-native/image-picker";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    NotifDetailPage,
+    EventsJoinPage,
+    EventsReleasePage,
+    RegisterPage
   ],
   providers: [
     {

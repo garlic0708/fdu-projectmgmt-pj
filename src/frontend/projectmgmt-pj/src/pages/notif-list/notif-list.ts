@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams, App, AlertController} from 'ionic-angular';
+import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover";
+import {DataProvider} from "../../providers/data/data";
+import {NotifPreview} from "./notif-preview";
+import {Observable} from "rxjs";
+import {NotifDetailPage} from "../notif-detail/notif-detail";
 
 /**
  * Generated class for the NotifListPage page.
@@ -15,11 +20,35 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class NotifListPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  notifItems: Observable<NotifPreview[]>;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private appCtrl: App,
+              private data: DataProvider,
+              private loading: LoadingCoverProvider,
+              public alertCtrl: AlertController) {
+    [this.notifItems] = this.loading.fetchData(this.data.getNotifList());
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotifListPage');
+  }
+
+  goToNotifDetail(id) {
+    this.appCtrl.getRootNav().push(NotifDetailPage, { notifId: id })
+  }
+
+  doAlert(notifItem) {
+    let alert = this.alertCtrl.create({
+      title: notifItem.title,
+      subTitle: notifItem.content,
+      buttons: ['Ok']
+    });
+
+    alert.present();
+
+    //TODO 若未读发送已读请求
   }
 
 }

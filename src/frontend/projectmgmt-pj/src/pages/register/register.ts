@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, App} from 'ionic-angular';
-import {EventsJoinPage} from "../events-join/events-join";
-import {EventsReleasePage} from "../events-release/events-release";
-import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover";
+import {Observable} from "rxjs";
+import {RegisterPreview} from "./register-preview";
 import {DataProvider} from "../../providers/data/data";
+import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover";
 
 /**
- * Generated class for the PersonalPage page.
+ * Generated class for the RegisterPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -14,27 +14,31 @@ import {DataProvider} from "../../providers/data/data";
 
 @IonicPage()
 @Component({
-  selector: 'page-personal',
-  templateUrl: 'personal.html',
+  selector: 'page-register',
+  templateUrl: 'register.html',
 })
-export class PersonalPage {
+export class RegisterPage {
+
+  personItems: Observable<RegisterPreview[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private appCtrl: App,
               private data: DataProvider,
               private loading: LoadingCoverProvider) {
+    [this.personItems] =
+      this.loading.fetchData(this.data.getEventRegister());
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PersonalPage');
+    console.log('ionViewDidLoad RegisterPage');
   }
 
-  goToEvent1() {
-    this.appCtrl.getRootNav().push(EventsJoinPage, {})
+  change(personItem) {
+    personItem.type = 1 - personItem.type;
   }
 
-  goToEvent2() {
-    this.appCtrl.getRootNav().push(EventsReleasePage, {})
+  todo() {
+
   }
 
 }
