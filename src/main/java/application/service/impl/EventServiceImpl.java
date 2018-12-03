@@ -78,8 +78,16 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public List<EventSlide> getHomeFlow(){
-        return null;
-    }
+        List<Event> events=eventRepository.getEvents(10);
+        List<EventSlide> eventSlides=new LinkedList<>();
+        for (int i=0;i<10;i++) {
+            String path=events.get(i).getImage();
+            String title=events.get(i).getEventName();
+            int id=events.get(i).geteId();
+            EventSlide eventSlide = new EventSlide(path,title,id);
+            eventSlides.add(eventSlide);
+        }
+        return eventSlides;    }
 
     @Override
     public List<Integer> getParticipants(int eid) {
