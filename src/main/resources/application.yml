@@ -48,5 +48,6 @@ api:
     detail: api/event/deatil
     home-slides: api/event/home-slides
     home-flow: api/event/home-flow
+    add: api/event/add
   tag:
     list: api/tag/list

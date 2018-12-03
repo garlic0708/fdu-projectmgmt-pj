@@ -17,8 +17,8 @@ public class Event {
     private Timestamp endtime;
     private Integer address;
     private Integer initiator;
-    private String eventstate;
-    private Byte limited;
+    private String eventstate; // notStarted , started, ended, canceled
+    private Boolean limited;
     private Integer credictLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
@@ -107,11 +107,11 @@ public class Event {
 
     @Basic
     @Column(name = "limited")
-    public Byte getLimited() {
+    public Boolean getLimited() {
         return limited;
     }
 
-    public void setLimited(Byte limited) {
+    public void setLimited(Boolean limited) {
         this.limited = limited;
     }
 

@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = {SpringBootWebApplication.class})
 public class EventServiceTest {
 
+
     @Autowired
     private EventService eventService;
     @Autowired
@@ -122,6 +123,11 @@ public class EventServiceTest {
         }
     }
 
+    @Test
+    public void getParticipants() throws Exception {
+        List<Integer> list = eventService.getParticipants(1);
+        assertEquals(list.size(), 0);
+    }
     @After
     public void tearDown() {
         for (int i = 0; i < events.size(); i++) {
