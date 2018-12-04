@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, App} from 'ionic-angular';
 import {Observable} from "rxjs";
-import {RegisterPreview} from "./register-preview";
 import {DataProvider} from "../../providers/data/data";
 import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover";
 
 /**
- * Generated class for the RegisterPage page.
+ * Generated class for the CheckinPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -14,19 +13,20 @@ import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover"
 
 @IonicPage()
 @Component({
-  selector: 'page-register',
-  templateUrl: 'register.html',
+  selector: 'page-checkin',
+  templateUrl: 'checkin.html',
 })
-export class RegisterPage {
+export class CheckinPage {
 
-  personItems: Observable<RegisterPreview[]>;
+  personItems: Observable<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private appCtrl: App,
               private data: DataProvider,
               private loading: LoadingCoverProvider) {
+    console.log('-------------------', this.navParams.get('eventId'));
     [this.personItems] =
-      this.loading.fetchData(this.data.getEventRegister());
+      this.loading.fetchData(this.data.getEventCheckin(this.navParams.get('eventId')));
   }
 
   ionViewDidLoad() {

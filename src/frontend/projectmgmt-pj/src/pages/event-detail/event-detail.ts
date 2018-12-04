@@ -4,7 +4,7 @@ import { DataProvider } from "../../providers/data/data";
 import { Observable} from "rxjs";
 import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import * as moment from 'moment';
-import {RegisterPage} from "../register/register";
+import {CheckinPage} from "../checkin/checkin";
 
 
 /**
@@ -38,8 +38,8 @@ export class EventDetailPage {
     console.log('ionViewDidLoad EventDetailPage');
   }
 
-  goToRegister() {
-    this.appCtrl.getRootNav().push(RegisterPage, {})
+  goToRegister(id) {
+    this.navCtrl.push(CheckinPage, { eventId: id })
   }
 
 }

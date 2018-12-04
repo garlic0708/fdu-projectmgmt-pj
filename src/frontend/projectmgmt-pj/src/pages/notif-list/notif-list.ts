@@ -4,7 +4,6 @@ import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover"
 import {DataProvider} from "../../providers/data/data";
 import {NotifPreview} from "./notif-preview";
 import {Observable} from "rxjs";
-import {NotifDetailPage} from "../notif-detail/notif-detail";
 
 /**
  * Generated class for the NotifListPage page.
@@ -33,10 +32,6 @@ export class NotifListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotifListPage');
-  }
-
-  goToNotifDetail(id) {
-    this.appCtrl.getRootNav().push(NotifDetailPage, { notifId: id })
   }
 
   doAlert(notifItem) {

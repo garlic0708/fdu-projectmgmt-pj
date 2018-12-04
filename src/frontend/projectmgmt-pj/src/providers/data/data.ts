@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { EventPreview } from "../../pages/home/event-preview";
 import { NotifPreview } from "../../pages/notif-list/notif-preview"
-import {RegisterPreview} from "../../pages/register/register-preview";
 
 /*
   Generated class for the DataProvider provider.
@@ -19,10 +18,9 @@ export class DataProvider {
   private flowUrl = '/api/event/home-flow';
   private eventTypeListUrl = '/api/event-type/list';
   private notifListUrl = '/api/notif/notif-list';
-  private notifDetailUrl = '/api/notif/notif-detail';
-  private eventsJoinUrl = '/api/personal/events-join';
-  private eventsReleaseUrl = '/api/personal/events-release';
-  private registerUrl = '/api/event/register';
+  private eventsJoinedUrl = '/api/personal/events-joined';
+  private eventsReleasedUrl = '/api/personal/events-released';
+  private checkinUrl = '/api/event/checkin';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
@@ -48,20 +46,18 @@ export class DataProvider {
     return this.http.get<NotifPreview[]>(this.notifListUrl)
   }
 
-  getNotifDetail(notifId): Observable<any> {
-    return this.http.get(`${this.notifDetailUrl}/${notifId}`)
+
+  getEventsJoined(): Observable<EventPreview[]> {
+    return this.http.get<EventPreview[]>(this.eventsJoinedUrl)
   }
 
-  getEventJoin(): Observable<EventPreview[]> {
-    return this.http.get<EventPreview[]>(this.eventsJoinUrl)
+  getEventsReleased(): Observable<EventPreview[]> {
+    return this.http.get<EventPreview[]>(this.eventsReleasedUrl)
   }
 
-  getEventRelease(): Observable<EventPreview[]> {
-    return this.http.get<EventPreview[]>(this.eventsReleaseUrl)
-  }
+  getEventCheckin(eventId): Observable<any> {
+    return this.http.get(`${this.checkinUrl}/${eventId}`)
 
-  getEventRegister(): Observable<RegisterPreview[]> {
-    return this.http.get<RegisterPreview[]>(this.registerUrl)
   }
 
 }
