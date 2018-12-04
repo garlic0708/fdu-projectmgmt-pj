@@ -57,3 +57,5 @@ api:
   user:
     join: api/user/join
     getDetail: api/user/get
+  image:
+    get: api/image/get

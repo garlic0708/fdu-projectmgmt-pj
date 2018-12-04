@@ -36,4 +36,6 @@ public interface EventService {
     void markAsEnded(int eid);
 
     Event addEvent(AddEventForm form, int uid) throws AddEventException;
+
+    Event getById(int eid);
 }

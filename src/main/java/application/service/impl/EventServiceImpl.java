@@ -185,4 +185,9 @@ public class EventServiceImpl implements EventService {
             return event;
         }
     }
+
+    @Override
+    public Event getById(int eid) {
+        return eventRepository.findByEId(eid);
+    }
 }
