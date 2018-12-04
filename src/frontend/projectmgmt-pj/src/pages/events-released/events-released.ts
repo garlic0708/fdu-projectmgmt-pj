@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams, App} from 'ionic-angular';
+import {Observable} from "rxjs";
+import {EventPreview} from "../home/event-preview";
+import {DataProvider} from "../../providers/data/data";
+import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover";
+import {EventDetailPage} from "../event-detail/event-detail";
 
 /**
  * Generated class for the EventsReleasedPage page.
@@ -15,11 +20,35 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class EventsReleasedPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private button = 1;
+
+  eventItems: Observable<EventPreview[]>;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private appCtrl: App,
+              private data: DataProvider,
+              private loading: LoadingCoverProvider) {
+    [this.eventItems] = this.loading.fetchData(this.data.getEventsReleased());
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventsReleasedPage');
+  }
+
+  showNotStarted() {
+    this.button = 1;
+  }
+
+  showStarted() {
+    this.button = 2;
+  }
+
+  showEnded() {
+    this.button = 3;
+  }
+
+  goToEventDetail(id) {
+    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
   }
 
 }

@@ -31,7 +31,6 @@ export class HomePage {
               private loading: LoadingCoverProvider) {
     [this.slideItems, this.flowItems] =
       this.loading.fetchData(this.data.getHomeSlides(), this.data.getHomeFlow());
-    // this.slideItems = this.data.getHomeSlides();
   }
 
   ionViewDidLoad() {

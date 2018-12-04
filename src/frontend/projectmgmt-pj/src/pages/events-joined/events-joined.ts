@@ -21,7 +21,6 @@ import {EventDetailPage} from "../event-detail/event-detail";
 export class EventsJoinedPage {
 
   private button = 1;
-  private page = 1;
 
   eventItems: Observable<EventPreview[]>;
 
@@ -33,7 +32,7 @@ export class EventsJoinedPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EventsJoinPage');
+    console.log('ionViewDidLoad EventsJoinedPage');
   }
 
   showNotStarted() {

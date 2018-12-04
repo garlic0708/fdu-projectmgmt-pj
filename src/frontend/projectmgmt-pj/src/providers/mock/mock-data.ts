@@ -55,14 +55,14 @@ export const mockData: any = {
     { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 3, status: 'started'},
     { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4, status: 'ended'},
   ],
-  //'GET /api/personal/events-released': [
-  //  { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 },
-  //  { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2 },
-  //  { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3 },
-  //  { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4 },
-  //  { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5 },
-  //  { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 6 },
-  //],
+  'GET /api/personal/events-released': [
+    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5, status: 'canceled'},
+    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 , status: 'notstarted'},
+    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2, status: 'notstarted'},
+    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3, status: 'started'},
+    { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 3, status: 'started'},
+    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4, status: 'ended'},
+  ],
   'GET /api/event/checkin/:id': {
     'person': [
       {id: 0, name: 'student1', type: 0},

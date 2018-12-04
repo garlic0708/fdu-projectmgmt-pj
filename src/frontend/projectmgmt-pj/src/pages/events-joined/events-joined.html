@@ -24,21 +24,19 @@
   <button ion-button *ngIf="button == 3">已结束</button>
 
   <div class="flow-container">
-    <div *ngFor="let eventItem of eventItems | async">
-      <div *ngIf="(button == 1 && eventItem.status == 'notstarted') || (button == 2 && eventItem.status == 'started') || (button == 3 && eventItem.status == 'ended')">
-        <ion-card class="flow-item" (click)="goToEventDetail(eventItem.id)">
-          <div class="flow-item-image">
-            <div class="aspect-ratio-inner">
-              <div class="flexbox-center">
-                <img-loader src="./assets/imgs/logo.png" useImg></img-loader>
-              </div>
+    <div class="flow-item" *ngFor="let eventItem of (eventItems | async | eventFilter: button)">
+      <ion-card (click)="goToEventDetail(eventItem.id)">
+        <div class="flow-item-image">
+          <div class="aspect-ratio-inner">
+            <div class="flexbox-center">
+              <img-loader src="./assets/imgs/logo.png" useImg></img-loader>
             </div>
           </div>
-          <ion-card-content>
-            {{eventItem.title}}
-          </ion-card-content>
-        </ion-card>
-      </div>
+        </div>
+        <ion-card-content>
+          {{eventItem.title}}
+        </ion-card-content>
+      </ion-card>
     </div>
   </div>
 
