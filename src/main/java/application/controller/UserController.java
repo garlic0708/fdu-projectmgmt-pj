@@ -79,7 +79,7 @@ public class UserController {
         return ResponseEntity.ok().body(eventService.getEventsReleased(user.getuId()));
     }
 
-    @RequestMapping(value = "${api.user.released}", method = RequestMethod.GET)
+    @RequestMapping(value = "${api.user.getDetail}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserDetail(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
         User user = jwtTokenUtil.getUserByToken(token);
