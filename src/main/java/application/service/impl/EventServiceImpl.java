@@ -27,6 +27,9 @@ public class EventServiceImpl implements EventService {
     private MessageRepository messageRepository;
     private AddressRepository addressRepository;
     private UserRepository userRepository;
+    private EventTagRepository eventTagRepository;
+    private TagRepository tagRepository;
+    private StartEventRepository startEventRepository;
     private Scheduler scheduler;
 
     @Value("${checkTime}")
@@ -38,13 +41,19 @@ public class EventServiceImpl implements EventService {
                             Scheduler scheduler,
                             MessageRepository messageRepository,
                             AddressRepository addressRepository,
-                            UserRepository userRepository){
+                            UserRepository userRepository,
+                            EventTagRepository eventTagRepository,
+                            TagRepository tagRepository,
+                            StartEventRepository startEventRepository){
         this.eventRepository = eventRepository;
         this.joinEventRepository = joinEventRepository;
         this.scheduler = scheduler;
         this.messageRepository = messageRepository;
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
+        this.eventTagRepository = eventTagRepository;
+        this.tagRepository = tagRepository;
+        this.startEventRepository = startEventRepository;
     }
 
     @Override
@@ -152,11 +161,16 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event addEvent(AddEventForm form, int uid) throws AddEventException{
-        Address address = new Address();
-        address.setAddressname(form.getAddressName());
-        address.setPositionX(form.getAddressPx());
-        address.setPositionY(form.getAddressPy());
-        address = addressRepository.save(address);
+        Address address = addressRepository.findByAddressNameAndPositionXAndPositionY(
+                form.getAddressName(), form.getAddressPx(), form.getAddressPy());
+        if (address == null) {
+            address = new Address();
+            address.setAddressname(form.getAddressName());
+            address.setPositionX(form.getAddressPx());
+            address.setPositionY(form.getAddressPy());
+            address = addressRepository.save(address);
+        }
+
 
         Date start = form.getStartTime();
         Date end = form.getEndTime();
@@ -194,6 +208,22 @@ public class EventServiceImpl implements EventService {
             joinEvent.setJeState(JoinEvent.INITIATOR);
             joinEventRepository.save(joinEvent);
 
+            // 为创建者添加创建情况
+            StartEvent startEvent = new StartEvent();
+            joinEvent.seteId(event.geteId());
+            joinEvent.setuId(uid);
+            startEventRepository.save(startEvent);
+
+            // 添加event-tag
+            List<Integer> tags = form.getTags();
+            for (int i: tags) {
+                if (tagRepository.findByTId(i) != null) {
+                    EventTag eventTag = new EventTag();
+                    eventTag.seteId(event.geteId());
+                    eventTag.settId(i);
+                    eventTagRepository.save(eventTag);
+                }
+            }
             return event;
         }
     }

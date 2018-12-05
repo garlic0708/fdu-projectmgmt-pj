@@ -3,6 +3,7 @@ package application.entity.forms;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Creator: DreamBoy
@@ -22,10 +23,11 @@ public class AddEventForm {
     private Integer upperLimit;
     private Integer lowerLimit;
     private String image;
+    private List<Integer> tags;
 
     public AddEventForm() {}
 
-    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image) {
+    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image, List<Integer> tags) {
         this.eventName = eventName;
         this.content = content;
         this.startTime = startTime;
@@ -37,6 +39,7 @@ public class AddEventForm {
         this.upperLimit = upperLimit;
         this.lowerLimit = lowerLimit;
         this.image = image;
+        this.tags = tags;
     }
 
     public String getImage() {
@@ -125,5 +128,13 @@ public class AddEventForm {
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
+    }
+
+    public List<Integer> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Integer> tags) {
+        this.tags = tags;
     }
 }

@@ -1,6 +1,7 @@
 package application.repository;
 
 import application.entity.Address;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -47,5 +48,8 @@ public interface AddressRepository extends CrudRepository<Address, Long> {
      */
     @Override
     void delete(Address address);
+
+    @Query(value = "SELECT * FROM address WHERE addressname = ? AND positionX = ? AND positionY = ?", nativeQuery = true)
+    Address findByAddressNameAndPositionXAndPositionY(String addressName, double positionX, double positionY);
 
 }
