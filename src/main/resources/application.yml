@@ -48,7 +48,7 @@ checkTime: 180000
 # Other api routes
 api:
   event:
-    detail: api/event/deatil
+    detail: api/event/detail
     home-slides: api/event/home-slides
     home-flow: api/event/home-flow
     add: api/event/add

@@ -4,6 +4,7 @@ import application.component.JwtTokenUtil;
 import application.entity.forms.ResultMessage;
 import application.entity.User;
 import application.exception.JoinEventException;
+import application.service.EventService;
 import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 public class UserController {
     private UserService userService;
+    private EventService eventService;
     private JwtTokenUtil jwtTokenUtil;
 
     @Value("${jwt.header}")
@@ -30,8 +32,10 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService,
+                          EventService eventService,
                           JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.eventService = eventService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -46,11 +50,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "${api.user.join}/{eid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> joinEvent(HttpServletRequest request,@PathVariable("eid") String eid) {
-        String authHeader = request.getHeader(this.tokenHeader);
-        final String authToken = authHeader.substring(tokenHead.length()); // The part after "Bearer "
-        String email = jwtTokenUtil.getUsernameFromToken(authToken);
-        User user = userService.getByEmail(email).orElse(null);
+    public ResponseEntity<?> joinEvent(HttpServletRequest httpServletRequest,@PathVariable("eid") String eid) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
 
         try {
             userService.joinEvent(user.getuId(), Integer.parseInt(eid));
@@ -59,6 +61,29 @@ public class UserController {
         catch (JoinEventException e) {
             return ResponseEntity.status(425).body(new ResultMessage(e.getMessage()));
         }
+    }
 
+    @RequestMapping(value = "${api.user.joined}", method = RequestMethod.GET)
+    public ResponseEntity<?> getJoinedEvent(HttpServletRequest httpServletRequest) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        return ResponseEntity.ok().body(eventService.getEventsJoined(user.getuId()));
+    }
+
+    @RequestMapping(value = "${api.user.released}", method = RequestMethod.GET)
+    public ResponseEntity<?> getReleasedEvent(HttpServletRequest httpServletRequest) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        return ResponseEntity.ok().body(eventService.getEventsReleased(user.getuId()));
+    }
+
+    @RequestMapping(value = "${api.user.released}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUserDetail(HttpServletRequest httpServletRequest) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        return ResponseEntity.ok().body(userService.getByEmail(user.getEmail()));
     }
 }

@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +32,7 @@ public class EventController {
     private EventService eventService;
     private QuartzEventService quartzEventService;
     private FileService fileService;
+    private UserService userService;
     private JwtTokenUtil jwtTokenUtil;
 
     @Value("${jwt.header}")
@@ -47,10 +45,12 @@ public class EventController {
     public EventController(EventService eventService,
                            QuartzEventService quartzEventService,
                            JwtTokenUtil jwtTokenUtil,
+                           UserService userService,
                            FileService fileService) {
         this.eventService = eventService;
         this.quartzEventService = quartzEventService;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.userService = userService;
         this.fileService = fileService;
     }
 
@@ -91,5 +91,23 @@ public class EventController {
         }
     }
 
+    @RequestMapping(value = "${api.event.detail}/{eid}", method = RequestMethod.GET)
+    public ResponseEntity<?> getEventDetail(@PathVariable("eid") int eid) {
+        return ResponseEntity.ok().body(eventService.getEventDetailById(eid));
+    }
 
+    @RequestMapping(value = "${api.event.home-slides}", method = RequestMethod.GET)
+    public ResponseEntity<?> getHomeSlides() {
+        return ResponseEntity.ok().body(eventService.getHomeSlides());
+    }
+
+    @RequestMapping(value = "${api.event.home-flow}", method = RequestMethod.GET)
+    public ResponseEntity<?> getHomeFlow() {
+        return ResponseEntity.ok().body(eventService.getHomeFlow());
+    }
+
+    @RequestMapping(value = "${api.event.checkin}/{eid}", method = RequestMethod.GET)
+    public ResponseEntity<?> checkIn(@PathVariable("eid") int eid) {
+        return ResponseEntity.ok().body(userService.getUserCheckIn(eid));
+    }
 }
