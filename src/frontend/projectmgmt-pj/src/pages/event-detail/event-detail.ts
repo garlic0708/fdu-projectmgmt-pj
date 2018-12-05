@@ -5,6 +5,8 @@ import { Observable } from "rxjs";
 import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import * as moment from 'moment';
 import { map } from "rxjs/operators/map";
+import {CheckinPage} from "../checkin/checkin";
+
 
 /**
  * Generated class for the EventDetailPage page.
@@ -63,6 +65,10 @@ export class EventDetailPage {
         eventStatus === "started" ?
           "alreadyStarted" :
           d.currentParticipants === d.upperBound ? "full" : "canJoin";
+  }
+
+  goToRegister(id) {
+    this.navCtrl.push(CheckinPage, { eventId: id })
   }
 
 }

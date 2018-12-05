@@ -18,9 +18,10 @@ import { LoginPageModule } from "../pages/login/login.module";
 import { ChangePasswordPageModule } from "../pages/change-password/change-password.module";
 
 
+
 @NgModule({
   declarations: [
-    MyApp,
+    MyApp
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -35,7 +36,7 @@ import { ChangePasswordPageModule } from "../pages/change-password/change-passwo
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    MyApp
   ],
   providers: [
     {

@@ -28,7 +28,7 @@
         {{eventTag.name}}</span>
     </p>
     <ng-container [ngSwitch]="getDisplayStatus(_detail)">
-      <button ion-button full *ngSwitchCase="'canCheck'" color="secondary">活动已开始，点击进入签到页面</button>
+      <button ion-button full *ngSwitchCase="'canCheck'" color="secondary" (click)="goToRegister(_detail.id)">活动已开始，点击进入签到页面</button>
       <button ion-button full *ngSwitchCase="'aboutToCheck'" color="secondary" disabled>活动尚未开始，开始后可点击进行签到</button>
       <button ion-button full *ngSwitchCase="'canJoin'">加入活动</button>
       <button ion-button full *ngSwitchCase="'joined'" disabled>已加入</button>
