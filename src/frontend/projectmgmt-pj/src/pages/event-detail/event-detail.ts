@@ -50,7 +50,7 @@ export class EventDetailPage {
 
   getDisplayStatus(d: {
     status: EventStatus, upperBound: number,
-    currentAttendants: number, joined: boolean,
+    currentParticipants: number, joined: boolean,
   }): DisplayStatus {
     console.log(d);
     const eventStatus = d.status;
@@ -62,7 +62,7 @@ export class EventDetailPage {
         "joined" :
         eventStatus === "started" ?
           "alreadyStarted" :
-          d.currentAttendants === d.upperBound ? "full" : "canJoin";
+          d.currentParticipants === d.upperBound ? "full" : "canJoin";
   }
 
 }

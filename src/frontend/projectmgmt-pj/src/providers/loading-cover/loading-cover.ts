@@ -25,7 +25,8 @@ export class LoadingCoverProvider {
       loadingView.dismiss();
       data.forEach((v, idx) => {
         console.log(v, idx);
-        subjects[idx].next(v)
+        subjects[idx].next(v);
+        subjects[idx].complete()
       })
     });
     return subjects;

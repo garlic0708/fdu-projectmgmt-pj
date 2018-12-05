@@ -23,9 +23,9 @@
       </div>
     </div>
     <h1 class="detail-name">{{_detail.name}}</h1>
-    <p class="event-type-caption-container">
-      <span class="event-type-caption" *ngFor="let eventType of _detail.types">
-        {{eventType.name}}</span>
+    <p class="event-tag-caption-container">
+      <span class="event-tag-caption" *ngFor="let eventTag of _detail.tags">
+        {{eventTag.name}}</span>
     </p>
     <ng-container [ngSwitch]="getDisplayStatus(_detail)">
       <button ion-button full *ngSwitchCase="'canCheck'" color="secondary">活动已开始，点击进入签到页面</button>
@@ -55,15 +55,15 @@
     </ion-item>
     <ion-grid>
       <ion-row>
-        <ion-col class="event-attendants-number" *ngIf="_detail.lowerBound !== null">
+        <ion-col class="event-participants-number" *ngIf="_detail.lowerBound !== null">
           <p>最低人数限制</p>
           <h2>{{_detail.lowerBound}}</h2>
         </ion-col>
-        <ion-col class="event-attendants-number">
+        <ion-col class="event-participants-number">
           <p>当前参加人数</p>
-          <h2>{{_detail.currentAttendants}}</h2>
+          <h2>{{_detail.currentParticipants}}</h2>
         </ion-col>
-        <ion-col class="event-attendants-number" *ngIf="_detail.upperBound !== null">
+        <ion-col class="event-participants-number" *ngIf="_detail.upperBound !== null">
           <p>最高人数限制</p>
           <h2>{{_detail.upperBound}}</h2>
         </ion-col>

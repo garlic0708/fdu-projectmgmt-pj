@@ -31,7 +31,7 @@ export class CurrentUserProvider {
           }
         });
       else
-        resolve()
+        reject()
     })
   }
 
@@ -39,7 +39,7 @@ export class CurrentUserProvider {
     this.auth.setStorageType(rememberMe ? StorageType.LOCAL_STORAGE : StorageType.MEMORY);
     return new Promise<any>((resolve, reject) => {
       this.auth.login({ email, password }).subscribe({
-        error: () => reject(),
+        error: (err) => reject(err),
         next: () => {
           this.currentUser = this.auth.getPayload();
           resolve()

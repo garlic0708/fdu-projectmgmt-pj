@@ -15,7 +15,7 @@ export class DataProvider {
   private detailUrl = '/api/event/detail';
   private slidesUrl = '/api/event/home-slides';
   private flowUrl = '/api/event/home-flow';
-  private eventTypeListUrl = '/api/event-type/list';
+  private eventTagListUrl = '/api/event-tag/list';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
@@ -33,8 +33,18 @@ export class DataProvider {
     return this.http.get<EventPreview[]>(this.flowUrl)
   }
 
-  getEventTypeList(): Observable<any> {
-    return this.http.get(this.eventTypeListUrl)
+  getEventTagList(): Observable<any> {
+    return this.http.get(this.eventTagListUrl)
+  }
+
+  testUpload(uri): Promise<any> {
+    return fetch(uri).then(res => res.blob())
+      .then(blob => {
+        const formData = new FormData();
+        formData.append('file', blob);
+        formData.append('nodeId', 1 + '');
+        return this.http.post('/api/upload', formData).toPromise()
+      })
   }
 
 }

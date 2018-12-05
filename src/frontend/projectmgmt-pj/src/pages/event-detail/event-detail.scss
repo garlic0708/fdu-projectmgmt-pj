@@ -7,11 +7,11 @@ page-event-detail {
     margin-bottom: 0;
   }
 
-  .event-type-caption-container {
+  .event-tag-caption-container {
     margin-top: 0.5rem;
   }
 
-  .event-attendants-number {
+  .event-participants-number {
     p, h2 {
       text-align: center;
       margin: 0.5rem 0;
@@ -22,7 +22,7 @@ page-event-detail {
     }
   }
 
-  .event-attendants-number:not(:last-child) {
+  .event-participants-number:not(:last-child) {
     border-right: solid 1px #eeeeee;
   }
 }

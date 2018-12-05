@@ -21,8 +21,8 @@ import { Observable } from "rxjs";
 })
 export class NewEventPage {
 
-  eventTypeList: Observable<{ id: number, name: string }[]>;
-  eventTypesChosen: number[] = [];
+  eventTagList: Observable<{ id: number, name: string }[]>;
+  eventTagsChosen: number[] = [];
 
   _startTime: Moment = moment().add(1, "d").hour(18).minute(0);
   _endTime: Moment = this._startTime.clone().add(2, "h");
@@ -51,7 +51,8 @@ export class NewEventPage {
     this.endTimeMinLimit = now.add(1, "minute").format();
     this.timeMaxLimit = now.add(5, "y").format("YYYY");
 
-    [this.eventTypeList] = this.loading.fetchData(this.data.getEventTypeList())
+    [this.eventTagList] = this.loading.fetchData(this.data.getEventTagList());
+    this.test()
   }
 
   get startTime() {
@@ -95,12 +96,18 @@ export class NewEventPage {
 
   chooseImage() {
     this.imagePicker.getPictures({ maximumImagesCount: 1 }).then(
-      ([result]) => this.eventImage = result
+      ([result]) => {
+        this.eventImage = result;
+      }
     )
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NewEventPage');
+  }
+
+  test() {
+    this.data.testUpload(this.fallBackImage).then(x => console.log(x))
   }
 
 }
