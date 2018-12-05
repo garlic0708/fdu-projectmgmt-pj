@@ -52,10 +52,15 @@ api:
     home-slides: api/event/home-slides
     home-flow: api/event/home-flow
     add: api/event/add
+    checkin: api/event/checkin
   tag:
     list: api/tag/list
   user:
     join: api/user/join
+    joined: api/user/joined
+    released: api/user/released
     getDetail: api/user/get
   image:
     get: api/image/get
+  notify:
+    list: api/notif/notif-list

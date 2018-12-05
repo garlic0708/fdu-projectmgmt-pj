@@ -179,7 +179,7 @@ public class EventServiceImpl implements EventService {
             JoinEvent joinEvent = new JoinEvent();
             joinEvent.seteId(event.geteId());
             joinEvent.setuId(uid);
-            joinEvent.setJeState("initiator");
+            joinEvent.setJeState(JoinEvent.INITIATOR);
             joinEventRepository.save(joinEvent);
 
             return event;
@@ -189,5 +189,17 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getById(int eid) {
         return eventRepository.findByEId(eid);
+    }
+
+    @Override
+    public List<Event> getEventsJoined(int uid) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public List<Event> getEventsReleased(int uid) {
+        //TODO
+        return null;
     }
 }

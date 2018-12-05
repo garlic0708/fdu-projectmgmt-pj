@@ -90,4 +90,6 @@ public class EventController {
             return ResponseEntity.status(425).body(new ResultMessage("Add event failed"));
         }
     }
+
+
 }

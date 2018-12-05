@@ -3,6 +3,7 @@ package application.service.impl;
 import application.entity.Event;
 import application.entity.JoinEvent;
 import application.entity.User;
+import application.entity.forms.UserCheckIn;
 import application.exception.JoinEventException;
 import application.repository.EventRepository;
 import application.repository.JoinEventRepository;
@@ -56,7 +57,13 @@ public class UserServiceImpl implements UserService {
         JoinEvent joinEvent = new JoinEvent();
         joinEvent.setuId(uid);
         joinEvent.seteId(eid);
-        joinEvent.setJeState("participated");
+        joinEvent.setJeState(JoinEvent.PARTICIPATED);
         joinEventRepository.save(joinEvent);
+    }
+
+    @Override
+    public List<UserCheckIn> getUserCheckIn(int eid) {
+        //TODO
+        return null;
     }
 }

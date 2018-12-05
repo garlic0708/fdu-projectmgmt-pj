@@ -38,4 +38,18 @@ public interface EventService {
     Event addEvent(AddEventForm form, int uid) throws AddEventException;
 
     Event getById(int eid);
+
+    /**
+     * 通过uid，返回这个用户参加过的活动
+     * @param uid
+     * @return
+     */
+    List<Event> getEventsJoined(int uid);
+
+    /**
+     * 通过uid，返回这个用户发起过的活动
+     * @param uid
+     * @return
+     */
+    List<Event> getEventsReleased(int uid);
 }
