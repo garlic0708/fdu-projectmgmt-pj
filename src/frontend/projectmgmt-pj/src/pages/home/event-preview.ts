@@ -1,5 +1,6 @@
 export interface EventPreview {
   path: string,
   title: string,
-  id: number
+  id: number,
+  status: string
 }

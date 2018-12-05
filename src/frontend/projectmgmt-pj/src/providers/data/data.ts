@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { EventPreview } from "../../pages/home/event-preview";
+import { NotifPreview } from "../../pages/notif-list/notif-preview"
 
 /*
   Generated class for the DataProvider provider.
@@ -16,6 +17,10 @@ export class DataProvider {
   private slidesUrl = '/api/event/home-slides';
   private flowUrl = '/api/event/home-flow';
   private eventTypeListUrl = '/api/event-type/list';
+  private notifListUrl = '/api/notif/notif-list';
+  private eventsJoinedUrl = '/api/personal/events-joined';
+  private eventsReleasedUrl = '/api/personal/events-released';
+  private checkinUrl = '/api/event/checkin';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
@@ -35,6 +40,24 @@ export class DataProvider {
 
   getEventTypeList(): Observable<any> {
     return this.http.get(this.eventTypeListUrl)
+  }
+
+  getNotifList(): Observable<NotifPreview[]> {
+    return this.http.get<NotifPreview[]>(this.notifListUrl)
+  }
+
+
+  getEventsJoined(): Observable<EventPreview[]> {
+    return this.http.get<EventPreview[]>(this.eventsJoinedUrl)
+  }
+
+  getEventsReleased(): Observable<EventPreview[]> {
+    return this.http.get<EventPreview[]>(this.eventsReleasedUrl)
+  }
+
+  getEventCheckin(eventId): Observable<any> {
+    return this.http.get(`${this.checkinUrl}/${eventId}`)
+
   }
 
 }

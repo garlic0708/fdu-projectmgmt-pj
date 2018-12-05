@@ -16,9 +16,10 @@ import { ComponentsModule } from "../components/components.module";
 import { ImagePicker } from "@ionic-native/image-picker";
 
 
+
 @NgModule({
   declarations: [
-    MyApp,
+    MyApp
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -29,7 +30,7 @@ import { ImagePicker } from "@ionic-native/image-picker";
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    MyApp
   ],
   providers: [
     {

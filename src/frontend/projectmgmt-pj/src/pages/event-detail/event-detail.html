@@ -27,6 +27,7 @@
       <span class="event-type-caption" *ngFor="let eventType of _detail.types">
         {{eventType.name}}</span>
     </p>
+    <button ion-button (click)="goToRegister(_detail.id)">签到</button>
     <button ion-item no-lines detail-push>
       <ion-icon name="pin" item-start></ion-icon>
       {{_detail.address}}
