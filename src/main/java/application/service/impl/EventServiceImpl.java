@@ -48,12 +48,20 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDetail getEventDetailById(int eid) {
-        return null;
+        Event event=eventRepository.findByEId(eid);
+        Integer aId=event.getAddress();
+        Address address=addressRepository.findByAddrId(aId);
+        EventDetail eventDetail=new EventDetail(eid,event.getEventName(),event.getContent(), event.getStartTime(),
+                event.getEndTime(),address.getAddressname(),event.getEventState(),event.getLimited(),event.getCreditLimit(),
+                event.getUpperLimit(),event.getLowerLimit(),event.getImage()
+        );
+
+        return eventDetail;
     }
 
 
     /**
-     * 拿一个到三个数据， 拿前三个
+     * 拿一个到三个数据， 拿后三个
      *
      * @return
      */
@@ -72,7 +80,7 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
-     * 拿前十个
+     * 拿后十个
      *
      * @return
      */

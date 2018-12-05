@@ -1,8 +1,11 @@
 package application.service;
 
 import application.SpringBootWebApplication;
+import application.entity.Address;
 import application.entity.Event;
+import application.entity.forms.EventDetail;
 import application.entity.forms.EventSlide;
+import application.repository.AddressRepository;
 import application.repository.EventRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -29,15 +32,31 @@ public class EventServiceTest {
     private EventService eventService;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     private List<Event> events;
+
+    private Address address;
 
     @Before
     public void setUp() {
         events = new LinkedList<>();
+
+        address=new Address();
+        address.setAddressname("Shanghai");
+        address.setPositionX(10.0);
+        address.setPositionY(15.8);
+        address=addressRepository.save(address);
+        int aid=address.getAddrId();
+
         Event event = new Event();
         event.setEventName("event1");
         event.setImage("path/image1");
+        event.setContent("content1");
+        event.setAddress(aid);
+        event.setCreditLimit(10);
+        event.setEventState("end");
         event = eventRepository.save(event);
         events.add(event);
 
@@ -105,12 +124,25 @@ public class EventServiceTest {
 
     @Test
     @Rollback
+    public void getEventDetailById(){
+        int eid=events.get(0).geteId();
+        EventDetail eventDetail=eventService.getEventDetailById(eid);
+        assertEquals(eventDetail.getAddress(),"Shanghai");
+        assertEquals(eventDetail.getContent(),"content1");
+        assertEquals(eventDetail.getCredictLimit(),new Integer(10));
+        assertEquals(eventDetail.getImage(),"path/image1");
+        assertEquals(eventDetail.getEventstate(),"end");
+
+    }
+
+    @Test
+    @Rollback
     public void getHomeSlides() throws Exception {
         List<EventSlide> eventSlides = eventService.getHomeSlides();
         assertEquals(eventSlides.size(), 3);
-        assertEquals(eventSlides.get(0).getPath(), "path/image1");
-        assertEquals(eventSlides.get(1).getPath(), "path/image2");
-        assertEquals(eventSlides.get(2).getPath(), "path/image3");
+        assertEquals(eventSlides.get(0).getPath(), "path/image11");
+        assertEquals(eventSlides.get(1).getPath(), "path/image10");
+        assertEquals(eventSlides.get(2).getPath(), "path/image9");
     }
 
     @Test
@@ -118,8 +150,8 @@ public class EventServiceTest {
     public void getHomeFlow() throws Exception {
         List<EventSlide> eventSlides = eventService.getHomeFlow();
         assertEquals(eventSlides.size(), 10);
-        for (int i = 1; i <= 10; i++) {
-            assertEquals(eventSlides.get(i-1).getPath(), "path/image" + i);
+        for (int i = 0; i < 10; i++) {
+            assertEquals(eventSlides.get(i).getPath(), "path/image" + (11-i));
         }
     }
 
@@ -133,6 +165,7 @@ public class EventServiceTest {
         for (int i = 0; i < events.size(); i++) {
             eventRepository.delete(events.get(i));
         }
+        addressRepository.delete(address);
 
     }
 }

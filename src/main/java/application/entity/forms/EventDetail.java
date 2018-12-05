@@ -29,6 +29,21 @@ public class EventDetail {
     private Map<String, String> initiator; //参考下面的注释
     private int currentAttendants; //当前参加人数
 
+    public EventDetail(int eId,String eventname,String content,Timestamp starttime,Timestamp endtime,String address,
+    String  eventstate,Boolean limited,Integer credictLimit,Integer upperLimit,Integer lowerLimit,String image){
+        this.eId=eId;
+        this.eventname=eventname;
+        this.content = content;
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.address = address;
+        this.eventstate = eventstate;
+        this.limited = limited;
+        this.credictLimit = credictLimit;
+        this.upperLimit = upperLimit;
+        this.lowerLimit = lowerLimit;
+        this.image = image;
+    }
 //    public EventDetail() {
 //        initiator = new HashMap<>();
 //        initiator.put("name", "tangxh");

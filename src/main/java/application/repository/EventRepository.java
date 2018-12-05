@@ -73,11 +73,11 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     List<Event> getEventsInASquare(double x1, double y1, double x2, double y2);
 
     /**
-     * 取前num个event
+     * 取后num个event
      * @param num
      * @return
      */
-    @Query(value = "SELECT * FROM event LIMIT ?" ,nativeQuery = true)
+    @Query(value = "SELECT * FROM event  ORDER BY e_id DESC LIMIT ?" ,nativeQuery = true)
     List<Event> getEvents(int num);
 
     /**
