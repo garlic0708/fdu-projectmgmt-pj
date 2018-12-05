@@ -9,31 +9,31 @@ import java.sql.Timestamp;
  * Date: 2018/12/3.
  */
 public class AddEventForm {
-    private String eventname;
+    private String eventName;
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ssZ")
-    private Timestamp starttime;
+    private Timestamp startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ssZ")
-    private Timestamp endtime;
+    private Timestamp endTime;
     private String addressName;
     private double addressPx;
     private double addressPy;
-    private Integer credictLimit;
+    private Integer creditLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
     private String image;
 
     public AddEventForm() {}
 
-    public AddEventForm(String eventname, String content, Timestamp starttime, Timestamp endtime, String addressName, double addressPx, double addressPy, Integer credictLimit, Integer upperLimit, Integer lowerLimit, String image) {
-        this.eventname = eventname;
+    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image) {
+        this.eventName = eventName;
         this.content = content;
-        this.starttime = starttime;
-        this.endtime = endtime;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.addressName = addressName;
         this.addressPx = addressPx;
         this.addressPy = addressPy;
-        this.credictLimit = credictLimit;
+        this.creditLimit = creditLimit;
         this.upperLimit = upperLimit;
         this.lowerLimit = lowerLimit;
         this.image = image;
@@ -63,12 +63,12 @@ public class AddEventForm {
         this.upperLimit = upperLimit;
     }
 
-    public Integer getCredictLimit() {
-        return credictLimit;
+    public Integer getCreditLimit() {
+        return creditLimit;
     }
 
-    public void setCredictLimit(Integer credictLimit) {
-        this.credictLimit = credictLimit;
+    public void setCreditLimit(Integer creditLimit) {
+        this.creditLimit = creditLimit;
     }
 
     public double getAddressPy() {
@@ -95,20 +95,20 @@ public class AddEventForm {
         this.addressName = addressName;
     }
 
-    public Timestamp getEndtime() {
-        return endtime;
+    public Timestamp getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Timestamp endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
     }
 
-    public Timestamp getStarttime() {
-        return starttime;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Timestamp starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
     }
 
     public String getContent() {
@@ -119,11 +119,11 @@ public class AddEventForm {
         this.content = content;
     }
 
-    public String getEventname() {
-        return eventname;
+    public String getEventName() {
+        return eventName;
     }
 
-    public void setEventname(String eventname) {
-        this.eventname = eventname;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 }

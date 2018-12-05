@@ -5,10 +5,7 @@ import application.entity.forms.AddEventForm;
 import application.entity.forms.EventDetail;
 import application.entity.forms.EventSlide;
 import application.exception.AddEventException;
-import application.repository.AddressRepository;
-import application.repository.EventRepository;
-import application.repository.JoinEventRepository;
-import application.repository.MessageRepository;
+import application.repository.*;
 import application.service.EventService;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import static application.service.impl.QuartzEventServiceImpl.JOB_GROUP;
 
@@ -28,6 +26,7 @@ public class EventServiceImpl implements EventService {
     private JoinEventRepository joinEventRepository;
     private MessageRepository messageRepository;
     private AddressRepository addressRepository;
+    private UserRepository userRepository;
     private Scheduler scheduler;
 
     @Value("${checkTime}")
@@ -38,12 +37,14 @@ public class EventServiceImpl implements EventService {
                             JoinEventRepository joinEventRepository,
                             Scheduler scheduler,
                             MessageRepository messageRepository,
-                            AddressRepository addressRepository){
+                            AddressRepository addressRepository,
+                            UserRepository userRepository){
         this.eventRepository = eventRepository;
         this.joinEventRepository = joinEventRepository;
         this.scheduler = scheduler;
         this.messageRepository = messageRepository;
         this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -144,6 +145,9 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByEId(eid);
         event.setEventState("ended");
         eventRepository.save(event);
+
+        //调整信用度
+        updateCredit(eid);
     }
 
     @Override
@@ -154,8 +158,8 @@ public class EventServiceImpl implements EventService {
         address.setPositionY(form.getAddressPy());
         address = addressRepository.save(address);
 
-        Date start = form.getStarttime();
-        Date end = form.getEndtime();
+        Date start = form.getStartTime();
+        Date end = form.getEndTime();
         Date now = new Date();
 
         if (now.getTime() + checkTime > start.getTime() || start.getTime() > end.getTime())
@@ -163,10 +167,10 @@ public class EventServiceImpl implements EventService {
 
         else {
             Event event = new Event();
-            event.setEventName(form.getEventname());
+            event.setEventName(form.getEventName());
             event.setContent(form.getContent());
-            event.setStartTime(form.getStarttime());
-            event.setEndTime(form.getEndtime());
+            event.setStartTime(form.getStartTime());
+            event.setEndTime(form.getEndTime());
             event.setAddress(address.getAddrId());
             event.setInitiator(uid);
             event.setEventState("notStarted");
@@ -177,7 +181,7 @@ public class EventServiceImpl implements EventService {
                 event.setLimited(true);
                 event.setLowerLimit(form.getLowerLimit());
                 event.setUpperLimit(form.getUpperLimit());
-                event.setCreditLimit(form.getCredictLimit());
+                event.setCreditLimit(form.getCreditLimit());
             }
             event.setImage(form.getImage());
 
@@ -209,5 +213,26 @@ public class EventServiceImpl implements EventService {
     public List<Event> getEventsReleased(int uid) {
         //TODO
         return null;
+    }
+
+    private void updateCredit(int eid) {
+        List<JoinEvent> joinEvents = joinEventRepository.getParticipantsByEId2(eid);
+        User user;
+        for (JoinEvent joinEvent: joinEvents) {
+            if (Objects.equals(joinEvent.getJeState(), JoinEvent.PARTICIPATED)) { //只是参加，没有签到
+                user = userRepository.findByUId(joinEvent.getuId());
+                int credit = user.getVredict();
+                credit = credit-1 >= 0 ? credit-1 : 0;
+                user.setVredict(credit);
+                userRepository.save(user);
+            }
+            else if (Objects.equals(joinEvent.getJeState(), JoinEvent.CHECK)) {
+                user = userRepository.findByUId(joinEvent.getuId());
+                int credit = user.getVredict();
+                credit = credit+1 >= 100 ? credit+1 : 100;
+                user.setVredict(credit);
+                userRepository.save(user);
+            }
+        }
     }
 }

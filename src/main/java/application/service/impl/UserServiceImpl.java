@@ -46,6 +46,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void joinEvent(int uid, int eid)  throws JoinEventException {
         Event event = eventRepository.findByEId(eid);
+        User user = userRepository.findByUId(uid);
+        if (user == null)
+            throw new JoinEventException("No such user");
         if (event == null)
             throw new JoinEventException("No such event");
         if (!event.getEventState().equals("notStarted"))
@@ -54,6 +57,8 @@ public class UserServiceImpl implements UserService {
             throw new JoinEventException("You have joined the event");
         if (joinEventRepository.getParticipantsByEId(eid).size() >= event.getUpperLimit())
             throw new JoinEventException("Full");
+        if (event.getLimited() && event.getCreditLimit() > user.getVredict())
+            throw new JoinEventException("You don't have enough credit");
         JoinEvent joinEvent = new JoinEvent();
         joinEvent.setuId(uid);
         joinEvent.seteId(eid);

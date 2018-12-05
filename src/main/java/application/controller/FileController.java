@@ -38,7 +38,7 @@ public class FileController {
     }
 
     @RequestMapping(value = "${api.image.get}/{eid}", method = RequestMethod.GET)
-    public ResponseEntity<?> addEvent(@PathVariable("eid") int eid) {
+    public ResponseEntity<?> getEventImage(@PathVariable("eid") int eid) {
         String imagePath = eventService.getById(eid).getImage();
         try {
             byte[] image = fileService.getImage(imagePath);
