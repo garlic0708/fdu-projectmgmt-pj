@@ -17,11 +17,11 @@
   <ion-list>
     <ion-item>
       <ion-label>活动名称</ion-label>
-      <ion-input></ion-input>
+      <ion-input [ngModel]="eventName"></ion-input>
     </ion-item>
     <ion-item class="new-event-description">
       <ion-label>活动描述</ion-label>
-      <ion-textarea></ion-textarea>
+      <ion-textarea [ngModel]="content"></ion-textarea>
     </ion-item>
     <ion-item>
       <ion-label>标签</ion-label>
@@ -48,6 +48,12 @@
       <ion-datetime pickerFormat="YYYY-MM-DD HH:mm" min="{{endTimeMinLimit}}"
                     max="{{timeMaxLimit}}"
                     [(ngModel)]="endTime"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-range [(ngModel)]="creditLimit">
+        <ion-label range-left>信用度限制</ion-label>
+        <ion-label range-right>{{creditLimit}}</ion-label>
+      </ion-range>
     </ion-item>
     <ion-item-divider>
       <ion-checkbox [(ngModel)]="lowerBoundEnabled"></ion-checkbox>

@@ -21,6 +21,9 @@ import { Observable } from "rxjs";
 })
 export class NewEventPage {
 
+  eventName: string;
+  content: string;
+
   eventTagList: Observable<{ id: number, name: string }[]>;
   eventTagsChosen: number[] = [];
 
@@ -32,6 +35,8 @@ export class NewEventPage {
   timeMaxLimit: string;
 
   address: string | null = null;
+
+  creditLimit: number = 0;
 
   lowerBoundEnabled: boolean = true;
   upperBoundEnabled: boolean = true;
@@ -46,13 +51,12 @@ export class NewEventPage {
               private imagePicker: ImagePicker,
               private loading: LoadingCoverProvider,
               private data: DataProvider) {
-    const now = moment();
-    this.startTimeMinLimit = now.format();
-    this.endTimeMinLimit = now.add(1, "minute").format();
-    this.timeMaxLimit = now.add(5, "y").format("YYYY");
+    const anHourLater = moment().add(1, "h");
+    this.startTimeMinLimit = anHourLater.format();
+    this.endTimeMinLimit = anHourLater.add(1, "minute").format();
+    this.timeMaxLimit = anHourLater.add(5, "y").format("YYYY");
 
     [this.eventTagList] = this.loading.fetchData(this.data.getEventTagList());
-    this.test()
   }
 
   get startTime() {
@@ -106,8 +110,17 @@ export class NewEventPage {
     console.log('ionViewDidLoad NewEventPage');
   }
 
-  test() {
-    this.data.testUpload(this.fallBackImage).then(x => console.log(x))
+  submit() {
+    const { eventName, content } = this;
+    this.data.addEvent(this.eventImage || this.fallBackImage, {
+      eventName, content, startTime: this._startTime, endTime: this._endTime,
+      lowerLimit: this.lowerBoundEnabled ? this.lowerBound : null,
+      upperLimit: this.upperBoundEnabled ? this.upperBound : null,
+      addressName: this.address,
+      addressPx: 0, addressPy: 0, // todo
+      creditLimit: 0,
+      tags: this.eventTagsChosen,
+    }).then(x => console.log(x))
   }
 
 }

@@ -1,6 +1,7 @@
 package application.repository;
 
 import application.entity.JoinEvent;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -66,4 +67,12 @@ public interface JoinEventRepository extends CrudRepository<JoinEvent, Long> {
      */
     @Override
     void delete(JoinEvent joinEvent);
+
+    @Query(value = "SELECT u_id FROM join_event WHERE e_id = ?", nativeQuery = true)
+    List<Integer> getParticipantsByEId(int eid);
+
+    @Query(value = "SELECT * FROM join_event WHERE e_id = ?", nativeQuery = true)
+    List<JoinEvent> getParticipantsByEId2(int eid);
+
+    JoinEvent findByUIdAndEId(int uid, int eid);
 }

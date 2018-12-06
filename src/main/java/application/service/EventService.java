@@ -1,8 +1,10 @@
 package application.service;
 
+import application.entity.forms.AddEventForm;
 import application.entity.Event;
-import application.entity.EventDetail;
-import application.entity.EventSlide;
+import application.entity.forms.EventDetail;
+import application.entity.forms.EventSlide;
+import application.exception.AddEventException;
 
 import java.util.List;
 
@@ -24,4 +26,30 @@ public interface EventService {
      * @return
      */
     List<EventSlide> getHomeFlow();
+
+    List<Integer> getParticipants(int eid);
+
+    void autoCancel(int eid);
+
+    void markAsStarted(int eid);
+
+    void markAsEnded(int eid);
+
+    Event addEvent(AddEventForm form, int uid) throws AddEventException;
+
+    Event getById(int eid);
+
+    /**
+     * 通过uid，返回这个用户参加过的活动
+     * @param uid
+     * @return
+     */
+    List<Event> getEventsJoined(int uid);
+
+    /**
+     * 通过uid，返回这个用户发起过的活动
+     * @param uid
+     * @return
+     */
+    List<Event> getEventsReleased(int uid);
 }

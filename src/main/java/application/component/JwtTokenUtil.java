@@ -1,9 +1,12 @@
 package application.component;
 
+import application.entity.User;
 import application.entity.userSecurity.JwtUser;
+import application.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -25,6 +28,9 @@ public class JwtTokenUtil implements Serializable {
 
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -133,5 +139,9 @@ public class JwtTokenUtil implements Serializable {
                 username.equals(user.getUsername())
                         && !isTokenExpired(token)
                         );
+    }
+
+    public User getUserByToken(String token) {
+        return userRepository.findByEmail(getUsernameFromToken(token)).orElse(null);
     }
 }

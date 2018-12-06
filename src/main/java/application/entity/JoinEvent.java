@@ -9,10 +9,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "join_event", schema = "yueya")
 public class JoinEvent {
+    public static final String INITIATOR = "initiator";
+    public static final String PARTICIPATED = "participated";
+    public static final String CHECK = "check";
     private int jeId;
     private Integer uId;
     private Integer eId;
-    private String jeState;
+    private String jeState; // initiator, participated, check
 
     @Id
     @GeneratedValue

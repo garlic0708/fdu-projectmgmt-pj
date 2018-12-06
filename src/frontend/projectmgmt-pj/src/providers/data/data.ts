@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { EventPreview } from "../../pages/home/event-preview";
 import { NotifPreview } from "../../pages/notif-list/notif-preview"
+import { AddEventForm } from "../../pages/new-event/add-event-form";
 
 /*
   Generated class for the DataProvider provider.
@@ -21,6 +22,8 @@ export class DataProvider {
   private eventsJoinedUrl = '/api/personal/events-joined';
   private eventsReleasedUrl = '/api/personal/events-released';
   private checkinUrl = '/api/event/checkin';
+
+  private addEventUrl = '/api/event/add';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
@@ -42,13 +45,18 @@ export class DataProvider {
     return this.http.get(this.eventTagListUrl)
   }
 
-  testUpload(uri): Promise<any> {
-    return fetch(uri).then(res => res.blob())
+  addEvent(imageUri: string, payload: AddEventForm): Promise<any> {
+    return fetch(imageUri).then(res => res.blob())
       .then(blob => {
         const formData = new FormData();
         formData.append('file', blob);
-        formData.append('nodeId', 1 + '');
-        return this.http.post('/api/upload', formData).toPromise()
+        const format = "yyyy-MM-dd HH:mm:ssZ";
+        formData.append('form', JSON.stringify({
+          ...payload,
+          startTime: payload.startTime.format(format),
+          endTime: payload.endTime.format(format),
+        }));
+        return this.http.post(this.addEventUrl, formData).toPromise()
       })
   }
 

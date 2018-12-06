@@ -2,10 +2,7 @@ package application.entity;
 
 import application.entity.userSecurity.Role;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Creator: DreamBoy
@@ -26,6 +23,7 @@ public class User {
     }
 
     @Id
+    @GeneratedValue
     @Column(name = "u_id")
     public int getuId() {
         return uId;

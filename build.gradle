@@ -30,7 +30,11 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-web")
 
-    //email
+    // schedule quartz
+    compile("org.quartz-scheduler:quartz:2.2.1")
+    compile("org.springframework:spring-context-support")
+
+    // email
     compile("org.springframework.boot:spring-boot-starter-mail")
 
     // JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)

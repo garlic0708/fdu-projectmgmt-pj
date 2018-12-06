@@ -12,7 +12,7 @@ public class Message {
     private Integer sender;
     private Integer receiver;
     private String content;
-    private String messagestate;
+    private String messagestate; // read、 unread
 
     @Id
     @GeneratedValue

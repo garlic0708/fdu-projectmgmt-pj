@@ -26,34 +26,34 @@ public class EventRepositoryTest {
     @Rollback
     public void findByAddrId() {
         Event event = new Event();
-        event.setEventname("Basketball");
+        event.setEventName("Basketball");
         event.setContent("Play basketball");
         event.setAddress(1);
         eventRepository.save(event);
         int id = event.geteId();
         Event test = eventRepository.findByEId(id);
-        assertEquals(test.getEventname(), "Basketball");
+        assertEquals(test.getEventName(), "Basketball");
     }
 
     @Test
     @Rollback
     public void findByEventname() {
         Event event = new Event();
-        event.setEventname("Football");
+        event.setEventName("Football");
         event.setContent("Play football");
         eventRepository.save(event);
 
         Event event1 = new Event();
-        event1.setEventname("Basketball");
+        event1.setEventName("Basketball");
         event1.setContent("Play basketball");
         eventRepository.save(event1);
 
         Event event2 = new Event();
-        event2.setEventname("Basketball");
+        event2.setEventName("Basketball");
         event2.setContent("Let's play basketball");
         eventRepository.save(event2);
 
-        List<Event> list = eventRepository.findByEventname("Basketball");
+        List<Event> list = eventRepository.findByEventName("Basketball");
         Event test1 = list.get(0);
         Event test2 = list.get(1);
         assertEquals(test1.getContent(), "Play basketball");
@@ -62,115 +62,115 @@ public class EventRepositoryTest {
 
     public void findByContent() {
         Event event = new Event();
-        event.setEventname("Football");
+        event.setEventName("Football");
         event.setContent("Play football");
         eventRepository.save(event);
 
         Event event1 = new Event();
-        event1.setEventname("Basketball");
+        event1.setEventName("Basketball");
         event1.setContent("Play basketball");
         eventRepository.save(event1);
 
         Event event2 = new Event();
-        event2.setEventname("Basketball");
+        event2.setEventName("Basketball");
         event2.setContent("Let's play basketball");
         eventRepository.save(event2);
 
         List<Event> list = eventRepository.findByContent("Play football");
         Event test1 = list.get(0);
-        assertEquals(test1.getEventname(), "Football");
+        assertEquals(test1.getEventName(), "Football");
     }
 
     @Test
     @Rollback
     public void findByInitiator() {
         Event event = new Event();
-        event.setEventname("Football");
+        event.setEventName("Football");
         event.setInitiator(1);
         eventRepository.save(event);
 
         Event event1 = new Event();
-        event1.setEventname("Lecture");
+        event1.setEventName("Lecture");
         event1.setInitiator(2);
         eventRepository.save(event1);
 
         Event event2 = new Event();
-        event2.setEventname("Basketball");
+        event2.setEventName("Basketball");
         event2.setInitiator(1);
         eventRepository.save(event2);
 
         List<Event> list = eventRepository.findByInitiator(1);
         Event test1 = list.get(0);
         Event test2 = list.get(1);
-        assertEquals(test1.getEventname(), "Football");
-        assertEquals(test2.getEventname(), "Basketball");
+        assertEquals(test1.getEventName(), "Football");
+        assertEquals(test2.getEventName(), "Basketball");
     }
 
     @Test
     @Rollback
     public void findByAddress() {
         Event event = new Event();
-        event.setEventname("Football");
+        event.setEventName("Football");
         event.setAddress(1);
         eventRepository.save(event);
 
         Event event1 = new Event();
-        event1.setEventname("Lecture");
+        event1.setEventName("Lecture");
         event1.setAddress(2);
         eventRepository.save(event1);
 
         Event event2 = new Event();
-        event2.setEventname("Basketball");
+        event2.setEventName("Basketball");
         event2.setAddress(1);
         eventRepository.save(event2);
 
         List<Event> list = eventRepository.findByAddress(1);
         Event test1 = list.get(0);
         Event test2 = list.get(1);
-        assertEquals(test1.getEventname(), "Football");
-        assertEquals(test2.getEventname(), "Basketball");
+        assertEquals(test1.getEventName(), "Football");
+        assertEquals(test2.getEventName(), "Basketball");
     }
 
     @Test
     @Rollback
     public void findByEventstate() {
         Event event = new Event();
-        event.setEventname("Football");
-        event.setEventstate("start");
+        event.setEventName("Football");
+        event.setEventState("start");
         eventRepository.save(event);
 
         Event event1 = new Event();
-        event1.setEventname("Lecture");
-        event1.setEventstate("end");
+        event1.setEventName("Lecture");
+        event1.setEventState("end");
         eventRepository.save(event1);
 
         Event event2 = new Event();
-        event2.setEventname("Basketball");
-        event2.setEventstate("start");
+        event2.setEventName("Basketball");
+        event2.setEventState("start");
         eventRepository.save(event2);
 
-        List<Event> list = eventRepository.findByEventstate("start");
+        List<Event> list = eventRepository.findByEventState("start");
         Event test1 = list.get(0);
         Event test2 = list.get(1);
-        assertEquals(test1.getEventname(), "Football");
-        assertEquals(test2.getEventname(), "Basketball");
+        assertEquals(test1.getEventName(), "Football");
+        assertEquals(test2.getEventName(), "Basketball");
     }
 
     @Test
     @Rollback
     public void listEvents() {
         Event event = new Event();
-        event.setEventname("Football");
+        event.setEventName("Football");
         event.setContent("Play football");
         eventRepository.save(event);
 
         Event event1 = new Event();
-        event1.setEventname("Basketball");
+        event1.setEventName("Basketball");
         event1.setContent("Play basketball");
         eventRepository.save(event1);
 
         Event event2 = new Event();
-        event2.setEventname("Basketball");
+        event2.setEventName("Basketball");
         event2.setContent("Let's play basketball");
         eventRepository.save(event2);
 
@@ -187,7 +187,7 @@ public class EventRepositoryTest {
     @Rollback
     public void deleteByEId() {
         Event event = new Event();
-        event.setEventname("Basketball");
+        event.setEventName("Basketball");
         eventRepository.save(event);
         int id = event.geteId();
         eventRepository.deleteByEId(id);
@@ -208,19 +208,19 @@ public class EventRepositoryTest {
     @Rollback
     public void deleteByEventstate() {
         Event event = new Event();
-        event.setEventstate("start");
+        event.setEventState("start");
         event.setContent("Play football");
         eventRepository.save(event);
         Event event1 = new Event();
-        event1.setEventstate("end");
+        event1.setEventState("end");
         event1.setContent("Play basketball");
         eventRepository.save(event);
         Event event2 = new Event();
-        event2.setEventstate("end");
+        event2.setEventState("end");
         event2.setContent("Let's play basketball");
 
         eventRepository.save(event);
-        eventRepository.deleteByEventstate("end");
+        eventRepository.deleteByEventState("end");
         assertNotEquals(eventRepository.findByContent("Play football").size(), 0);
         assertEquals(eventRepository.findByContent("Play basketball").size(), 0);
         assertEquals(eventRepository.findByContent("Let's play basketball").size(), 0);
@@ -230,7 +230,7 @@ public class EventRepositoryTest {
     @Rollback
     public void deleteEvent() {
         Event event = new Event();
-        event.setEventname("Basketball");
+        event.setEventName("Basketball");
         event.setContent("Play basketball");
         eventRepository.save(event);
         int id = event.geteId();
@@ -242,13 +242,13 @@ public class EventRepositoryTest {
     @Rollback
     public void updateEvent() {
         Event event = new Event();
-        event.setEventname("Basketball");
+        event.setEventName("Basketball");
         eventRepository.save(event);
         int id = event.geteId();
         Event event1 = eventRepository.findByEId(id);
-        event.setEventname("Football");
+        event.setEventName("Football");
         eventRepository.save(event1);
         Event test = eventRepository.findByEId(id);
-        assertEquals(test.getEventname(), "Football");
+        assertEquals(test.getEventName(), "Football");
     }
 }
