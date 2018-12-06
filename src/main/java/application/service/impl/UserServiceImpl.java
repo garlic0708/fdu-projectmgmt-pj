@@ -12,6 +12,7 @@ import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private JoinEventRepository joinEventRepository;
     private EventRepository eventRepository;
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            JoinEventRepository joinEventRepository,
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void joinEvent(int uid, int eid)  throws JoinEventException {
+    public void joinEvent(int uid, int eid) throws JoinEventException {
         Event event = eventRepository.findByEId(eid);
         User user = userRepository.findByUId(uid);
         if (user == null)
@@ -68,7 +70,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserCheckIn> getUserCheckIn(int eid) {
-        //TODO
-        return null;
+        List<JoinEvent> joinEvents = joinEventRepository.findByEId(eid);
+        List<UserCheckIn> userCheckIns = new LinkedList<>();
+        for (int i = 0; i < joinEvents.size(); i++) {
+            JoinEvent joinEvent = joinEvents.get(i);
+            int uid = joinEvent.getuId();
+            String jeState = joinEvent.getJeState();
+            UserCheckIn userCheckIn = new UserCheckIn();
+            if (jeState.equals("participated"))
+                userCheckIn.setType(false);
+            else if (jeState.equals("check"))
+                userCheckIn.setType(true);
+            else if (jeState.equals("initiator"))
+                continue;
+            userCheckIn.setUid(uid);
+            User user = userRepository.findByUId(uid);
+            userCheckIn.setName(user.getNickname());
+            userCheckIns.add(userCheckIn);
+        }
+
+        return userCheckIns;
     }
 }

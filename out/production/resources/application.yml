@@ -54,6 +54,7 @@ api:
     add: api/event/add
     checkin: api/event/checkin
   tag:
+    add: api/tag/add
     list: api/tag/list
   user:
     join: api/user/join
