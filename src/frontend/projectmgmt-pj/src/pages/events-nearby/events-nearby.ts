@@ -50,7 +50,8 @@ export class EventsNearbyPage {
   markers=[];
   searchQuery: string = '';
   items: lbs_msg[];
-  searchNum; number;
+  searchNum: number;
+
   returnType: number;
   search_content: lbs_msg;
   nearby_array: location_array;
@@ -66,6 +67,7 @@ export class EventsNearbyPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient,
   public data: DataProvider) {
     this.searchNum=0;
+
   }
 
   goLocation_search(){
@@ -227,6 +229,7 @@ export class EventsNearbyPage {
     this.navCtrl.push(ShowNearByPage,{});
   }
   getItems(ev: any): Observable<lbs_msg_psg> {
+
     // Reset items back to all of the items
     this.initializeItems();
 
@@ -234,8 +237,9 @@ export class EventsNearbyPage {
     const val = ev.target.value;
 
     // if the value is an empty string don't filter the items
+    console.log(map.getAdcode());
     if (val && val.trim() != '') {
-      const url = 'https://restapi.amap.com/v3/assistant/inputtips?output=json&city=021&citylimit=true&keywords='+val+'&key=93c4bd0fee3dd51c49b2f93b64749208';
+      const url = 'https://restapi.amap.com/v3/assistant/inputtips?output=json&city='+map.getAdcode()+'&citylimit=true&keywords='+val+'&key=93c4bd0fee3dd51c49b2f93b64749208';
       this.http.get<lbs_msg_psg>(url).subscribe(data=>{
         console.log(data);
         let re = new lbs_msg_psg();
