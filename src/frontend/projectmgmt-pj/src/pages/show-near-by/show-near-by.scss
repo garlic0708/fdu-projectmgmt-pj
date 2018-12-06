@@ -1,4 +1,4 @@
-page-events-nearby {
+page-show-near-by {
   .map_container {
     width: 100%;
     height: 100%;
@@ -30,9 +30,11 @@ page-events-nearby {
     min-height:1%;
     font-size: 5px;
   }
-  .ion-f{
+  .t{
     position: absolute;
-    left:80%;
+    z-index: 999;
+    left: 77%;
     top:80%;
+    size: 30px;
   }
 }

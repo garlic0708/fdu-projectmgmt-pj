@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
-import {location_array} from "../../location_array";
+import {location_array, location_array, location_array, location_array} from "../../location_array";
+import {EventPoint} from "../../event_point";
 
 /*
   Generated class for the DataProvider provider.
@@ -18,8 +19,13 @@ export class DataProvider {
     console.log('Hello DataProvider Provider');
   }
 
-  getEvent(location_array: location_array): Observable<any> {
-    return this.http.get(`${this.EventUrl}/${location_array}`)
+  getEvent(location_array: any[]): Observable<EventPoint[]> {
+    return this.http.get<EventPoint[]>(`${this.EventUrl}`,{
+      params: {
+        x:location_array[0],
+        y:location_array[1]
+      }
+    })
   }
 
 }

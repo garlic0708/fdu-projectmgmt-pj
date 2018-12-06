@@ -41,28 +41,6 @@ export class LocationSearchPage {
 
   }
 
-  getItems(ev: any): Observable<lbs_msg_psg> {
-    // Reset items back to all of the items
-    this.initializeItems();
-
-    // set val to the value of the searchbar
-    const val = ev.target.value;
-
-    // if the value is an empty string don't filter the items
-    if (val && val.trim() != '') {
-      const url = 'https://restapi.amap.com/v3/assistant/inputtips?output=json&city=021&citylimit=true&keywords='+val+'&key=93c4bd0fee3dd51c49b2f93b64749208';
-      this.http.get<lbs_msg_psg>(url).subscribe(data=>{
-        console.log(data);
-        let re = new lbs_msg_psg();
-        re = data;
-        if(re.tips.length !==0 ){
-          for(var i=0;i<10;i++){
-            this.items.push(re.tips[i]);
-          }
-        }
-      });
-    }
-  }
 
   returnLoaction(item: lbs_msg){
     this.navCtrl.push(EventsNearbyPage,{

@@ -1,5 +1,5 @@
 <!--
-  Generated template for the EventsNearbyPage page.
+  Generated template for the ShowNearByPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,14 +7,13 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>events-nearby</ion-title>
+    <ion-title>showNearBy</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <!--<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>-->
   <ion-searchbar #searchbar (ionInput)="getItems($event)" placeholder={{searchbar_value}}></ion-searchbar>
   <ion-list>
     <button ion-item *ngFor="let item of items" (click)="showLoaction(item)" class='item-small'>
@@ -22,10 +21,7 @@
       {{ item.name }}
     </button>
   </ion-list>
+  <button ion-button="button" class="t" (click)="ensureLocation()">确定</button>
   <div #map_container class="map_container"></div>
-  <ion-fab class="ion-f">
-    <button ion-fab mini (click)="jumpto()">
-      <ion-icon name="ios-locate-outline"></ion-icon>
-    </button>
-  </ion-fab>
+
 </ion-content>
