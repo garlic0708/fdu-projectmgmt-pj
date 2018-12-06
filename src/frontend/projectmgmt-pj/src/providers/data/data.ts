@@ -22,8 +22,10 @@ export class DataProvider {
   getEvent(location_array: any[]): Observable<EventPoint[]> {
     return this.http.get<EventPoint[]>(`${this.EventUrl}`,{
       params: {
-        x:location_array[0],
-        y:location_array[1]
+        nex:location_array[0],
+        ney:location_array[1],
+        swx:location_array[2],
+        swy:location_array[3]
       }
     })
   }

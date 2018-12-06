@@ -103,11 +103,12 @@ export class EventsNearbyPage {
       console.log("end move");
       var bounds = map.getBounds();
       console.log(bounds);
+      console.log([bounds.northeast.lng,bounds.northeast.lat,bounds.southwest.lng,bounds.southwest.lat]);
       var zoom = map.getZoom(); //获取当前地图级别
       var center = map.getCenter(); //获取当前地图级别
       console.log(zoom);
       console.log(center);
-      data.getEvent(self_location).subscribe(data=>{
+      data.getEvent([bounds.northeast.lng,bounds.northeast.lat,bounds.southwest.lng,bounds.southwest.lat]).subscribe(data=>{
         for(var i=0;i<data.length;i++){
           var marker1 = new AMap.Marker({
             position: new AMap.LngLat(data[i].x, data[i].y),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
@@ -167,6 +168,22 @@ export class EventsNearbyPage {
 //     map.add(marker);
     map.setZoomAndCenter(18, [x*1, y*1]);
     this.initializeItems();
+      var bounds = map.getBounds();
+      console.log([bounds.northeast.lng,bounds.northeast.lat,bounds.southwest.lng,bounds.southwest.lat]);
+      this.data.getEvent([bounds.northeast.lng,bounds.northeast.lat,bounds.southwest.lng,bounds.southwest.lat]).subscribe(data=>{
+          for(var i=0;i<data.length;i++){
+              var marker1 = new AMap.Marker({
+                  position: new AMap.LngLat(data[i].x, data[i].y),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+              });
+              marker1.content=data[i].id;
+              marker1.on('click',function (e) {
+                  console.log(e.target.content);
+                  console.log(e.target.getPosition());
+              });
+              map.add(marker1);
+          }
+          console.log("load event near by finish!");
+      });
   }
   showSelfLocation(){
     var geolocation = new AMap.Geolocation({
