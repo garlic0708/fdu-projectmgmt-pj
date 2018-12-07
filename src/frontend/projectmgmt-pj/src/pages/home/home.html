@@ -15,4 +15,7 @@
 
 <ion-content padding>
   <button ion-button (click)="test()">Push</button>
+  <p>{{poi?.name}}</p>
+  <p>{{poi?.address}}</p>
+  <button ion-button (click)="test2()" [disabled]="!poi">Detail</button>
 </ion-content>

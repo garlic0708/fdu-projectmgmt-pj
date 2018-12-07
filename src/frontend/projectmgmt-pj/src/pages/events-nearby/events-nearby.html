@@ -13,19 +13,8 @@
 </ion-header>
 
 
-<ion-content padding>
-  <!--<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>-->
-  <ion-searchbar #searchbar (ionInput)="getItems($event)" placeholder={{searchbar_value}}></ion-searchbar>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="showLoaction(item)" class='item-small'>
-      <!--<button (click)="returnLoaction(item)">{{ item.name }}</button>-->
-      {{ item.name }}
-    </button>
-  </ion-list>
-  <div #map_container class="map_container"></div>
-  <ion-fab class="ion-f">
-    <button ion-fab mini (click)="jumpto()">
-      <ion-icon name="ios-locate-outline"></ion-icon>
-    </button>
-  </ion-fab>
+<ion-content>
+  <amap #amapContainer [enableCustomCardContent]="true"
+        [customCardContent]="cardContent"
+        (onMapMoved)="updateNearbyEvents()"></amap>
 </ion-content>

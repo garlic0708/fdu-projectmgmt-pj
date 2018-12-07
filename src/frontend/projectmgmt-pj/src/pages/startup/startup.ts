@@ -4,6 +4,7 @@ import { HomePage } from "../home/home";
 import { EventsNearbyPage } from "../events-nearby/events-nearby";
 import { NotifListPage } from "../notif-list/notif-list";
 import { PersonalPage } from "../personal/personal";
+import { SuperTabsController } from "ionic2-super-tabs";
 
 /**
  * Generated class for the StartupPage page.
@@ -18,13 +19,17 @@ import { PersonalPage } from "../personal/personal";
   templateUrl: 'startup.html',
 })
 export class StartupPage {
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any, id ?: any}>;
+  config: any = {
+    allowElementScroll: true,
+  };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private superTabsCtrl: SuperTabsController,) {
     // set our app's pages
     this.pages = [
       { title: '主页', component: HomePage },
-      { title: '附近', component: EventsNearbyPage },
+      { title: '附近', component: EventsNearbyPage, id: 'nearby' },
       { title: '消息列表', component: NotifListPage },
       { title: '我的', component: PersonalPage },
     ];
@@ -32,6 +37,7 @@ export class StartupPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad StartupPage');
+    this.superTabsCtrl.enableTabSwipe('nearby', false,)
   }
 
 }

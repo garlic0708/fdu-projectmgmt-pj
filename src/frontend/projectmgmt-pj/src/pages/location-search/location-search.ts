@@ -1,11 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
-import {IonicPage, NavController, NavParams, Searchbar} from 'ionic-angular';
-import {lbs_msg} from "../../lbs_msg";
-import {Observable} from "rxjs/Observable";
-import {lbs_msg_psg} from "../../lbs_msg_psg";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Observable} from "rxjs/Observable";
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Poi} from "../../components/amap/poi";
 import { EventsNearbyPage } from "../events-nearby/events-nearby";
+import { AMapComponent } from "../../components/amap/amap";
 
 /**
  * Generated class for the LocationSearchPage page.
@@ -21,31 +18,19 @@ import { EventsNearbyPage } from "../events-nearby/events-nearby";
 })
 export class LocationSearchPage {
 
-  searchbar_value: string="";
-  @ViewChild('searchbar') searchbar:Searchbar;
+  resolveLocation: (l: Poi) => void;
+  location: Poi = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
-    this.initializeItems();
-    this.searchbar_value=this.navParams.get('default_value');
-  }
-
-  items: lbs_msg[];
-
-  initializeItems() {
-    this.items = [
-
-    ];
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.resolveLocation = this.navParams.get('resolveLocation')
   }
 
   ionViewDidLoad() {
-
+    console.log('Hello LocationSearchPage')
   }
 
-
-  returnLoaction(item: lbs_msg){
-    this.navCtrl.push(EventsNearbyPage,{
-      content: item,
-      returnType: 1
-    });
+  returnLocation(){
+    this.resolveLocation(this.location);
+    this.navCtrl.pop()
   }
 }

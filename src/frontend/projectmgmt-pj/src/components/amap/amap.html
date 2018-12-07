@@ -1,0 +1,55 @@
+<!-- Generated template for the AMapComponent component -->
+<ng-container *ngIf="showSearchBar">
+  <ion-searchbar #searchbar (ionInput)="getItems($event)" placeholder={{searchbar_value}}></ion-searchbar>
+  <ion-scroll scrollY="true" class="amap-list-container" [class.hidden]="!inputTipList?.length">
+    <ion-list>
+      <button ion-item *ngFor="let item of inputTipList" (click)="showLocation(item)" class='item-small'>
+        <p>{{ item.name }}</p>
+        <p>{{item.address}}</p>
+      </button>
+      <button ion-item *ngIf="inputTipTriggerFlag" class="item-small" (click)="loadMoreItems()">
+        <p>{{itemTipLoading ? '加载中' : '点击加载更多'}}</p>
+      </button>
+    </ion-list>
+  </ion-scroll>
+</ng-container>
+<div #map_container class="map_container"></div>
+<div class="amap-item-detail">
+  <ion-fab class="ion-f">
+    <button ion-fab mini (click)="showSelfLocation()">
+      <ion-icon name="ios-locate-outline"></ion-icon>
+    </button>
+  </ion-fab>
+  <ng-container *ngIf="enableCustomCardContent; else b_poi">
+    <ion-card *ngIf="customCardContent">
+      <p><b>{{customCardContent.title}}</b></p>
+      <p>{{customCardContent.content}}</p>
+      <button ion-button full *ngIf="customCardContent.showButton"
+              (click)="customCardContent.onButtonClick()">
+        {{customCardContent.buttonText}}
+      </button>
+    </ion-card>
+  </ng-container>
+  <ng-template #b_poi>
+    <ion-card *ngIf="currentPOI; else b_address">
+      <p class="amap-poi-name"><b>{{currentPOI.name}}</b></p>
+      <p>{{currentPOI.address}}</p>
+      <button ion-button full *ngIf="showConfirmButton"
+              (click)="onConfirmClicked.emit()">选择此地点</button>
+    </ion-card>
+  </ng-template>
+  <ng-template #b_address>
+    <ion-card *ngIf="address">
+      <p><b>{{address.formattedAddress}}</b></p>
+      <p class="amap-small">此处附近有</p>
+      <ion-scroll scrollY="true">
+        <ion-list>
+          <button ion-item *ngFor="let item of address.pois" (click)="showLocation(item)" class='item-small'>
+            <p>{{ item.name }}</p>
+            <p>{{item.address}}</p>
+          </button>
+        </ion-list>
+      </ion-scroll>
+    </ion-card>
+  </ng-template>
+</div>
