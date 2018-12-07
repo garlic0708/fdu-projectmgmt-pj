@@ -25,7 +25,11 @@ export class MockProvider implements HttpInterceptor {
     // if (req.url.startsWith("http"))
     //   return next.handle(req);
     // console.log(req);
-    const key = `${req.method} ${req.url}`;
+    let url = req.url;
+    const idx = req.url.indexOf('?');
+    if(idx!==-1)
+      url=req.url.substring(0,idx);
+    const key = `${req.method} ${url}`;
     const mockDatum = mockData[
       Object.keys(mockData).find(k => {
         k = escapeRegExp(k);

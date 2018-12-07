@@ -38,9 +38,14 @@ export const mockData: any = {
     return { id: n + 1, name: `Type ${n + 1}` }
   }),
   'GET /api/notif/notif-list': [
-    { type: 1, title:'Title 1', content: 'Content 1', id: 1 },
-    { type: 2, title:'Title 2', content: 'Content 2', id: 2 },
-    { type: 3, title:'Title 3, testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest', content: 'Content 3, testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest', id: 3 },
+    { type: 1, title: 'Title 1', content: 'Content 1', id: 1 },
+    { type: 2, title: 'Title 2', content: 'Content 2', id: 2 },
+    {
+      type: 3,
+      title: 'Title 3, testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest',
+      content: 'Content 3, testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest',
+      id: 3
+    },
   ],
   'GET /api/notif/notif-detail/:id': {
     'type': 1,
@@ -48,29 +53,34 @@ export const mockData: any = {
     'content': 'Content 1',
   },
   'GET /api/personal/events-joined': [
-    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5, status: 'canceled'},
-    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 , status: 'notstarted'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2, status: 'notstarted'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3, status: 'started'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 3, status: 'started'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4, status: 'ended'},
+    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5, status: 'canceled' },
+    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1, status: 'notstarted' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2, status: 'notstarted' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3, status: 'started' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 3, status: 'started' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4, status: 'ended' },
   ],
   'GET /api/personal/events-released': [
-    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5, status: 'canceled'},
-    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1 , status: 'notstarted'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2, status: 'notstarted'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3, status: 'started'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 3, status: 'started'},
-    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4, status: 'ended'},
+    { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5, status: 'canceled' },
+    { path: './assets/imgs/logo.png', title: 'Title 1', id: 1, status: 'notstarted' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 2', id: 2, status: 'notstarted' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 3', id: 3, status: 'started' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 6', id: 3, status: 'started' },
+    { path: './assets/imgs/placeholder.png', title: 'Title 4', id: 4, status: 'ended' },
   ],
   'GET /api/event/checkin/:id': {
     'person': [
-      {id: 0, name: 'student1', type: 0},
-      {id: 1, name: 'student2', type: 1},
-      {id: 2, name: 'student3', type: 0},
-      {id: 3, name: 'student4', type: 1},
-      {id: 4, name: 'student5', type: 0},
-      {id: 5, name: 'student6', type: 0},
+      { id: 0, name: 'student1', type: 0 },
+      { id: 1, name: 'student2', type: 1 },
+      { id: 2, name: 'student3', type: 0 },
+      { id: 3, name: 'student4', type: 1 },
+      { id: 4, name: 'student5', type: 0 },
+      { id: 5, name: 'student6', type: 0 },
     ]
-  }
+  },
+  'GET /api/nearby/list': [
+    { id: 1, name: 'Event 1', x: 121.5940, y: 31.1900 },
+    { id: 2, name: 'Event 2', x: 121.5942, y: 31.1901 },
+    { id: 3, name: 'Event 3', x: 121.5944, y: 31.1902 }
+  ]
 };

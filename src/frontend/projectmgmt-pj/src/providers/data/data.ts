@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { EventPreview } from "../../pages/home/event-preview";
 import { NotifPreview } from "../../pages/notif-list/notif-preview"
+import { EventPoint } from "../../components/amap/event_point";
 
 /*
   Generated class for the DataProvider provider.
@@ -21,6 +22,7 @@ export class DataProvider {
   private eventsJoinedUrl = '/api/personal/events-joined';
   private eventsReleasedUrl = '/api/personal/events-released';
   private checkinUrl = '/api/event/checkin';
+  private EventUrl = '/api/nearby/list';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
@@ -57,7 +59,17 @@ export class DataProvider {
 
   getEventCheckin(eventId): Observable<any> {
     return this.http.get(`${this.checkinUrl}/${eventId}`)
+  }
 
+  getEvent(locationArray: any[]): Observable<EventPoint[]> {
+    return this.http.get<EventPoint[]>(`${this.EventUrl}`, {
+      params: {
+        nex: locationArray[0],
+        ney: locationArray[1],
+        swx: locationArray[2],
+        swy: locationArray[3]
+      }
+    })
   }
 
 }
