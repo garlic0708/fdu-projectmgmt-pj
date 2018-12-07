@@ -30,7 +30,7 @@ public class EventDetail {
     private int currentAttendants; //当前参加人数
 
     public EventDetail(int eId,String eventname,String content,Timestamp starttime,Timestamp endtime,String address,
-    String  eventstate,Boolean limited,Integer credictLimit,Integer upperLimit,Integer lowerLimit,String image){
+    String eventstate,Boolean limited,Integer credictLimit,Integer upperLimit,Integer lowerLimit,String image){
         this.eId=eId;
         this.eventname=eventname;
         this.content = content;
