@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { App, IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { EventDetailPage } from "../event-detail/event-detail";
-import { Poi } from "../../components/amap/poi";
-import { LocationSearchPage } from "../location-search/location-search";
-import { ShowEventLocationPage } from "../show-event-location/show-event-location";
+import { Observable, Subject } from "rxjs";
+import { DataProvider } from "../../providers/data/data";
+import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
+import { EventPreview } from "./event-preview";
 
 /**
  * Generated class for the HomePage page.
@@ -19,27 +20,25 @@ import { ShowEventLocationPage } from "../show-event-location/show-event-locatio
 })
 export class HomePage {
 
-  poi: Poi;
+  slideItems: Observable<EventPreview[]>;
+  flowItems: Observable<EventPreview[]>;
+
+  @ViewChild(Slides) slides: Slides;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private appCtrl: App) {
+              private appCtrl: App,
+              private data: DataProvider,
+              private loading: LoadingCoverProvider) {
+    [this.slideItems, this.flowItems] =
+      this.loading.fetchData(this.data.getHomeSlides(), this.data.getHomeFlow());
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
   }
 
-  test() {
-    new Promise<Poi>(resolve => {
-
-      this.appCtrl.getRootNav().push(LocationSearchPage, { resolveLocation: resolve })
-    }).then(msg => {
-      this.poi = msg
-    })
-  }
-
-  test2() {
-    this.appCtrl.getRootNav().push(ShowEventLocationPage, { poi: this.poi })
+  goToEventDetail(id) {
+    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
   }
 
 }

@@ -14,5 +14,52 @@
 
 
 <ion-content padding>
-
+  <ng-container *ngIf="detail | async as _detail">
+    <div class="event-image">
+      <div class="aspect-ratio-inner">
+        <div class="flexbox-center">
+          <img-loader src="{{_detail.image}}" useImg></img-loader>
+        </div>
+      </div>
+    </div>
+    <h1 class="detail-name">{{_detail.name}}</h1>
+    <p class="event-type-caption-container">
+      <span class="event-type-caption" *ngFor="let eventType of _detail.types">
+        {{eventType.name}}</span>
+    </p>
+    <button ion-button (click)="goToRegister(_detail.id)">签到</button>
+    <button ion-item no-lines detail-push>
+      <ion-icon name="pin" item-start></ion-icon>
+      {{_detail.address}}
+    </button>
+    <ion-item no-lines>
+      <ion-icon name="time" item-start></ion-icon>
+      <p>{{formatTime(_detail.startTime)}}</p><hr>
+      <p>{{formatTime(_detail.endTime)}}</p>
+    </ion-item>
+    <ion-item no-lines>
+      <ion-avatar item-start>
+        <img-loader src="{{_detail.initiator.avatar}}" useImg></img-loader>
+      </ion-avatar>
+      <p>发起人</p>
+      <h2>{{_detail.initiator.name}}</h2>
+    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="event-attendants-number" *ngIf="_detail.lowerBound !== null">
+          <p>最低人数限制</p>
+          <h2>{{_detail.lowerBound}}</h2>
+        </ion-col>
+        <ion-col class="event-attendants-number">
+          <p>当前参加人数</p>
+          <h2>{{_detail.currentAttendants}}</h2>
+        </ion-col>
+        <ion-col class="event-attendants-number" *ngIf="_detail.upperBound !== null">
+          <p>最高人数限制</p>
+          <h2>{{_detail.upperBound}}</h2>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <p>{{_detail.description}}</p>
+  </ng-container>
 </ion-content>

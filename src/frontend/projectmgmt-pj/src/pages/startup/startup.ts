@@ -5,6 +5,7 @@ import { EventsNearbyPage } from "../events-nearby/events-nearby";
 import { NotifListPage } from "../notif-list/notif-list";
 import { PersonalPage } from "../personal/personal";
 import { SuperTabsController } from "ionic2-super-tabs";
+import { NewEventPage } from "../new-event/new-event";
 
 /**
  * Generated class for the StartupPage page.
@@ -19,7 +20,7 @@ import { SuperTabsController } from "ionic2-super-tabs";
   templateUrl: 'startup.html',
 })
 export class StartupPage {
-  pages: Array<{title: string, component: any, id ?: any}>;
+  pages: Array<{title: string, component: any, id ?: any, tabIcon: string }>;
   config: any = {
     allowElementScroll: true,
   };
@@ -28,10 +29,11 @@ export class StartupPage {
               private superTabsCtrl: SuperTabsController,) {
     // set our app's pages
     this.pages = [
-      { title: '主页', component: HomePage },
-      { title: '附近', component: EventsNearbyPage, id: 'nearby' },
-      { title: '消息列表', component: NotifListPage },
-      { title: '我的', component: PersonalPage },
+      { title: '主页', component: HomePage, tabIcon: 'home' },
+      { title: '附近', component: EventsNearbyPage, tabIcon: 'pin', id: 'nearby' },
+      { title: '新建活动', component: NewEventPage, tabIcon: 'add' },
+      { title: '消息列表', component: NotifListPage, tabIcon: 'notifications' },
+      { title: '我的', component: PersonalPage, tabIcon: 'person' },
     ];
   }
 

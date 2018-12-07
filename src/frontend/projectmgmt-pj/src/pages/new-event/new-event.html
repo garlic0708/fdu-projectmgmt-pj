@@ -1,0 +1,79 @@
+<!--
+  Generated template for the NewEventPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>new-event</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>活动名称</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item class="new-event-description">
+      <ion-label>活动描述</ion-label>
+      <ion-textarea></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>标签</ion-label>
+      <ion-select [(ngModel)]="eventTypesChosen" multiple="true">
+        <ion-option *ngFor="let item of eventTypeList | async" value="{{item.id}}">
+          <span class="event-type-caption">{{item.name}}</span>
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <button ion-item>
+      <ion-label>活动地点</ion-label>
+      <div item-content>
+        <p>{{address === null ? '点击选择地点' : address}}</p>
+      </div>
+    </button>
+    <ion-item>
+      <ion-label>起始时间</ion-label>
+      <ion-datetime pickerFormat="YYYY-MM-DD HH:mm" min="{{startTimeMinLimit}}"
+                    max="{{timeMaxLimit}}"
+                    [(ngModel)]="startTime"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>结束时间</ion-label>
+      <ion-datetime pickerFormat="YYYY-MM-DD HH:mm" min="{{endTimeMinLimit}}"
+                    max="{{timeMaxLimit}}"
+                    [(ngModel)]="endTime"></ion-datetime>
+    </ion-item>
+    <ion-item-divider>
+      <ion-checkbox [(ngModel)]="lowerBoundEnabled"></ion-checkbox>
+      <ion-label>最低人数限制</ion-label>
+    </ion-item-divider>
+    <ion-item class="slide-from-above" [class.collapsed]="!lowerBoundEnabled">
+      <div item-content>
+        <stepper [(value)]="lowerBound" [enabled]="lowerBoundEnabled"
+                 [minValue]="0"></stepper>
+      </div>
+    </ion-item>
+    <ion-item-divider>
+      <ion-checkbox [(ngModel)]="upperBoundEnabled"></ion-checkbox>
+      <ion-label>最高人数限制</ion-label>
+    </ion-item-divider>
+    <ion-item class="slide-from-above" [class.collapsed]="!upperBoundEnabled">
+      <div item-content>
+        <stepper [(value)]="upperBound" [enabled]="upperBoundEnabled"
+                 [minValue]="1"></stepper>
+      </div>
+    </ion-item>
+    <button ion-item (click)="chooseImage()">
+      <ion-thumbnail item-start>
+        <img src="{{eventImage || fallBackImage}}">
+      </ion-thumbnail>
+      <div ion-content>选择活动图片</div>
+    </button>
+  </ion-list>
+</ion-content>

@@ -14,5 +14,12 @@
 
 
 <ion-content padding>
-
+  <ion-list>
+    <ion-item *ngFor="let notifItem of notifItems | async" (click)="doAlert(notifItem)">
+      <ion-icon name="plane" item-start color="danger" *ngIf="notifItem.type == 1"></ion-icon>
+      <ion-icon name="wifi" item-start color="primary" *ngIf="notifItem.type == 2"></ion-icon>
+      <ion-icon name="bluetooth" item-start color="primary" *ngIf="notifItem.type == 3"></ion-icon>
+      <ion-label class="notif-content">{{notifItem.title}}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

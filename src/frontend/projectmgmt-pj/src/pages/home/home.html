@@ -14,8 +14,32 @@
 
 
 <ion-content padding>
-  <button ion-button (click)="test()">Push</button>
-  <p>{{poi?.name}}</p>
-  <p>{{poi?.address}}</p>
-  <button ion-button (click)="test2()" [disabled]="!poi">Detail</button>
+  <div class="slides-container">
+    <ion-slides pager loop="true" class="aspect-ratio-inner">
+      <ion-slide *ngFor="let slideItem of slideItems | async"
+                 (click)="goToEventDetail(slideItem.id)">
+        <!--<div class="aspect-ratio-inner">-->
+        <div class="flexbox-center">
+          <img-loader src="{{slideItem.path}}" useImg></img-loader>
+        </div>
+        <p class="slides-title">{{slideItem.title}}</p>
+        <!--</div>-->
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <div class="flow-container">
+    <ion-card class="flow-item" *ngFor="let flowItem of flowItems | async"
+              (click)="goToEventDetail(flowItem.id)">
+      <div class="flow-item-image">
+        <div class="aspect-ratio-inner">
+          <div class="flexbox-center">
+            <img-loader src="{{flowItem.path}}" useImg></img-loader>
+          </div>
+        </div>
+      </div>
+      <ion-card-content>
+        {{flowItem.title}}
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

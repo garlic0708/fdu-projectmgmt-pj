@@ -5,38 +5,33 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HttpModule } from "@angular/http";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { HomePageModule } from "../pages/home/home.module";
-import { EventDetailPageModule } from "../pages/event-detail/event-detail.module";
-import { EventsNearbyPageModule } from "../pages/events-nearby/events-nearby.module";
-import { NotifListPageModule } from "../pages/notif-list/notif-list.module";
-import { PersonalPageModule } from "../pages/personal/personal.module";
-import { SuperTabsModule } from "ionic2-super-tabs";
 import { StartupPageModule } from "../pages/startup/startup.module";
-import { LocationSearchPage } from "../pages/location-search/location-search";
-import { ShowEventLocationPage } from "../pages/show-event-location/show-event-location";
+import { MockProvider } from '../providers/mock/mock';
 import { DataProvider } from "../providers/data/data";
-import { MockProvider } from "../providers/mock/mock";
-import { LocationSearchPageModule } from "../pages/location-search/location-search.module";
-import { ShowEventLocationPageModule } from "../pages/show-event-location/show-event-location.module";
-import { AMapApiProvider } from '../providers/amap-api/amap-api';
+import { IonicImageLoader } from "ionic-image-loader";
+import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
+import { ComponentsModule } from "../components/components.module";
+import { ImagePicker } from "@ionic-native/image-picker";
+
+
 
 @NgModule({
   declarations: [
-    MyApp,
+    MyApp
   ],
   imports: [
+    IonicModule.forRoot(MyApp),
     StartupPageModule,
     LocationSearchPageModule,
     ShowEventLocationPageModule,
     BrowserModule,
+    IonicImageLoader.forRoot(),
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    MyApp
   ],
   providers: [
     {
@@ -44,11 +39,12 @@ import { AMapApiProvider } from '../providers/amap-api/amap-api';
       useClass: MockProvider,
       multi: true,
     },
+    DataProvider,
+    ImagePicker,
     StatusBar,
     SplashScreen,
-    DataProvider,
-    AMapApiProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+    LoadingCoverProvider,
   ]
 })
 export class AppModule {
