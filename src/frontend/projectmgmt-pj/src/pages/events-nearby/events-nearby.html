@@ -13,6 +13,8 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+  <amap #amapContainer [enableCustomCardContent]="true"
+        [customCardContent]="cardContent"
+        (onMapMoved)="updateNearbyEvents()"></amap>
 </ion-content>

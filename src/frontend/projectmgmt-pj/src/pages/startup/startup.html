@@ -1,3 +1,4 @@
-<super-tabs tabsPlacement="bottom">
-  <super-tab *ngFor="let p of pages" [root]="p.component" [title]="p.title" icon="{{p.tabIcon}}"></super-tab>
+<super-tabs id="startupTabs" tabsPlacement="bottom" [config]="config">
+  <super-tab *ngFor="let p of pages" [root]="p.component"
+             [title]="p.title" [id]="p.id"></super-tab>
 </super-tabs>
