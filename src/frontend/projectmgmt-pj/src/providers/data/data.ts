@@ -59,6 +59,7 @@ export class DataProvider {
 
   getEventCheckin(eventId): Observable<any> {
     return this.http.get(`${this.checkinUrl}/${eventId}`)
+  }
 
   getEvent(locationArray: any[]): Observable<EventPoint[]> {
     return this.http.get<EventPoint[]>(`${this.EventUrl}`, {

@@ -13,6 +13,9 @@ import { IonicImageLoader } from "ionic-image-loader";
 import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
 import { ComponentsModule } from "../components/components.module";
 import { ImagePicker } from "@ionic-native/image-picker";
+import { LocationSearchPageModule } from "../pages/location-search/location-search.module";
+import { ShowEventLocationPageModule } from "../pages/show-event-location/show-event-location.module";
+import { AMapApiProvider } from "../providers/amap-api/amap-api";
 
 
 
@@ -40,6 +43,7 @@ import { ImagePicker } from "@ionic-native/image-picker";
       multi: true,
     },
     DataProvider,
+    AMapApiProvider,
     ImagePicker,
     StatusBar,
     SplashScreen,
