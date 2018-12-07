@@ -13,7 +13,7 @@
         <class>application.entity.Event</class>
         <class>application.entity.userSecurity.VerificationToken</class>
         <properties>
-            <property name="toplink.jdbc.url" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
+            <property name="toplink.jdbc.url" value="jdbc:mysql://101.132.75.236:3306/yueya?CharsetEncode=utf8"/>
             <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://101.132.75.236:3306/yueya"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>

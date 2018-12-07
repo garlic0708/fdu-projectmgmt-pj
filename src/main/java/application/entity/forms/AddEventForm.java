@@ -16,6 +16,7 @@ public class AddEventForm {
     private Timestamp startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ssZ")
     private Timestamp endTime;
+    private String poiId;
     private String addressName;
     private double addressPx;
     private double addressPy;
@@ -27,11 +28,12 @@ public class AddEventForm {
 
     public AddEventForm() {}
 
-    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image, List<Integer> tags) {
+    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime,String poiId, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image, List<Integer> tags) {
         this.eventName = eventName;
         this.content = content;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.poiId = poiId;
         this.addressName = addressName;
         this.addressPx = addressPx;
         this.addressPy = addressPy;
@@ -136,5 +138,13 @@ public class AddEventForm {
 
     public void setTags(List<Integer> tags) {
         this.tags = tags;
+    }
+
+    public String getPoiId() {
+        return poiId;
+    }
+
+    public void setPoiId(String poiId) {
+        this.poiId = poiId;
     }
 }

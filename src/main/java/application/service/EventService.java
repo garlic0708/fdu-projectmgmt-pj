@@ -13,6 +13,11 @@ import java.util.List;
  * Date: 2018/11/25.
  */
 public interface EventService {
+    /**
+     * 通过eid，拿到活动的详细信息
+     * @param eid
+     * @return
+     */
     EventDetail getEventDetailById(int eid);
 
     /**

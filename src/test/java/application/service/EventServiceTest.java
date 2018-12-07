@@ -26,6 +26,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = {SpringBootWebApplication.class})
 public class EventServiceTest {
 
+
     @Autowired
     private EventService eventService;
     @Autowired
@@ -42,6 +43,7 @@ public class EventServiceTest {
     private EventTagRepository eventTagRepository;
 
     private List<Event> events;
+
     private Address address;
     private List<JoinEvent> joinEvents;
     private List<User> users;
@@ -87,8 +89,10 @@ public class EventServiceTest {
         u3 = userRepository.save(u3);
         users.add(u3);
 
+        address=new Address();
+        address.setAddressName("Shanghai");
         address = new Address();
-        address.setAddressname("Shanghai");
+        address.setAddressName("Shanghai");
         address.setPositionX(10.0);
         address.setPositionY(15.8);
         address = addressRepository.save(address);
@@ -195,22 +199,14 @@ public class EventServiceTest {
 
     @Test
     @Rollback
-    public void getEventDetailById() {
-        int eid = events.get(0).geteId();
-        EventDetail eventDetail = eventService.getEventDetailById(eid);
-        Map<String, String> initiator = eventDetail.getInitiator();
-        List<Tag> tagList = eventDetail.getTags();
-        assertEquals(eventDetail.getCurrentAttendants(), 2);
-        assertEquals(tagList.size(), 2);
-        assertEquals(tagList.get(0).getTagname(), "tag1");
-        assertEquals(tagList.get(1).getTagname(), "tag3");
-        assertEquals(initiator.get("name"), "gtx");
-        assertEquals(initiator.get("avatar"), "path1");
-        assertEquals(eventDetail.getAddress(), "Shanghai");
-        assertEquals(eventDetail.getContent(), "content1");
-        assertEquals(eventDetail.getCredictLimit(), new Integer(10));
-        assertEquals(eventDetail.getImage(), "path/image1");
-        assertEquals(eventDetail.getEventstate(), "end");
+    public void getEventDetailById(){
+        int eid=events.get(0).geteId();
+        EventDetail eventDetail=eventService.getEventDetailById(eid);
+        assertEquals(eventDetail.getAddress(),"Shanghai");
+        assertEquals(eventDetail.getContent(),"content1");
+        assertEquals(eventDetail.getCredictLimit(),new Integer(10));
+        assertEquals(eventDetail.getImage(),"path/image1");
+        assertEquals(eventDetail.getEventstate(),"end");
 
     }
 
@@ -230,7 +226,7 @@ public class EventServiceTest {
         List<EventSlide> eventSlides = eventService.getHomeFlow();
         assertEquals(eventSlides.size(), 10);
         for (int i = 0; i < 10; i++) {
-            assertEquals(eventSlides.get(i).getPath(), "path/image" + (11 - i));
+            assertEquals(eventSlides.get(i).getPath(), "path/image" + (11-i));
         }
     }
 

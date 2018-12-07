@@ -18,12 +18,19 @@ public interface AddressRepository extends CrudRepository<Address, Long> {
     Address findByAddrId(int addrId);
 
     /**
-     * 通过地址名称返回地址列表
-     *
-     * @param addressname
+     * 通过poiId返回Address
+     * @param poiId
      * @return
      */
-    List<Address> findByAddressname(String addressname);
+    Address findByPoiId(String poiId);
+
+    /**
+     * 通过地址名称返回地址列表
+     *
+     * @param addressName
+     * @return
+     */
+    List<Address> findByAddressName(String addressName);
 
     /**
      * 通过坐标返回地址列表
@@ -49,7 +56,7 @@ public interface AddressRepository extends CrudRepository<Address, Long> {
     @Override
     void delete(Address address);
 
-    @Query(value = "SELECT * FROM address WHERE addressname = ? AND positionX = ? AND positionY = ?", nativeQuery = true)
+    @Query(value = "SELECT * FROM address WHERE address_name = ? AND positionX = ? AND positionY = ?", nativeQuery = true)
     Address findByAddressNameAndPositionXAndPositionY(String addressName, double positionX, double positionY);
 
 }
