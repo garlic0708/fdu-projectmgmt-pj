@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
             user.setNickname(verificationToken.getNickname());
 //            user.setImage(verificationToken.getImage());
 //            user.setRole(Role.USER);
-            user.setVredict(verificationToken.getVredict());
+            user.setCredit(verificationToken.getVredict());
             verificationTokenRepository.delete(verificationToken);
             userRepository.save(user);
         }

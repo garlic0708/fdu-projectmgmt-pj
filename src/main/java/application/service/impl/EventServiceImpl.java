@@ -183,6 +183,7 @@ public class EventServiceImpl implements EventService {
         if (poiId == null || ((address = addressRepository.findByPoiId(poiId)) == null)) {
             address = new Address();
             address.setAddressName(form.getAddressName());
+            address.setAddressPosition(form.getAddressLocation());
             address.setPositionX(form.getAddressPx());
             address.setPositionY(form.getAddressPy());
             address = addressRepository.save(address);
@@ -268,16 +269,16 @@ public class EventServiceImpl implements EventService {
         for (JoinEvent joinEvent: joinEvents) {
             if (Objects.equals(joinEvent.getJeState(), JoinEvent.PARTICIPATED)) { //只是参加，没有签到
                 user = userRepository.findByUId(joinEvent.getuId());
-                int credit = user.getVredict();
+                int credit = user.getCredit();
                 credit = credit-1 >= 0 ? credit-1 : 0;
-                user.setVredict(credit);
+                user.setCredit(credit);
                 userRepository.save(user);
             }
             else if (Objects.equals(joinEvent.getJeState(), JoinEvent.CHECK)) {
                 user = userRepository.findByUId(joinEvent.getuId());
-                int credit = user.getVredict();
+                int credit = user.getCredit();
                 credit = credit+1 >= 100 ? credit+1 : 100;
-                user.setVredict(credit);
+                user.setCredit(credit);
                 userRepository.save(user);
             }
         }

@@ -17,7 +17,8 @@ public class AddEventForm {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ssZ")
     private Timestamp endTime;
     private String poiId;
-    private String addressName;
+    private String addressName; // eg. 高科苑
+    private String addressLocation; //eg. 蔡伦路1433弄
     private double addressPx;
     private double addressPy;
     private Integer creditLimit;
@@ -28,13 +29,14 @@ public class AddEventForm {
 
     public AddEventForm() {}
 
-    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime,String poiId, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image, List<Integer> tags) {
+    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime,String poiId, String addressName, String addressLocation, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image, List<Integer> tags) {
         this.eventName = eventName;
         this.content = content;
         this.startTime = startTime;
         this.endTime = endTime;
         this.poiId = poiId;
         this.addressName = addressName;
+        this.addressLocation = addressLocation;
         this.addressPx = addressPx;
         this.addressPy = addressPy;
         this.creditLimit = creditLimit;
@@ -146,5 +148,13 @@ public class AddEventForm {
 
     public void setPoiId(String poiId) {
         this.poiId = poiId;
+    }
+
+    public String getAddressLocation() {
+        return addressLocation;
+    }
+
+    public void setAddressLocation(String addressLocation) {
+        this.addressLocation = addressLocation;
     }
 }

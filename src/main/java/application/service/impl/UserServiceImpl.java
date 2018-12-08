@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             throw new JoinEventException("You have joined the event");
         if (joinEventRepository.getParticipantsByEId(eid).size() >= event.getUpperLimit())
             throw new JoinEventException("Full");
-        if (event.getLimited() && event.getCreditLimit() > user.getVredict())
+        if (event.getLimited() && event.getCreditLimit() > user.getCredit())
             throw new JoinEventException("You don't have enough credit");
         JoinEvent joinEvent = new JoinEvent();
         joinEvent.setuId(uid);

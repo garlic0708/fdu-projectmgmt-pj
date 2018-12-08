@@ -14,7 +14,7 @@ public class User {
     private String email;
     private String password;
     private String nickname;
-    private Integer vredict;
+    private Integer credit;
     private String image;
     private Role role;
 
@@ -64,13 +64,13 @@ public class User {
     }
 
     @Basic
-    @Column(name = "vredict")
-    public Integer getVredict() {
-        return vredict;
+    @Column(name = "credit")
+    public Integer getCredit() {
+        return credit;
     }
 
-    public void setVredict(Integer vredict) {
-        this.vredict = vredict;
+    public void setCredit(Integer vredict) {
+        this.credit = vredict;
     }
 
     @Basic
@@ -104,7 +104,7 @@ public class User {
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (nickname != null ? !nickname.equals(user.nickname) : user.nickname != null) return false;
-        if (vredict != null ? !vredict.equals(user.vredict) : user.vredict != null) return false;
+        if (credit != null ? !credit.equals(user.credit) : user.credit != null) return false;
         if (image != null ? !image.equals(user.image) : user.image != null) return false;
         if (role != null ? !role.equals(user.role) : user.role != null) return false;
 
@@ -117,7 +117,7 @@ public class User {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
-        result = 31 * result + (vredict != null ? vredict.hashCode() : 0);
+        result = 31 * result + (credit != null ? credit.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
