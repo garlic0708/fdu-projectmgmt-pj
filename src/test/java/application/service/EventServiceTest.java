@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -204,9 +203,9 @@ public class EventServiceTest {
         EventDetail eventDetail=eventService.getEventDetailById(eid);
         assertEquals(eventDetail.getAddress(),"Shanghai");
         assertEquals(eventDetail.getContent(),"content1");
-        assertEquals(eventDetail.getCredictLimit(),new Integer(10));
+        assertEquals(eventDetail.getCreditLimit(),new Integer(10));
         assertEquals(eventDetail.getImage(),"path/image1");
-        assertEquals(eventDetail.getEventstate(),"end");
+        assertEquals(eventDetail.getEventState(),"end");
 
     }
 

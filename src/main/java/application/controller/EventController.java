@@ -77,7 +77,7 @@ public class EventController {
                 addEventForm.setImage(filePath+fileName);
                 Event event = eventService.addEvent(addEventForm, user.getuId());
                 quartzEventService.addEventJob(event);
-                return ResponseEntity.ok(new ResultMessage("Add event success"));
+                return ResponseEntity.ok(new ResultMessage(event.geteId()+""));
             }
             else {
                 return ResponseEntity.status(424).body(new ResultMessage("Add event failed, no such user"));

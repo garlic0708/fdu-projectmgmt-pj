@@ -32,6 +32,9 @@ public class EventServiceImpl implements EventService {
     @Value("${checkTime}")
     private long checkTime;
 
+    @Value("${messages.cancelEventMessage}")
+    private String cancelEventMessage;
+
     @Autowired
     public EventServiceImpl(EventRepository eventRepository,
                             JoinEventRepository joinEventRepository,
@@ -59,7 +62,7 @@ public class EventServiceImpl implements EventService {
         Integer aId=event.getAddress();
         Address address=addressRepository.findByAddrId(aId);
         EventDetail eventDetail=new EventDetail(eid,event.getEventName(),event.getContent(), event.getStartTime(),
-                event.getEndTime(),address.getAddressName(),event.getEventState(),event.getLimited(),event.getCreditLimit(),
+                event.getEndTime(),address,event.getEventState(),event.getLimited(),event.getCreditLimit(),
                 event.getUpperLimit(),event.getLowerLimit(),event.getImage()
         );
 
@@ -142,8 +145,7 @@ public class EventServiceImpl implements EventService {
                     Message message = new Message();
                     message.setSender(0);
                     message.setReceiver(uid);
-                    message.setContent("对不起，由于您参加的这个活动在规定时间内没有达到人数最低要求，" +
-                            "系统已自动取消该活动，给您生活娱乐带来了很大的不便，请您谅解！");
+                    message.setContent(cancelEventMessage);
                     message.setMessagestate("Unread");
                     messageRepository.save(message);
                 }
@@ -182,6 +184,7 @@ public class EventServiceImpl implements EventService {
         Address address;
         if (poiId == null || ((address = addressRepository.findByPoiId(poiId)) == null)) {
             address = new Address();
+            address.setPoiId(form.getPoiId());
             address.setAddressName(form.getAddressName());
             address.setAddressPosition(form.getAddressLocation());
             address.setPositionX(form.getAddressPx());
@@ -206,15 +209,25 @@ public class EventServiceImpl implements EventService {
             event.setAddress(address.getAddrId());
             event.setInitiator(uid);
             event.setEventState("notStarted");
-            if (form.getUpperLimit() == null || form.getLowerLimit() == null) {
+
+            Integer ul = form.getUpperLimit();
+            Integer ll = form.getLowerLimit();
+
+            if (ul == null && ll == null) { // 上限和下限都没有时，才设置limited为false
                 event.setLimited(false);
             }
-            else {
+            else  {
                 event.setLimited(true);
-                event.setLowerLimit(form.getLowerLimit());
-                event.setUpperLimit(form.getUpperLimit());
-                event.setCreditLimit(form.getCreditLimit());
+                if (ul != null)
+                    event.setUpperLimit(ul);
+                if (ll != null)
+                    event.setLowerLimit(ll);
             }
+            if (form.getCreditLimit() == null)
+                event.setCreditLimit(0);
+            else
+                event.setCreditLimit(form.getCreditLimit());
+
             event.setImage(form.getImage());
 
             event = eventRepository.save(event);
