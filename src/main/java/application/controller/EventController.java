@@ -41,6 +41,9 @@ public class EventController {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    @Value("${imagePathTitle}")
+    private String imagePathTitle;
+
     @Autowired
     public EventController(EventService eventService,
                            QuartzEventService quartzEventService,
@@ -67,8 +70,8 @@ public class EventController {
 
         //得到文件路径和文件名
         String fileName = file.getOriginalFilename();
-        String filePath = httpServletRequest.getSession().getServletContext().getRealPath(
-                String.format("/%s/", Calendar.getInstance().getTime()).replace(":", "-"));
+        String filePath = String.format("%s/%s/", imagePathTitle,
+                Calendar.getInstance().getTime()).replace(":", "-");
 
         try {
             if (user != null) {
