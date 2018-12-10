@@ -57,7 +57,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDetail getEventDetailById(int eid) {
+    public Map<String, Object> getEventDetailById(int eid, int uid) {
         Event event=eventRepository.findByEId(eid);
         Integer aId=event.getAddress();
         Address address=addressRepository.findByAddrId(aId);
@@ -86,7 +86,16 @@ public class EventServiceImpl implements EventService {
         List<JoinEvent> joinEventList = joinEventRepository.findByEId(eid);
         eventDetail.setCurrentAttendants(joinEventList.size());
 
-        return eventDetail;
+        Map<String, Object> detail = new HashMap<>();
+        detail.put("detail", eventDetail);
+
+        JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
+        if (joinEvent == null)
+            detail.put("state", JoinEvent.NOTJOINED);
+        else
+            detail.put("state", joinEvent.getJeState());
+
+        return detail;
     }
 
 

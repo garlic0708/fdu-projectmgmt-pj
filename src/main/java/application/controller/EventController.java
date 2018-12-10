@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -95,8 +96,10 @@ public class EventController {
     }
 
     @RequestMapping(value = "${api.event.detail}/{eid}", method = RequestMethod.GET)
-    public ResponseEntity<?> getEventDetail(@PathVariable("eid") int eid) {
-        return ResponseEntity.ok().body(eventService.getEventDetailById(eid));
+    public ResponseEntity<?> getEventDetail(HttpServletRequest httpServletRequest, @PathVariable("eid") int eid) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+        return ResponseEntity.ok().body(eventService.getEventDetailById(eid, user.getuId()));
     }
 
     @RequestMapping(value = "${api.event.home-slides}", method = RequestMethod.GET)

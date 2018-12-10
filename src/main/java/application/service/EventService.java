@@ -7,6 +7,7 @@ import application.entity.forms.EventSlide;
 import application.exception.AddEventException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Creator: DreamBoy
@@ -18,7 +19,7 @@ public interface EventService {
      * @param eid
      * @return
      */
-    EventDetail getEventDetailById(int eid);
+    Map<String, Object> getEventDetailById(int eid, int uid);
 
     /**
      * 拿一个到三个数据， 拿前三个
