@@ -38,7 +38,11 @@ export class HomePage {
   }
 
   goToEventDetail(id) {
-    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
+    this.appCtrl.getRootNavs()[0].push(EventDetailPage, { eventId: id })
+  }
+
+  getImageUrl(eventId) {
+    return this.data.getEventImageUrl(eventId)
   }
 
 }

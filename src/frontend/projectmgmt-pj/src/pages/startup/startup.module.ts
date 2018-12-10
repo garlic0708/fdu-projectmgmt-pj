@@ -9,6 +9,8 @@ import { PersonalPageModule } from "../personal/personal.module";
 import { SuperTabsModule } from "ionic2-super-tabs";
 import { NewEventPageModule } from "../new-event/new-event.module";
 import { ChangePasswordPageModule } from "../change-password/change-password.module";
+import { LocationSearchPageModule } from "../location-search/location-search.module";
+import { ShowEventLocationPageModule } from "../show-event-location/show-event-location.module";
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { ChangePasswordPageModule } from "../change-password/change-password.mod
     NewEventPageModule,
     NotifListPageModule,
     PersonalPageModule,
+    LocationSearchPageModule,
+    ShowEventLocationPageModule,
     ChangePasswordPageModule,
     IonicPageModule.forChild(StartupPage),
     SuperTabsModule.forRoot(),

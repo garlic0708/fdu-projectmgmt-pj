@@ -9,12 +9,18 @@ import { HttpClient } from "@angular/common/http";
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
+
+export type User = {
+  email: string, image: string, nickname: string, credit: number,
+};
+
 @Injectable()
 export class CurrentUserProvider {
 
-  currentUser: { email: string, picture: string, nickname: string } | null = null;
+  currentUser: User = null;
 
   private refreshUrl = '/refresh';
+  private changePasswordUrl = '/auth/update';
 
   constructor(public auth: AuthService, private http: HttpClient) {
     console.log('Hello CurrentUserProvider Provider');
@@ -27,6 +33,7 @@ export class CurrentUserProvider {
           error: err => reject(err.message),
           next: ({ token }) => {
             this.auth.setToken(token);
+            this.setCurrentUser();
             resolve()
           }
         });
@@ -41,11 +48,21 @@ export class CurrentUserProvider {
       this.auth.login({ email, password }).subscribe({
         error: (err) => reject(err),
         next: () => {
-          this.currentUser = this.auth.getPayload();
+          this.setCurrentUser();
+          console.log(this.currentUser);
           resolve()
         },
       })
     })
+  }
+
+  private setCurrentUser() {
+    const payload = this.auth.getPayload();
+    this.currentUser = {
+      ...payload,
+      email: payload.sub,
+      image: payload.picture,
+    };
   }
 
   register(email: string, password: string, nickname?: string): Promise<any> {
@@ -59,6 +76,13 @@ export class CurrentUserProvider {
 
   logout(): Observable<void> {
     return this.auth.logout()
+  }
+
+  changePassword(f: { oldPassword: string, newPassword: string }): Observable<any> {
+    return this.http.post(this.changePasswordUrl, {
+      email: this.currentUser.email,
+      ...f,
+    })
   }
 
 }

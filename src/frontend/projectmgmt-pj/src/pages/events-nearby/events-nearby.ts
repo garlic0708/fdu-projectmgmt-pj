@@ -40,7 +40,7 @@ export class EventsNearbyPage {
     const bounds = this.amapContainer.map.getBounds();
     console.log(bounds);
     console.log([bounds.northeast.lng, bounds.northeast.lat, bounds.southwest.lng, bounds.southwest.lat]);
-    this.data.getEvent([bounds.northeast.lng, bounds.northeast.lat,
+    this.data.getNearbyEvents([bounds.northeast.lng, bounds.northeast.lat,
       bounds.southwest.lng, bounds.southwest.lat]).subscribe(data => {
       data.forEach(datum => {
         const marker1 = new AMap.Marker({
@@ -64,6 +64,6 @@ export class EventsNearbyPage {
   }
 
   private goToDetail(id) {
-    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
+    this.appCtrl.getRootNavs()[0].push(EventDetailPage, { eventId: id })
   }
 }

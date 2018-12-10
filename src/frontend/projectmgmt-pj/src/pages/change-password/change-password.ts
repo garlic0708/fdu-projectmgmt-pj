@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { CurrentUserProvider } from "../../providers/current-user/current-user";
 
 /**
  * Generated class for the ChangePasswordPage page.
@@ -17,9 +18,14 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 export class ChangePasswordPage {
 
   private formGroup: FormGroup;
+  private readonly result: () => void;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private fb: FormBuilder,) {
+              private fb: FormBuilder,
+              private currentUser: CurrentUserProvider,
+              private toast: ToastController,
+              private loading: LoadingController,) {
+    this.result = this.navParams.get('resolveResult');
     this.formGroup = fb.group({
       oldPassword: new FormControl('', Validators.required),
       newPassword: new FormControl('', Validators.required),
@@ -31,7 +37,14 @@ export class ChangePasswordPage {
   }
 
   submit() {
-
+    const loading = this.loading.create({ content: '加载中……' });
+    loading.present();
+    this.currentUser.changePassword(this.formGroup.value)
+      .finally(() => loading.dismissAll())
+      .subscribe(
+        () => this.result(),
+        (err) => this.toast.create({ message: '密码错误', duration: 1500 }).present(),
+      )
   }
 
 }

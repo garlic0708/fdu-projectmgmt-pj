@@ -3,13 +3,14 @@ import { IonicPageModule } from 'ionic-angular';
 import { EventDetailPage } from './event-detail';
 import { IonicImageLoader } from "ionic-image-loader";
 import {CheckinPageModule} from "../checkin/checkin.module";
+import { ComponentsModule } from "../../components/components.module";
 
 @NgModule({
   declarations: [
     EventDetailPage,
   ],
   imports: [
-    IonicImageLoader,
+    ComponentsModule,
     CheckinPageModule,
     IonicPageModule.forChild(EventDetailPage),
   ],

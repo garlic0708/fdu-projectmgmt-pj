@@ -15,10 +15,8 @@ import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ImagePicker } from "@ionic-native/image-picker";
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { LoginPageModule } from "../pages/login/login.module";
-import { ChangePasswordPageModule } from "../pages/change-password/change-password.module";
-import { LocationSearchPageModule } from "../pages/location-search/location-search.module";
-import { ShowEventLocationPageModule } from "../pages/show-event-location/show-event-location.module";
 import { AMapApiProvider } from "../providers/amap-api/amap-api";
+import { NotifProvider } from '../providers/notif/notif';
 
 
 
@@ -30,8 +28,6 @@ import { AMapApiProvider } from "../providers/amap-api/amap-api";
     IonicModule.forRoot(MyApp),
     LoginPageModule,
     StartupPageModule,
-    LocationSearchPageModule,
-    ShowEventLocationPageModule,
     BrowserModule,
     IonicImageLoader.forRoot(),
     HttpClientModule,
@@ -57,6 +53,7 @@ import { AMapApiProvider } from "../providers/amap-api/amap-api";
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     LoadingCoverProvider,
     CurrentUserProvider,
+    NotifProvider,
   ]
 })
 export class AppModule {

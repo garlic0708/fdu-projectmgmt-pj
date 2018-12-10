@@ -5,6 +5,9 @@ import { EventPreview } from "../../pages/home/event-preview";
 import { NotifPreview } from "../../pages/notif-list/notif-preview"
 import { AddEventForm } from "../../pages/new-event/add-event-form";
 import { EventPoint } from "../../components/amap/event_point";
+import { EventDetail, JoinedStatus } from "../../pages/event-detail/event-detail";
+import { map } from "rxjs/operators/map";
+import * as moment from "moment";
 
 /*
   Generated class for the DataProvider provider.
@@ -20,19 +23,51 @@ export class DataProvider {
   private flowUrl = '/api/event/home-flow';
   private eventTagListUrl = '/api/event-tag/list';
   private notifListUrl = '/api/notif/notif-list';
-  private eventsJoinedUrl = '/api/personal/events-joined';
-  private eventsReleasedUrl = '/api/personal/events-released';
+  private joinEventUrl = '/api/user/join';
+  private eventsJoinedUrl = '/api/user/joined';
+  private eventsReleasedUrl = '/api/user/released';
   private checkinUrl = '/api/event/checkin';
-  private EventUrl = '/api/nearby/list';
+  private nearbyEventsUrl = '/api/nearby/list';
 
   private addEventUrl = '/api/event/add';
+  private eventImageUrl = '/api/image/get';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
   }
 
-  getDetail(eventId): Observable<any> {
-    return this.http.get(`${this.detailUrl}/${eventId}`)
+  getDetail(eventId): Observable<{ detail: EventDetail, joined: JoinedStatus }> {
+    return this.http.get<any>(`${this.detailUrl}/${eventId}`)
+      .pipe(map((d: { detail: any, state: JoinedStatus }) => {
+        const {
+          initiator, tags, currentAttendants,
+          creditLimit, startTime, endTime
+        } = d.detail;
+        return {
+          detail: {
+            name: d.detail.eventName,
+            tags,
+            initiator,
+            startTime,
+            endTime,
+            address: {
+              id: d.detail.address.poiId,
+              name: d.detail.address.addressName,
+              location: {
+                lng: d.detail.address.positionX,
+                lat: d.detail.address.positionY,
+              },
+              address: d.detail.address.addressPosition,
+            },
+            lowerBound: d.detail.lowerLimit,
+            upperBound: d.detail.upperLimit,
+            currentAttendants,
+            creditLimit,
+            description: d.detail.content,
+            status: d.detail.eventState,
+          }, joined: d.state,
+        }
+      }))
   }
 
   getHomeSlides(): Observable<EventPreview[]> {
@@ -52,8 +87,8 @@ export class DataProvider {
       .then(blob => {
         const formData = new FormData();
         formData.append('file', blob);
-        const format = "yyyy-MM-dd HH:mm:ssZ";
-        formData.append('form', JSON.stringify({
+        const format = "YYYY-MM-DD HH:mm:ssZZ";
+        formData.append('addEventForm', JSON.stringify({
           ...payload,
           startTime: payload.startTime.format(format),
           endTime: payload.endTime.format(format),
@@ -63,9 +98,15 @@ export class DataProvider {
   }
 
   getNotifList(): Observable<NotifPreview[]> {
-    return this.http.get<NotifPreview[]>(this.notifListUrl)
+    return this.http.get<any[]>(this.notifListUrl).pipe(map(n =>
+      n.map(x => {
+        return { id: x.mId, content: x.content, type: x.messagestate, }
+      })))
   }
 
+  joinEvent(eventId): Observable<any> {
+    return this.http.put(`${this.joinEventUrl}/${eventId}`, null)
+  }
 
   getEventsJoined(): Observable<EventPreview[]> {
     return this.http.get<EventPreview[]>(this.eventsJoinedUrl)
@@ -79,8 +120,8 @@ export class DataProvider {
     return this.http.get(`${this.checkinUrl}/${eventId}`)
   }
 
-  getEvent(locationArray: any[]): Observable<EventPoint[]> {
-    return this.http.get<EventPoint[]>(`${this.EventUrl}`, {
+  getNearbyEvents(locationArray: any[]): Observable<EventPoint[]> {
+    return this.http.get<EventPoint[]>(`${this.nearbyEventsUrl}`, {
       params: {
         nex: locationArray[0],
         ney: locationArray[1],
@@ -88,6 +129,10 @@ export class DataProvider {
         swy: locationArray[3]
       }
     })
+  }
+
+  getEventImageUrl(eventId): string {
+    return `${this.eventImageUrl}/${eventId}`
   }
 
 }

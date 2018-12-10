@@ -4,6 +4,7 @@ import {LoadingCoverProvider} from "../../providers/loading-cover/loading-cover"
 import {DataProvider} from "../../providers/data/data";
 import {NotifPreview} from "./notif-preview";
 import {Observable} from "rxjs";
+import { NotifProvider } from "../../providers/notif/notif";
 
 /**
  * Generated class for the NotifListPage page.
@@ -23,10 +24,9 @@ export class NotifListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private appCtrl: App,
-              private data: DataProvider,
-              private loading: LoadingCoverProvider,
+              private notif: NotifProvider,
               public alertCtrl: AlertController) {
-    [this.notifItems] = this.loading.fetchData(this.data.getNotifList());
+    this.notifItems = notif.notifications
 
   }
 
@@ -34,16 +34,15 @@ export class NotifListPage {
     console.log('ionViewDidLoad NotifListPage');
   }
 
-  doAlert(notifItem) {
-    let alert = this.alertCtrl.create({
-      title: notifItem.title,
+  doAlert(notifItem: NotifPreview) {
+    const alert = this.alertCtrl.create({
       subTitle: notifItem.content,
       buttons: ['Ok']
     });
 
     alert.present();
 
-    //TODO 若未读发送已读请求
+    this.notif.markAsRead(notifItem.id)
   }
 
 }

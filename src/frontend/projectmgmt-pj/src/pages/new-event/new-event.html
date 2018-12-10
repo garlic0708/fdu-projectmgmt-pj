@@ -17,11 +17,11 @@
   <ion-list>
     <ion-item>
       <ion-label>活动名称</ion-label>
-      <ion-input [ngModel]="eventName"></ion-input>
+      <ion-input [(ngModel)]="eventName" required></ion-input>
     </ion-item>
     <ion-item class="new-event-description">
       <ion-label>活动描述</ion-label>
-      <ion-textarea [ngModel]="content"></ion-textarea>
+      <ion-textarea [(ngModel)]="content"></ion-textarea>
     </ion-item>
     <ion-item>
       <ion-label>标签</ion-label>
@@ -31,10 +31,10 @@
         </ion-option>
       </ion-select>
     </ion-item>
-    <button ion-item>
+    <button ion-item (click)="selectAddress()">
       <ion-label>活动地点</ion-label>
       <div item-content>
-        <p>{{address === null ? '点击选择地点' : address}}</p>
+        <p>{{address === null ? '点击选择地点' : address.name}}</p>
       </div>
     </button>
     <ion-item>
@@ -62,7 +62,7 @@
     <ion-item class="slide-from-above" [class.collapsed]="!lowerBoundEnabled">
       <div item-content class="stepper-container">
         <stepper [(value)]="lowerBound" [enabled]="lowerBoundEnabled"
-                 [minValue]="0"></stepper>
+                 [minValue]="1"></stepper>
       </div>
     </ion-item>
     <ion-item-divider>
@@ -72,14 +72,17 @@
     <ion-item class="slide-from-above" [class.collapsed]="!upperBoundEnabled">
       <div item-content class="stepper-container">
         <stepper [(value)]="upperBound" [enabled]="upperBoundEnabled"
-                 [minValue]="1"></stepper>
+                 [minValue]="2"></stepper>
       </div>
     </ion-item>
-    <button ion-item (click)="chooseImage()">
+    <button ion-item (click)="selectImage()">
       <ion-thumbnail item-start>
         <img src="{{eventImage || fallBackImage}}">
       </ion-thumbnail>
       <div ion-content>选择活动图片</div>
     </button>
   </ion-list>
+  <div class="new-event-submit">
+    <button ion-button block (click)="submit()">提交</button>
+  </div>
 </ion-content>

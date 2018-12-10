@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { DataProvider } from "../../providers/data/data";
 import { Observable } from "rxjs";
 import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import * as moment from 'moment';
 import { map } from "rxjs/operators/map";
-import {CheckinPage} from "../checkin/checkin";
+import { CheckinPage } from "../checkin/checkin";
+import { Poi } from "../../components/amap/poi";
+import { ShowEventLocationPage } from "../show-event-location/show-event-location";
+import { CurrentUserProvider, User } from "../../providers/current-user/current-user";
+import { not } from "rxjs/util/not";
+import { tap } from "rxjs/operators";
 
 
 /**
@@ -16,8 +21,25 @@ import {CheckinPage} from "../checkin/checkin";
  */
 
 type DisplayStatus = 'canCheck' | 'aboutToCheck' | 'canJoin' | 'joined' | 'full' |
-  'alreadyStarted' | 'ended' | 'canceled';
+  'alreadyStarted' | 'ended' | 'canceled' | 'notEnoughCredit';
 type EventStatus = 'notStarted' | 'started' | 'ended' | 'canceled';
+
+export type JoinedStatus = 'initiator' | 'check' | 'participated' | 'notJoined';
+
+export type EventDetail = {
+  name: string,
+  tags: { id: number, name: string }[],
+  initiator: User,
+  startTime: string,
+  endTime: string,
+  address: Poi,
+  lowerBound: number,
+  upperBound: number,
+  currentAttendants: number,
+  creditLimit: number,
+  description: string,
+  status: EventStatus,
+}
 
 @IonicPage()
 @Component({
@@ -26,12 +48,27 @@ type EventStatus = 'notStarted' | 'started' | 'ended' | 'canceled';
 })
 export class EventDetailPage {
 
-  detail: Observable<any>;
+  detail: Observable<EventDetail>;
+  imageUrl: string;
+  eventId: number;
+
+  joined: JoinedStatus;
+  joining: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private data: DataProvider,
-              private loading: LoadingCoverProvider) {
-    [this.detail] = this.loading.fetchData(this.data.getDetail(this.navParams.get('eventId')));
+              private loading: LoadingCoverProvider,
+              private currentUser: CurrentUserProvider,
+              private toast: ToastController,) {
+    this.eventId = this.navParams.get('eventId');
+    this.reload();
+    this.imageUrl = this.data.getEventImageUrl(this.eventId);
+  }
+
+  private reload() {
+    const [detail] = this.loading.fetchData(this.data.getDetail(this.eventId));
+    this.detail = detail.pipe(tap(d => this.joined = d.joined),
+      map(d => d.detail));
   }
 
   formatTime = (utcTime) => {
@@ -42,33 +79,40 @@ export class EventDetailPage {
     console.log('ionViewDidLoad EventDetailPage');
   }
 
-  private amIInitiator(): boolean {
-    return false; // todo
+  goToLocation(address: Poi) {
+    this.navCtrl.push(ShowEventLocationPage, { poi: address })
   }
 
-  test() {
-
-  }
-
-  getDisplayStatus(d: {
-    status: EventStatus, upperBound: number,
-    currentParticipants: number, joined: boolean,
-  }): DisplayStatus {
+  getDisplayStatus(d: EventDetail): DisplayStatus {
     console.log(d);
     const eventStatus = d.status;
     if (eventStatus === "ended") return "ended";
     if (eventStatus === "canceled") return "canceled";
-    return this.amIInitiator() ?
+    return this.joined === "initiator" ?
       eventStatus === "started" ? "canCheck" : "aboutToCheck" :
-      d.joined ?
+      this.joined !== "notJoined" ?
         "joined" :
         eventStatus === "started" ?
           "alreadyStarted" :
-          d.currentParticipants === d.upperBound ? "full" : "canJoin";
+          d.currentAttendants === d.upperBound ?
+            "full" :
+            this.currentUser.currentUser.credit < d.creditLimit ?
+              "notEnoughCredit" :
+              "canJoin";
   }
 
-  goToRegister(id) {
-    this.navCtrl.push(CheckinPage, { eventId: id })
+  goToCheckin() {
+    this.navCtrl.push(CheckinPage, { eventId: this.eventId })
+  }
+
+  joinEvent() {
+    this.joining = true;
+    this.data.joinEvent(this.eventId)
+      .finally(() => this.joining = false)
+      .subscribe({
+        next: () => this.reload(),
+        error: () => this.toast.create({ message: '网络错误', duration: 1500 }).present(),
+      })
   }
 
 }

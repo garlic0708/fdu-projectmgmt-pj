@@ -4,11 +4,11 @@
 export class Poi {
   id: string;
   name: string;
-  district: string;
-  adcode: number;
+  district?: string;
+  adcode?: number;
   location: string | { lng: number, lat: number };
   address: string;
-  typecode: string;
+  typecode?: string;
   
   static getLnglat(item: Poi): number[] {
     let x: any;

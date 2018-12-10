@@ -12,7 +12,7 @@ page-new-event {
   }
 
   .new-event-description {
-    height: 150px;
+    height: 30vh;
   }
 
   .slide-from-above {
@@ -36,6 +36,10 @@ page-new-event {
   .slide-from-above.collapsed {
     min-height: 0;
     height: 0;
+  }
+
+  .new-event-submit {
+    margin: 5px;
   }
 }
 

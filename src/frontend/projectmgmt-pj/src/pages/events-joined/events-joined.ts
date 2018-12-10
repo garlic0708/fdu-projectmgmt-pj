@@ -48,7 +48,7 @@ export class EventsJoinedPage {
   }
 
   goToEventDetail(id) {
-    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
+    this.appCtrl.getRootNavs()[0].push(EventDetailPage, { eventId: id })
   }
 
 
