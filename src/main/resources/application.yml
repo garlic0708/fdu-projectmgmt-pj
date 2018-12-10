@@ -52,15 +52,20 @@ api:
     home-slides: api/event/home-slides
     home-flow: api/event/home-flow
     add: api/event/add
+    cancel: api/event/cancel
     checkin: api/event/checkin
+    nearby: api/event/nearby
   tag:
     add: api/tag/add
     list: api/tag/list
   user:
     join: api/user/join
+    quit: api/user/quit
     joined: api/user/joined
     released: api/user/released
     getDetail: api/user/get
+    checkIn: api/user/checkIn
+    checkOut: api/user/checkOut
   image:
     get: api/image/get
   notify:
@@ -78,6 +83,12 @@ resultMessage:
       update: "Update success"
 
 messages:
-  cancelEventMessage: "对不起，由于您参加的这个活动在规定时间内没有达到人数最低要求，系统已自动取消该活动，给您生活娱乐带来了很大的不便，请您谅解！"
+  cancelEvent:
+    time:
+      initiator: "对不起，由于您发布的这个活动在规定时间内没有达到人数最低要求，系统已自动取消该活动，给您生活娱乐带来了很大的不便，请您谅解！"
+      others: "对不起，由于您参加的这个活动在规定时间内没有达到人数最低要求，系统已自动取消该活动，给您生活娱乐带来了很大的不便，请您谅解！"
+    user:
+      initiator: "您发布的活动已取消"
+      others: "对不起，您参加的这个活动已经被发起人取消，给您生活娱乐带来了很大的不便，请您谅解！"
 
 imagePathTitle: "D:\\test\\img\\"

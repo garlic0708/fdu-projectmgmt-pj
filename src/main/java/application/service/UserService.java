@@ -19,6 +19,8 @@ public interface UserService {
 
     void joinEvent(int uid, int eid) throws JoinEventException;
 
+    void quitEvent(int uid, int eid);
+
     /**
      * 通过event的eid，返回这个event的参与情况，要构造的数据为UserCheckIn，具体要求见entity.forms.UserCheckIn
      * 另外，这个list中不需包含创建者，即如果是INITIATOR，则忽略
@@ -26,4 +28,8 @@ public interface UserService {
      * @return
      */
     List<UserCheckIn> getUserCheckIn(int eid);
+
+    void checkIn(int uid, int eid);
+
+    void checkOut(int uid, int eid);
 }

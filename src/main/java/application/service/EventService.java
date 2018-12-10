@@ -5,6 +5,7 @@ import application.entity.Event;
 import application.entity.forms.EventDetail;
 import application.entity.forms.EventSlide;
 import application.exception.AddEventException;
+import application.exception.CancelEventException;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,10 @@ public interface EventService {
     void markAsEnded(int eid);
 
     Event addEvent(AddEventForm form, int uid) throws AddEventException;
+
+    void cancelEvent(int uid, int eid) throws CancelEventException;
+
+    List<Event> getNearbyEvents(double x1, double y1, double x2, double y2);
 
     Event getById(int eid);
 

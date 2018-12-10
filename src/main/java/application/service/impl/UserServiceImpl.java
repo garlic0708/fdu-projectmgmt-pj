@@ -69,6 +69,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void quitEvent(int uid, int eid) {
+        JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
+        if (joinEvent != null)
+            joinEventRepository.delete(joinEvent);
+    }
+
+    @Override
     public List<UserCheckIn> getUserCheckIn(int eid) {
         List<JoinEvent> joinEvents = joinEventRepository.findByEId(eid);
         List<UserCheckIn> userCheckIns = new LinkedList<>();
@@ -90,5 +97,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return userCheckIns;
+    }
+
+    @Override
+    public void checkIn(int uid, int eid) {
+        JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
+        joinEvent.setJeState(JoinEvent.CHECK);
+        joinEventRepository.save(joinEvent);
+    }
+
+    @Override
+    public void checkOut(int uid, int eid) {
+        JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
+        joinEvent.setJeState(JoinEvent.PARTICIPATED);
+        joinEventRepository.save(joinEvent);
     }
 }

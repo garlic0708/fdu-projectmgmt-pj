@@ -5,10 +5,12 @@ import application.entity.forms.AddEventForm;
 import application.entity.forms.EventDetail;
 import application.entity.forms.EventSlide;
 import application.exception.AddEventException;
+import application.exception.CancelEventException;
 import application.repository.*;
 import application.service.EventService;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,8 +34,14 @@ public class EventServiceImpl implements EventService {
     @Value("${checkTime}")
     private long checkTime;
 
-    @Value("${messages.cancelEventMessage}")
-    private String cancelEventMessage;
+    @Value("${messages.cancelEvent.time.others}")
+    private String cancelEventTimeOthersMessage;
+    @Value("${messages.cancelEvent.time.initiator}")
+    private String cancelEventTimeInitiatorMessage;
+    @Value("${messages.cancelEvent.user.others}")
+    private String cancelEventUserOthersMessage;
+    @Value("${messages.cancelEvent.user.initiator}")
+    private String cancelEventUserInitiatorMessage;
 
     @Autowired
     public EventServiceImpl(EventRepository eventRepository,
@@ -148,15 +156,13 @@ public class EventServiceImpl implements EventService {
             List<Integer> list = getParticipants(eid);
 
             if (event.getLimited() && event.getLowerLimit() > list.size()) {
-                event.setEventState("canceled");
+                event.setEventState(Event.CANCELED);
 
-                for (Integer uid: list) {
-                    Message message = new Message();
-                    message.setSender(0);
-                    message.setReceiver(uid);
-                    message.setContent(cancelEventMessage);
-                    message.setMessagestate("Unread");
-                    messageRepository.save(message);
+                for (Integer ouid: list) {
+                    if (ouid != eid)
+                        sendMessage(0, ouid, cancelEventTimeOthersMessage);
+                    else
+                        sendMessage(0, ouid, cancelEventTimeInitiatorMessage);
                 }
 
                 eventRepository.save(event);
@@ -173,14 +179,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public void markAsStarted(int eid) {
         Event event = eventRepository.findByEId(eid);
-        event.setEventState("started");
+        event.setEventState(Event.STARTED);
         eventRepository.save(event);
     }
 
     @Override
     public void markAsEnded(int eid) {
         Event event = eventRepository.findByEId(eid);
-        event.setEventState("ended");
+        event.setEventState(Event.ENDED);
         eventRepository.save(event);
 
         //调整信用度
@@ -217,7 +223,7 @@ public class EventServiceImpl implements EventService {
             event.setEndTime(form.getEndTime());
             event.setAddress(address.getAddrId());
             event.setInitiator(uid);
-            event.setEventState("notStarted");
+            event.setEventState(Event.NOTSTARTED);
 
             Integer ul = form.getUpperLimit();
             Integer ll = form.getLowerLimit();
@@ -269,20 +275,57 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public void cancelEvent(int uid, int eid) throws CancelEventException {
+        Event event = eventRepository.findByEId(eid);
+        if (event == null)
+            throw new CancelEventException("No such Event");
+        if (event.getInitiator() != uid)
+            throw new CancelEventException("Permission denied");
+        event.setEventState(Event.CANCELED);
+
+        List<Integer> list = getParticipants(eid);
+
+        for (Integer ouid: list) {
+            if (ouid != eid)
+                sendMessage(0, ouid, cancelEventUserOthersMessage);
+            else
+                sendMessage(0, ouid, cancelEventUserInitiatorMessage);
+        }
+        try {
+            //TODO
+            scheduler.deleteJob(JobKey.jobKey(eid + " markAsStarted", JOB_GROUP));
+            scheduler.deleteJob(JobKey.jobKey(eid + " markAsEnded", JOB_GROUP));
+        }
+        catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        eventRepository.save(event);
+    }
+
+    @Override
+    public List<Event> getNearbyEvents(double x1, double y1, double x2, double y2) {
+        return eventRepository.getEventsInASquare(x1, y1, x2, y2);
+    }
+
+    @Override
     public Event getById(int eid) {
         return eventRepository.findByEId(eid);
     }
 
     @Override
     public List<Event> getEventsJoined(int uid) {
-        //TODO
-        return null;
+        List<JoinEvent> joinEvents = joinEventRepository.findByUId(uid);
+        List<Event> events = new ArrayList<>();
+        for (JoinEvent joinEvent: joinEvents) {
+            if (!joinEvent.getJeState().equals(JoinEvent.INITIATOR))
+                events.add(eventRepository.findByEId(joinEvent.geteId()));
+        }
+        return events;
     }
 
     @Override
     public List<Event> getEventsReleased(int uid) {
-        //TODO
-        return null;
+        return eventRepository.findByInitiator(uid);
     }
 
     private void updateCredit(int eid) {
@@ -304,5 +347,14 @@ public class EventServiceImpl implements EventService {
                 userRepository.save(user);
             }
         }
+    }
+
+    private void sendMessage(int sender, int receiver, String content) {
+        Message message = new Message();
+        message.setSender(sender);
+        message.setReceiver(receiver);
+        message.setContent(content);
+        message.setMessagestate("Unread");
+        messageRepository.save(message);
     }
 }

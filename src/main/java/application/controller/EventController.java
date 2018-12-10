@@ -6,6 +6,7 @@ import application.entity.Event;
 import application.entity.forms.ResultMessage;
 import application.entity.User;
 import application.exception.AddEventException;
+import application.exception.CancelEventException;
 import application.service.EventService;
 import application.service.FileService;
 import application.service.QuartzEventService;
@@ -95,6 +96,20 @@ public class EventController {
         }
     }
 
+    @RequestMapping(value = "${api.event.cancel}/{eid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> cancelEvent(HttpServletRequest httpServletRequest,
+                                         @PathVariable("eid") int eid) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        try {
+            eventService.cancelEvent(user.getuId(), eid);
+            return ResponseEntity.ok().body(new ResultMessage("Cancle event success"));
+        }catch (CancelEventException e) {
+            return ResponseEntity.status(427).body(new ResultMessage(e.getMessage()));
+        }
+    }
+
     @RequestMapping(value = "${api.event.detail}/{eid}", method = RequestMethod.GET)
     public ResponseEntity<?> getEventDetail(HttpServletRequest httpServletRequest, @PathVariable("eid") int eid) {
         String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
@@ -113,7 +128,13 @@ public class EventController {
     }
 
     @RequestMapping(value = "${api.event.checkin}/{eid}", method = RequestMethod.GET)
-    public ResponseEntity<?> checkIn(@PathVariable("eid") int eid) {
+    public ResponseEntity<?> getCheckIn(@PathVariable("eid") int eid) {
         return ResponseEntity.ok().body(userService.getUserCheckIn(eid));
+    }
+
+    @RequestMapping(value = "${api.event.nearby}", method = RequestMethod.GET)
+    public ResponseEntity<?> getNearbyEvents(@RequestParam("nex") double nex, @RequestParam("ney") double ney,
+                                             @RequestParam("swx") double swx,@RequestParam("swx") double swy) {
+        return ResponseEntity.ok().body(eventService.getNearbyEvents(nex, ney, swx, swy));
     }
 }

@@ -63,7 +63,30 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "${api.user.joined}", method = RequestMethod.GET)
+    @RequestMapping(value = "${api.user.quit}/{eid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> quitEvent(HttpServletRequest httpServletRequest,@PathVariable("eid") String eid) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        userService.quitEvent(user.getuId(), Integer.parseInt(eid));
+        return ResponseEntity.ok().body(new ResultMessage("Quit event success"));
+    }
+
+    @RequestMapping(value = "${api.user.checkIn}/{eid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> checkIn(@PathVariable("eid") String eid, @RequestParam("uid") int uid) {
+
+        userService.checkIn(uid, Integer.parseInt(eid));
+        return ResponseEntity.ok().body(new ResultMessage("CheckIn success"));
+    }
+
+    @RequestMapping(value = "${api.user.checkOut}/{eid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> checkOut(@PathVariable("eid") String eid, @RequestParam("uid") int uid) {
+
+        userService.checkOut(uid, Integer.parseInt(eid));
+        return ResponseEntity.ok().body(new ResultMessage("CheckOut success"));
+    }
+
+    @RequestMapping(value = "${api.user.joined}", method = RequestMethod.PUT)
     public ResponseEntity<?> getJoinedEvent(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
         User user = jwtTokenUtil.getUserByToken(token);
