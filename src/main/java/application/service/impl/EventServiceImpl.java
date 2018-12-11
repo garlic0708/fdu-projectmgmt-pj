@@ -160,9 +160,9 @@ public class EventServiceImpl implements EventService {
 
                 for (Integer ouid: list) {
                     if (ouid != eid)
-                        sendMessage(0, ouid, cancelEventTimeOthersMessage);
+                        sendMessage(0, ouid, cancelEventTimeOthersMessage.replace("%event%", "("+ event.getEventName() + ")"));
                     else
-                        sendMessage(0, ouid, cancelEventTimeInitiatorMessage);
+                        sendMessage(0, ouid, cancelEventTimeInitiatorMessage.replace("%event%", "("+ event.getEventName() + ")"));
                 }
 
                 eventRepository.save(event);
@@ -287,9 +287,7 @@ public class EventServiceImpl implements EventService {
 
         for (Integer ouid: list) {
             if (ouid != eid)
-                sendMessage(0, ouid, cancelEventUserOthersMessage);
-            else
-                sendMessage(0, ouid, cancelEventUserInitiatorMessage);
+                sendMessage(0, ouid, cancelEventUserOthersMessage.replace("%event%", "("+ event.getEventName() + ")"));
         }
         try {
             //TODO
