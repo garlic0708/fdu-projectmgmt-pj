@@ -34,5 +34,6 @@ public class MessageServiceImpl implements MessageService {
         if (message.getReceiver() != uid)
             throw new ReadMessageException("Permission denied");
         message.setMessageState(Message.READ);
+        messageRepository.save(message);
     }
 }

@@ -17,5 +17,5 @@ public interface MessageService {
      */
     List<Message> getMessagesByUid(int uid);
 
-    public void readMessage(int uid, int mid) throws ReadMessageException;
+    void readMessage(int uid, int mid) throws ReadMessageException;
 }
