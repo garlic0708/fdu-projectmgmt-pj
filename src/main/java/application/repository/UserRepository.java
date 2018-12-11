@@ -14,6 +14,8 @@ import java.util.Optional;
  */
 
 public interface UserRepository extends CrudRepository<User, Long> {
+    User getByUId(int uid);
+
     /**
      * 通过uid返回用户
      * @param uid

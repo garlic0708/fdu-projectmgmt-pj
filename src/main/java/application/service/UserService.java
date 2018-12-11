@@ -15,6 +15,8 @@ import java.util.Optional;
  * Date: 2018/11/23.
  */
 public interface UserService {
+    User getByUid(int uid);
+
     List<User> getAllUsers();
 
     Optional<User> getByEmail(String email);

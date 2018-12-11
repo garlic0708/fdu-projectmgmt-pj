@@ -69,7 +69,9 @@ api:
     updateName: api/user/updateName
     updateImg: api/user/updateImg
   image:
-    get: api/image/get
+    get:
+      event: api/eventImg/get
+      user: api/userImg/get
   notify:
     list: api/notif/notif-list
     read: api/notif/read
@@ -95,3 +97,5 @@ messages:
       others: "对不起，您参加的这个活动 %event% 已经被发起人取消，给您生活娱乐带来了很大的不便，请您谅解！"
 
 imagePathTitle: "D:\\test\\img\\"
+
+defaultNickname: "新用户"

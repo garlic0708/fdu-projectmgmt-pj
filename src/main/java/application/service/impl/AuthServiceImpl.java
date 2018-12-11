@@ -45,6 +45,9 @@ public class AuthServiceImpl implements AuthService {
     @Value("${emailList}")
     private String[] emails;
 
+    @Value("${defaultNickname}")
+    private String defaultNickname;
+
     @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
@@ -73,6 +76,8 @@ public class AuthServiceImpl implements AuthService {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setEmail(userToAdd.getEmail());
         verificationToken.setPassword(encoder.encode(userToAdd.getPassword()));
+        if (userToAdd.getNickname() == null || userToAdd.getNickname().equals(""))
+            verificationToken.setNickname(defaultNickname);
         verificationToken.setNickname(userToAdd.getNickname());
         verificationToken.setImage(userToAdd.getImage());
         verificationToken.setVredict(100);
