@@ -7,7 +7,6 @@ import { AddEventForm } from "../../pages/new-event/add-event-form";
 import { EventPoint } from "../../components/amap/event_point";
 import { EventDetail, JoinedStatus } from "../../pages/event-detail/event-detail";
 import { map } from "rxjs/operators/map";
-import * as moment from "moment";
 
 /*
   Generated class for the DataProvider provider.
@@ -24,6 +23,8 @@ export class DataProvider {
   private eventTagListUrl = '/api/event-tag/list';
   private notifListUrl = '/api/notif/notif-list';
   private joinEventUrl = '/api/user/join';
+  private quitEventUrl = '/api/user/quit';
+  private cancelAnEventUrl: '/api/event/cancel';
   private eventsJoinedUrl = '/api/user/joined';
   private eventsReleasedUrl = '/api/user/released';
   private checkinUrl = '/api/event/checkin';
@@ -106,6 +107,14 @@ export class DataProvider {
 
   joinEvent(eventId): Observable<any> {
     return this.http.put(`${this.joinEventUrl}/${eventId}`, null)
+  }
+
+  quitEvent(eventId): Observable<any> {
+    return this.http.put(`${this.quitEventUrl}/${eventId}`, null)
+  }
+
+  cancelEvent(eventId): Observable<any> {
+    return this.http.put(`${this.cancelAnEventUrl}/${eventId}`, null)
   }
 
   getEventsJoined(): Observable<EventPreview[]> {

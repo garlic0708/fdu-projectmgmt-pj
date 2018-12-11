@@ -8,12 +8,17 @@
 
   <ion-navbar>
     <ion-title>event-detail</ion-title>
+    <ion-buttons end *ngIf="detail | async as _detail">
+      <button ion-button icon-only *ngIf="getPopoverOptions(_detail).length" (click)="presentPopover(_detail, $event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
+
   <ng-container *ngIf="detail | async as _detail">
     <div class="event-image">
       <div class="aspect-ratio-inner">

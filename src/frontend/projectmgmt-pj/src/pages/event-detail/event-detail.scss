@@ -26,3 +26,21 @@ page-event-detail {
     border-right: solid 1px #eeeeee;
   }
 }
+
+.event-detail-popover {
+  .list {
+    margin-bottom: 0;
+  }
+
+  .item {
+    padding-left: 0;
+  }
+
+  .item-inner {
+    padding-right: 0;
+  }
+
+  .label {
+    margin: 13px;
+  }
+}

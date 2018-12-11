@@ -17,6 +17,7 @@ import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { LoginPageModule } from "../pages/login/login.module";
 import { AMapApiProvider } from "../providers/amap-api/amap-api";
 import { NotifProvider } from '../providers/notif/notif';
+import { ConfirmProvider } from '../providers/confirm/confirm';
 
 
 
@@ -54,6 +55,7 @@ import { NotifProvider } from '../providers/notif/notif';
     LoadingCoverProvider,
     CurrentUserProvider,
     NotifProvider,
+    ConfirmProvider,
   ]
 })
 export class AppModule {

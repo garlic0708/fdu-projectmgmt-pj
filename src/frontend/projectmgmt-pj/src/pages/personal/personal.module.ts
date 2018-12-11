@@ -19,5 +19,8 @@ import { ComponentsModule } from "../../components/components.module";
     ComponentsModule,
     IonicPageModule.forChild(PersonalPage),
   ],
+  entryComponents: [
+    PersonalPopover,
+  ],
 })
 export class PersonalPageModule {}
