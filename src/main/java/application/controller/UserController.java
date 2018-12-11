@@ -4,14 +4,19 @@ import application.component.JwtTokenUtil;
 import application.entity.forms.ResultMessage;
 import application.entity.User;
 import application.exception.JoinEventException;
+import application.exception.UpdateUserImgException;
 import application.service.EventService;
+import application.service.FileService;
 import application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -23,6 +28,7 @@ public class UserController {
     private UserService userService;
     private EventService eventService;
     private JwtTokenUtil jwtTokenUtil;
+    private FileService fileService;
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -30,24 +36,45 @@ public class UserController {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+    @Value("${imagePathTitle}")
+    private String imagePathTitle;
+
     @Autowired
     public UserController(UserService userService,
                           EventService eventService,
+                          FileService fileService,
                           JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
         this.eventService = eventService;
+        this.fileService = fileService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public List<User> getUsers() {
-        return (userService.getAllUsers());
+    @RequestMapping(value = "${api.user.updateName}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateName(HttpServletRequest httpServletRequest,@RequestParam("nickname") String nickname) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        userService.updateName(user.getuId(), nickname);
+        return ResponseEntity.ok().body(new ResultMessage("Update nickname success"));
     }
 
-    @RequestMapping(value = "/users2", method = RequestMethod.GET)
-    public List<User> getUsers2() {
-        return (userService.getAllUsers());
+    @RequestMapping(value = "${api.user.updateImg}", method = RequestMethod.POST)
+    public ResponseEntity<?> updateImg(HttpServletRequest httpServletRequest,
+                                       @RequestParam("img") MultipartFile img) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+       try {
+           userService.updateImg(user, img);
+           return ResponseEntity.ok().body(new ResultMessage("Update img success"));
+       }
+        catch (UpdateUserImgException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(429).body(new ResultMessage(e.getMessage()));
+        }
     }
+
 
     @RequestMapping(value = "${api.user.join}/{eid}", method = RequestMethod.PUT)
     public ResponseEntity<?> joinEvent(HttpServletRequest httpServletRequest,@PathVariable("eid") String eid) {

@@ -354,7 +354,7 @@ public class EventServiceImpl implements EventService {
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setContent(content);
-        message.setMessagestate("Unread");
+        message.setMessageState("Unread");
         messageRepository.save(message);
     }
 }

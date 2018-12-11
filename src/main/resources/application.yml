@@ -66,10 +66,13 @@ api:
     getDetail: api/user/get
     checkIn: api/user/checkIn
     checkOut: api/user/checkOut
+    updateName: api/user/updateName
+    updateImg: api/user/updateImg
   image:
     get: api/image/get
   notify:
     list: api/notif/notif-list
+    read: api/notif/read
 
 # result messages
 resultMessage:

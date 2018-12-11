@@ -15,6 +15,13 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
     Message findByMId(int mID);
 
     /**
+     * 通过uid，返回用户所有的消息列表
+     * @param uid
+     * @return
+     */
+    List<Message> findByReceiver(int uid);
+
+    /**
      * 通过信息状态返回信息列表
      *
      * @param messagestate

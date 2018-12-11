@@ -1,6 +1,7 @@
 package application.service;
 
 import application.entity.Message;
+import application.exception.ReadMessageException;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface MessageService {
      * @return
      */
     List<Message> getMessagesByUid(int uid);
+
+    public void readMessage(int uid, int mid) throws ReadMessageException;
 }

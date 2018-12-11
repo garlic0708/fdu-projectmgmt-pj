@@ -2,11 +2,14 @@ package application.controller;
 
 import application.component.JwtTokenUtil;
 import application.entity.User;
+import application.entity.forms.ResultMessage;
+import application.exception.ReadMessageException;
 import application.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -40,5 +43,19 @@ public class MessageController {
         User user = jwtTokenUtil.getUserByToken(token);
 
         return ResponseEntity.ok().body(messageService.getMessagesByUid(user.getuId()));
+    }
+
+    @RequestMapping(value = "${api.notify.read}/{mid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> readMessage(@PathVariable("mid") String mid, HttpServletRequest httpServletRequest) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        try {
+            messageService.readMessage(user.getuId(), Integer.parseInt(mid));
+            return ResponseEntity.ok().body(new ResultMessage("Read message success"));
+        }
+        catch (ReadMessageException e) {
+            return ResponseEntity.status(428).body(new ResultMessage(e.getMessage()));
+        }
     }
 }
