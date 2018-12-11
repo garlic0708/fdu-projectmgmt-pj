@@ -42,8 +42,10 @@ export class NotifProvider {
   }
 
   markAsRead(id) {
-    this.notificationList.find(x => x.id === id).type = "read";
-    this._notifications.next(this.notificationList)
+    this.data.markNotifAsRead(id).subscribe(() => {
+      this.notificationList.find(x => x.id === id).type = "read";
+      this._notifications.next(this.notificationList)
+    })
   }
 
 }

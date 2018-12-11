@@ -22,16 +22,19 @@ export class DataProvider {
   private flowUrl = '/api/event/home-flow';
   private eventTagListUrl = '/api/event-tag/list';
   private notifListUrl = '/api/notif/notif-list';
+  private markNotifAsReadUrl = '/api/notif/read';
   private joinEventUrl = '/api/user/join';
   private quitEventUrl = '/api/user/quit';
   private cancelAnEventUrl: '/api/event/cancel';
   private eventsJoinedUrl = '/api/user/joined';
   private eventsReleasedUrl = '/api/user/released';
-  private checkinUrl = '/api/event/checkin';
-  private nearbyEventsUrl = '/api/nearby/list';
+  private checkinListUrl = '/api/event/checkin';
+  private nearbyEventsUrl = '/api/event/nearby';
+  private checkinUrl = '/api/user/checkIn';
+  private checkoutUrl = '/api/user/checkOut';
 
   private addEventUrl = '/api/event/add';
-  private eventImageUrl = '/api/image/get';
+  private eventImageUrl = '/api/eventImg/get';
 
   constructor(public http: HttpClient) {
     console.log('Hello DataProvider Provider');
@@ -101,8 +104,12 @@ export class DataProvider {
   getNotifList(): Observable<NotifPreview[]> {
     return this.http.get<any[]>(this.notifListUrl).pipe(map(n =>
       n.map(x => {
-        return { id: x.mId, content: x.content, type: x.messagestate, }
+        return { id: x.mId, content: x.content, type: x.messageState.toLowerCase(), }
       })))
+  }
+
+  markNotifAsRead(notifId): Observable<any> {
+    return this.http.put(`${this.markNotifAsReadUrl}/${notifId}`, null)
   }
 
   joinEvent(eventId): Observable<any> {
@@ -125,19 +132,37 @@ export class DataProvider {
     return this.http.get<EventPreview[]>(this.eventsReleasedUrl)
   }
 
-  getEventCheckin(eventId): Observable<any> {
-    return this.http.get(`${this.checkinUrl}/${eventId}`)
+  getEventCheckinList(eventId): Observable<any[]> {
+    return this.http.get<any[]>(`${this.checkinListUrl}/${eventId}`).map(
+      v => v.map((u) => {
+        const { type, ...rest } = u;
+        return { checked: type, ...rest }
+      }))
   }
 
   getNearbyEvents(locationArray: any[]): Observable<EventPoint[]> {
-    return this.http.get<EventPoint[]>(`${this.nearbyEventsUrl}`, {
+    return this.http.get<any[]>(`${this.nearbyEventsUrl}`, {
       params: {
         nex: locationArray[0],
         ney: locationArray[1],
         swx: locationArray[2],
         swy: locationArray[3]
       }
-    })
+    }).map(v => v.map(u => {
+      return {
+        id: u.eId,
+        name: u.eventName,
+        x: u.address.positionX,
+        y: u.address.positionY,
+      }
+    }))
+  }
+
+  checkin(eventId, userId, isCancel: boolean = false): Observable<any> {
+    const formData = new FormData();
+    formData.set('uid', userId);
+    return this.http.put(`${isCancel ? this.checkoutUrl : this.checkinUrl}/${eventId}`,
+      formData)
   }
 
   getEventImageUrl(eventId): string {

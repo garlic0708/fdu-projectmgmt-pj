@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { EventsReleasedPage } from './events-released';
 import {IonicImageLoader} from "ionic-image-loader";
-import {PipesModule} from "../../pipes/pipes.module";
+import { ComponentsModule } from "../../components/components.module";
 
 @NgModule({
   declarations: [
@@ -10,8 +10,8 @@ import {PipesModule} from "../../pipes/pipes.module";
   ],
   imports: [
     IonicImageLoader,
-    PipesModule,
     IonicPageModule.forChild(EventsReleasedPage),
+    ComponentsModule,
   ],
 })
 export class EventsReleasedPageModule {}

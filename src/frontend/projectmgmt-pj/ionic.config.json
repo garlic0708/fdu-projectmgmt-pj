@@ -24,6 +24,10 @@
     {
       "path": "/api/user",
       "proxyUrl": "http://localhost:8090/api/user"
+    },
+    {
+      "path": "/api/notif",
+      "proxyUrl": "http://localhost:8090/api/notif"
     }
   ]
 }

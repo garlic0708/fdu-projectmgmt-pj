@@ -46,7 +46,7 @@ export const mockData: any = {
   'GET /api/event-tag/list': range(5).map(n => {
     return { id: n + 1, name: `tag ${n + 1}` }
   }),
-  'GET /api/notif/notif-list': [
+  '#GET /api/notif/notif-list': [
     { type: 'unread', content: 'Content 1', id: 1 },
     { type: 'unread', content: 'Content 2', id: 2 },
     {
@@ -55,11 +55,6 @@ export const mockData: any = {
       id: 3
     },
   ],
-  'GET /api/notif/notif-detail/:id': {
-    'type': 1,
-    'title': 'Title 1',
-    'content': 'Content 1',
-  },
   'GET /api/personal/events-joined': [
     { path: './assets/imgs/placeholder.png', title: 'Title 5', id: 5, status: 'canceled' },
     { path: './assets/imgs/logo.png', title: 'Title 1', id: 1, status: 'notstarted' },

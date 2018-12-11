@@ -20,8 +20,6 @@ import {EventDetailPage} from "../event-detail/event-detail";
 })
 export class EventsJoinedPage {
 
-  private button = 1;
-
   eventItems: Observable<EventPreview[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -33,18 +31,6 @@ export class EventsJoinedPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventsJoinedPage');
-  }
-
-  showNotStarted() {
-    this.button = 1;
-  }
-
-  showStarted() {
-    this.button = 2;
-  }
-
-  showEnded() {
-    this.button = 3;
   }
 
   goToEventDetail(id) {
