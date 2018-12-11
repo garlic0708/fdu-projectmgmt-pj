@@ -115,16 +115,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void checkIn(int uid, int eid) {
-        JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
-        joinEvent.setJeState(JoinEvent.CHECK);
-        joinEventRepository.save(joinEvent);
+        Event event = eventRepository.findByEId(eid);
+        if (event.getEventState().equals(Event.STARTED)) {
+            JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
+            joinEvent.setJeState(JoinEvent.CHECK);
+            joinEventRepository.save(joinEvent);
+        }
+
     }
 
     @Override
     public void checkOut(int uid, int eid) {
-        JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
-        joinEvent.setJeState(JoinEvent.PARTICIPATED);
-        joinEventRepository.save(joinEvent);
+        Event event = eventRepository.findByEId(eid);
+        if (event.getEventState().equals(Event.STARTED)) {
+            JoinEvent joinEvent = joinEventRepository.findByUIdAndEId(uid, eid);
+            joinEvent.setJeState(JoinEvent.PARTICIPATED);
+            joinEventRepository.save(joinEvent);
+        }
     }
 
     @Override

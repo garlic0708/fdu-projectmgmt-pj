@@ -27,5 +27,5 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
      * @param messagestate
      * @return
      */
-    List<Message> findByMessagestate(String messagestate);
+    List<Message> findByMessageState(String messagestate);
 }
