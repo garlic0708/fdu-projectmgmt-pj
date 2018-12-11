@@ -301,8 +301,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getNearbyEvents(double x1, double y1, double x2, double y2) {
-        return eventRepository.getEventsInASquare(x1, y1, x2, y2);
+    public List<EventDetail> getNearbyEvents(double x1, double y1, double x2, double y2) {
+        List<Event> events = eventRepository.getEventsInASquare(x1, y1, x2, y2);
+        List<EventDetail> details = new ArrayList<>();
+        for (Event event: events) {
+            EventDetail detail = new EventDetail();
+            detail.seteId(event.geteId());
+            detail.setEventName(event.getEventName());
+            detail.setAddress(addressRepository.findByAddrId(event.getAddress()));
+            details.add(detail);
+        }
+        return details;
     }
 
     @Override
@@ -311,19 +320,33 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getEventsJoined(int uid) {
+    public List<EventSlide> getEventsJoined(int uid) {
         List<JoinEvent> joinEvents = joinEventRepository.findByUId(uid);
-        List<Event> events = new ArrayList<>();
+        List<EventSlide> slides = new ArrayList<>();
         for (JoinEvent joinEvent: joinEvents) {
-            if (!joinEvent.getJeState().equals(JoinEvent.INITIATOR))
-                events.add(eventRepository.findByEId(joinEvent.geteId()));
+            if (!joinEvent.getJeState().equals(JoinEvent.INITIATOR)) {
+                Event event = eventRepository.findByEId(joinEvent.geteId());
+                EventSlide slide = new EventSlide();
+                slide.setId(event.geteId());
+                slide.setTitle(event.getEventName());
+                slides.add(slide);
+            }
         }
-        return events;
+        return slides;
     }
 
     @Override
-    public List<Event> getEventsReleased(int uid) {
-        return eventRepository.findByInitiator(uid);
+    public List<EventSlide> getEventsReleased(int uid) {
+        List<Event> events = eventRepository.findByInitiator(uid);
+        List<EventSlide> slides = new ArrayList<>();
+        for (Event event: events) {
+            EventSlide slide = new EventSlide();
+            slide.setId(event.geteId());
+            slide.setTitle(event.getEventName());
+            slides.add(slide);
+
+        }
+        return slides;
     }
 
     private void updateCredit(int eid) {

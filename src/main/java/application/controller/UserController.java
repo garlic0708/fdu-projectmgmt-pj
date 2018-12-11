@@ -1,13 +1,16 @@
 package application.controller;
 
 import application.component.JwtTokenUtil;
+import application.entity.forms.EventSlide;
 import application.entity.forms.ResultMessage;
 import application.entity.User;
+import application.entity.forms.View;
 import application.exception.JoinEventException;
 import application.exception.UpdateUserImgException;
 import application.service.EventService;
 import application.service.FileService;
 import application.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -113,8 +116,9 @@ public class UserController {
         return ResponseEntity.ok().body(new ResultMessage("CheckOut success"));
     }
 
-    @RequestMapping(value = "${api.user.joined}", method = RequestMethod.PUT)
-    public ResponseEntity<?> getJoinedEvent(HttpServletRequest httpServletRequest) {
+    @RequestMapping(value = "${api.user.joined}", method = RequestMethod.GET)
+    @JsonView(View.SimpleEvent.class)
+    public ResponseEntity<List<EventSlide>> getJoinedEvent(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
         User user = jwtTokenUtil.getUserByToken(token);
 
@@ -122,7 +126,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "${api.user.released}", method = RequestMethod.GET)
-    public ResponseEntity<?> getReleasedEvent(HttpServletRequest httpServletRequest) {
+    @JsonView(View.SimpleEvent.class)
+    public ResponseEntity<List<EventSlide>> getReleasedEvent(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
         User user = jwtTokenUtil.getUserByToken(token);
 

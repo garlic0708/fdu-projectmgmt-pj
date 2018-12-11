@@ -2,6 +2,7 @@ package application.entity.forms;
 
 import application.entity.Address;
 import application.entity.Tag;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -12,12 +13,15 @@ import java.util.Map;
  * Date: 2018/11/25.
  */
 public class EventDetail {
+    @JsonView(View.NearByEvent.class)
     private int eId;
+    @JsonView(View.NearByEvent.class)
     private String eventName;
     private String content;
     private Timestamp startTime;
     private Timestamp endTime;
-    private Address address; // addressName
+    @JsonView(View.NearByEvent.class)
+    private Address address;
     private String eventState;
     private Boolean limited;  // 如果这一个是false，下面三个limit不需要设置
     private Integer creditLimit;
@@ -28,6 +32,8 @@ public class EventDetail {
     private List<Tag> tags; //从数据库表tag和eventTag中获取
     private Map<String, String> initiator; //参考下面的注释
     private int currentAttendants; //当前参加人数
+
+    public EventDetail() {}
 
     public EventDetail(int eId, String eventName, String content, Timestamp startTime, Timestamp endTime, Address address,
                        String eventState, Boolean limited, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image){

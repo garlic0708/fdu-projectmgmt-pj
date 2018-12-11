@@ -3,14 +3,17 @@ package application.controller;
 import application.component.JwtTokenUtil;
 import application.entity.forms.AddEventForm;
 import application.entity.Event;
+import application.entity.forms.EventDetail;
 import application.entity.forms.ResultMessage;
 import application.entity.User;
+import application.entity.forms.View;
 import application.exception.AddEventException;
 import application.exception.CancelEventException;
 import application.service.EventService;
 import application.service.FileService;
 import application.service.QuartzEventService;
 import application.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -133,8 +137,9 @@ public class EventController {
     }
 
     @RequestMapping(value = "${api.event.nearby}", method = RequestMethod.GET)
-    public ResponseEntity<?> getNearbyEvents(@RequestParam("nex") double nex, @RequestParam("ney") double ney,
-                                             @RequestParam("swx") double swx,@RequestParam("swx") double swy) {
+    @JsonView(View.NearByEvent.class)
+    public ResponseEntity<List<EventDetail>> getNearbyEvents(@RequestParam("nex") double nex, @RequestParam("ney") double ney,
+                                                             @RequestParam("swx") double swx, @RequestParam("swx") double swy) {
         return ResponseEntity.ok().body(eventService.getNearbyEvents(nex, ney, swx, swy));
     }
 }

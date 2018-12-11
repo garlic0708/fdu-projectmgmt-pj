@@ -46,7 +46,7 @@ public interface EventService {
 
     void cancelEvent(int uid, int eid) throws CancelEventException;
 
-    List<Event> getNearbyEvents(double x1, double y1, double x2, double y2);
+    List<EventDetail> getNearbyEvents(double x1, double y1, double x2, double y2);
 
     Event getById(int eid);
 
@@ -55,12 +55,12 @@ public interface EventService {
      * @param uid
      * @return
      */
-    List<Event> getEventsJoined(int uid);
+    List<EventSlide> getEventsJoined(int uid);
 
     /**
      * 通过uid，返回这个用户发起过的活动
      * @param uid
      * @return
      */
-    List<Event> getEventsReleased(int uid);
+    List<EventSlide> getEventsReleased(int uid);
 }
