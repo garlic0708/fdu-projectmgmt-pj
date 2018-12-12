@@ -34,8 +34,12 @@ export class EventSummaryComponent {
     this.button = 2;
   }
 
-  showEnded() {
+  showCanceled() {
     this.button = 3;
+  }
+
+  showEnded() {
+    this.button = 4;
   }
 
   clickEvent(id) {

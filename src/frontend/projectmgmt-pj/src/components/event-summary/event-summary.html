@@ -7,8 +7,10 @@
     <button ion-col ion-button outline (click)="showStarted()" *ngIf="button != 2">进行中</button>
     <button ion-col ion-button *ngIf="button == 2">进行中</button>
 
-    <button ion-col ion-button outline (click)="showEnded()" *ngIf="button != 3">已结束</button>
-    <button ion-col ion-button *ngIf="button == 3">已结束</button>
+    <button ion-col ion-button outline (click)="showCanceled()" *ngIf="button != 3">已取消</button>
+    <button ion-col ion-button *ngIf="button == 3">已取消</button>
+    <button ion-col ion-button outline (click)="showEnded()" *ngIf="button != 4">已结束</button>
+    <button ion-col ion-button *ngIf="button == 4">已结束</button>
   </ion-row>
 </ion-grid>
 

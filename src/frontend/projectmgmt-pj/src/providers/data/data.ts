@@ -20,7 +20,7 @@ export class DataProvider {
   private detailUrl = '/api/event/detail';
   private slidesUrl = '/api/event/home-slides';
   private flowUrl = '/api/event/home-flow';
-  private eventTagListUrl = '/api/event-tag/list';
+  private eventTagListUrl = '/api/tag/list';
   private notifListUrl = '/api/notif/notif-list';
   private markNotifAsReadUrl = '/api/notif/read';
   private joinEventUrl = '/api/user/join';
@@ -141,7 +141,7 @@ export class DataProvider {
   }
 
   getNearbyEvents(locationArray: any[]): Observable<EventPoint[]> {
-    return this.http.get<any[]>(`${this.nearbyEventsUrl}`, {
+    return this.http.get<any[]>(this.nearbyEventsUrl, {
       params: {
         nex: locationArray[0],
         ney: locationArray[1],

@@ -14,20 +14,8 @@
       "proxyUrl": "http://localhost:8090/refresh"
     },
     {
-      "path": "/api/event",
-      "proxyUrl": "http://localhost:8090/api/event"
-    },
-    {
-      "path": "/api/image",
-      "proxyUrl": "http://localhost:8090/api/image"
-    },
-    {
-      "path": "/api/user",
-      "proxyUrl": "http://localhost:8090/api/user"
-    },
-    {
-      "path": "/api/notif",
-      "proxyUrl": "http://localhost:8090/api/notif"
+      "path": "/api",
+      "proxyUrl": "http://localhost:8090/api"
     }
   ]
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {
   AlertController,
   App,
-  IonicPage,
+  IonicPage, LoadingController,
   NavController,
   NavParams, Popover,
   PopoverController,
@@ -11,7 +11,6 @@ import {
 import { CurrentUserProvider, User } from "../../providers/current-user/current-user";
 import { LoginPage } from "../login/login";
 
-import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import { DataProvider } from "../../providers/data/data";
 import { EventsJoinedPage } from "../events-joined/events-joined";
 import { EventsReleasedPage } from "../events-released/events-released";
@@ -63,7 +62,8 @@ export class PersonalPage {
               private popover: PopoverController,
               private imagePicker: ImagePicker,
               private alert: AlertController,
-              private confirm: ConfirmProvider,) {
+              private confirm: ConfirmProvider,
+              private loading: LoadingController,) {
     this.currentUser = this.currentUserProvider.currentUser;
   }
 
@@ -88,10 +88,18 @@ export class PersonalPage {
     }).then(value => {
       popover.dismiss();
       if (value === "avatar") {
-        console.log('avatar')
-        // this.imagePicker.getPictures({ maximumImagesCount: 1 }).then(([results]) => {
-        //
-        // })
+        this.imagePicker.getPictures({ maximumImagesCount: 1 }).then(([result]) => {
+          const loading = this.loading.create({ content: '加载中……' });
+          loading.present();
+          this.currentUserProvider.changeAvatar(result)
+            .then(
+              () => loading.dismiss(),
+              () => {
+                this.toast.create({ message: '网络错误', duration: 1500 }).present();
+                loading.dismiss()
+              },
+            )
+        })
       } else {
         this.alert.create({
           title: '请输入新昵称',
@@ -99,7 +107,12 @@ export class PersonalPage {
           buttons: [{
             text: '确定',
             handler: data => {
-              console.log(data); // todo
+              const loading = this.loading.create({ content: '加载中……' });
+              loading.present();
+              this.currentUserProvider.changeNickname(data.nickname)
+                .catch(() => this.toast.create({ message: '网络错误', duration: 1500 }).present())
+                .finally(() => loading.dismiss())
+                .subscribe(() => {})
             }
           }]
         }).present()

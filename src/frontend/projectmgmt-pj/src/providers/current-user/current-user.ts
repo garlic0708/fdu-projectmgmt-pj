@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AuthService, StorageType } from 'ng2-ui-auth';
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { tap } from "rxjs/operators";
 
 /*
   Generated class for the CurrentUserProvider provider.
@@ -21,6 +22,8 @@ export class CurrentUserProvider {
 
   private refreshUrl = '/refresh';
   private changePasswordUrl = '/auth/update';
+  private changeNicknameUrl = '/api/user/updateName';
+  private changeAvatarUrl = '/api/user/updateImg';
 
   constructor(public auth: AuthService, private http: HttpClient) {
     console.log('Hello CurrentUserProvider Provider');
@@ -83,6 +86,23 @@ export class CurrentUserProvider {
       email: this.currentUser.email,
       ...f,
     })
+  }
+
+  changeNickname(nickname): Observable<any> {
+    const formData = new FormData();
+    formData.append('nickname', nickname);
+    console.log(formData);
+    return this.http.put(this.changeNicknameUrl, formData)
+      .pipe(tap(() => this.currentUser.nickname = nickname))
+  }
+
+  changeAvatar(imageUri: string): Promise<any> {
+    return fetch(imageUri).then(res => res.blob())
+      .then(blob => {
+        const formData = new FormData();
+        formData.append('img', blob);
+        return this.http.post(this.changeAvatarUrl, formData).toPromise()
+      })
   }
 
 }

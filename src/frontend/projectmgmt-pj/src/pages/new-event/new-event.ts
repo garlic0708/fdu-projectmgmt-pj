@@ -164,7 +164,7 @@ export class NewEventPage {
         this.appCtrl.getRootNavs()[0].push(EventDetailPage, { eventId: +x.message })
       },
       (err: { status: string }) => {
-        this.toast.create({ message: err.status, duration: 1500, }).present();
+        this.toast.create({ message: '网络错误', duration: 1500, }).present();
       })
   }
 
