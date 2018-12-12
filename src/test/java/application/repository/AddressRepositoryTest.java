@@ -25,37 +25,37 @@ public class AddressRepositoryTest {
     @Rollback
     public void findByAddrId() {
         Address address = new Address();
-        address.setAddressname("Fudan");
+        address.setAddressName("Fudan");
         address.setPositionX(2.0);
         address.setPositionY(1.5);
         addressRepository.save(address);
         int id = address.getAddrId();
         Address test = addressRepository.findByAddrId(id);
-        assertEquals(test.getAddressname(), "Fudan");
+        assertEquals(test.getAddressName(), "Fudan");
     }
 
     @Test
     @Rollback
     public void findByAddressname() {
         Address address = new Address();
-        address.setAddressname("Fudan");
+        address.setAddressName("Fudan");
         address.setPositionX(2.0);
         address.setPositionY(1.5);
         addressRepository.save(address);
 
         Address address1 = new Address();
-        address1.setAddressname("Shanghai");
+        address1.setAddressName("Shanghai");
         address1.setPositionX(2.0);
         address1.setPositionY(1.5);
         addressRepository.save(address1);
 
         Address address2 = new Address();
-        address2.setAddressname("Shanghai");
+        address2.setAddressName("Shanghai");
         address2.setPositionX(180.0);
         address2.setPositionY(33.5);
         addressRepository.save(address2);
 
-        List<Address> list = addressRepository.findByAddressname("Shanghai");
+        List<Address> list = addressRepository.findByAddressName("Shanghai");
         Address test1 = list.get(0);
         Address test2 = list.get(1);
         assertEquals(test1.getPositionX(), new Double(2.0));
@@ -68,13 +68,13 @@ public class AddressRepositoryTest {
     @Rollback
     public void findByPosition() {
         Address address = new Address();
-        address.setAddressname("Shanghai");
+        address.setAddressName("Shanghai");
         address.setPositionX(2.0);
         address.setPositionY(1.5);
         addressRepository.save(address);
 
         Address address1 = new Address();
-        address1.setAddressname("Fudan");
+        address1.setAddressName("Fudan");
         address1.setPositionX(2.0);
         address1.setPositionY(1.5);
         addressRepository.save(address1);
@@ -82,8 +82,8 @@ public class AddressRepositoryTest {
         List<Address> list = addressRepository.findByPositionXAndPositionY(2.0, 1.5);
         Address test1 = list.get(0);
         Address test2 = list.get(1);
-        assertEquals(test1.getAddressname(), "Shanghai");
-        assertEquals(test2.getAddressname(), "Fudan");
+        assertEquals(test1.getAddressName(), "Shanghai");
+        assertEquals(test2.getAddressName(), "Fudan");
 
     }
 
@@ -91,7 +91,7 @@ public class AddressRepositoryTest {
     @Rollback
     public void deleteById() {
         Address address = new Address();
-        address.setAddressname("Shanghai");
+        address.setAddressName("Shanghai");
         address.setPositionX(2.0);
         address.setPositionY(1.5);
         addressRepository.save(address);
@@ -105,7 +105,7 @@ public class AddressRepositoryTest {
     @Rollback
     public void deleteAddress() {
         Address address = new Address();
-        address.setAddressname("Shanghai");
+        address.setAddressName("Shanghai");
         address.setPositionX(2.0);
         address.setPositionY(1.5);
         addressRepository.save(address);
@@ -118,19 +118,19 @@ public class AddressRepositoryTest {
     @Rollback
     public void updateAddress() {
         Address address = new Address();
-        address.setAddressname("Shanghai");
+        address.setAddressName("Shanghai");
         address.setPositionX(2.0);
         address.setPositionY(1.5);
         addressRepository.save(address);
         int id = address.getAddrId();
         Address address2 = addressRepository.findByAddrId(id);
-        address2.setAddressname("Beijing");
+        address2.setAddressName("Beijing");
         address2.setPositionX(10.0);
         address2.setPositionY(7.5);
         addressRepository.save(address2);
 
         Address test = addressRepository.findByAddrId(id);
-        assertEquals(test.getAddressname(), "Beijing");
+        assertEquals(test.getAddressName(), "Beijing");
         assertEquals(test.getPositionX(), new Double(10.0));
         assertEquals(test.getPositionY(), new Double(7.5));
     }
