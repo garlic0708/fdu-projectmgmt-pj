@@ -116,7 +116,7 @@ public class EventServiceImpl implements EventService {
     public List<EventSlide> getHomeSlides(){
         List<Event> events=eventRepository.getEvents(3);
         List<EventSlide> eventSlides=new LinkedList<>();
-        for (int i=0;i<3;i++) {
+        for (int i=0;i<events.size();i++) {
             String path=events.get(i).getImage();
             String title=events.get(i).getEventName();
             int id=events.get(i).geteId();
@@ -135,7 +135,7 @@ public class EventServiceImpl implements EventService {
     public List<EventSlide> getHomeFlow(){
         List<Event> events=eventRepository.getEvents(10);
         List<EventSlide> eventSlides=new LinkedList<>();
-        for (int i=0;i<10;i++) {
+        for (int i=0;i<events.size();i++) {
             String path=events.get(i).getImage();
             String title=events.get(i).getEventName();
             int id=events.get(i).geteId();
@@ -329,6 +329,7 @@ public class EventServiceImpl implements EventService {
                 EventSlide slide = new EventSlide();
                 slide.setId(event.geteId());
                 slide.setTitle(event.getEventName());
+                slide.setStatus(event.getEventState());
                 slides.add(slide);
             }
         }
@@ -343,6 +344,7 @@ public class EventServiceImpl implements EventService {
             EventSlide slide = new EventSlide();
             slide.setId(event.geteId());
             slide.setTitle(event.getEventName());
+            slide.setStatus(event.getEventState());
             slides.add(slide);
 
         }

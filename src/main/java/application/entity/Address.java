@@ -1,5 +1,8 @@
 package application.entity;
 
+import application.entity.forms.View;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 
 /**
@@ -10,7 +13,9 @@ import javax.persistence.*;
 public class Address {
     private int addrId;
     private String addressName;
+    @JsonView(View.NearByEvent.class)
     private Double positionX;
+    @JsonView(View.NearByEvent.class)
     private Double positionY;
     private String poiId;
     private String addressPosition;

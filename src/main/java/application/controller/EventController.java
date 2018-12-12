@@ -139,7 +139,7 @@ public class EventController {
     @RequestMapping(value = "${api.event.nearby}", method = RequestMethod.GET)
     @JsonView(View.NearByEvent.class)
     public ResponseEntity<List<EventDetail>> getNearbyEvents(@RequestParam("nex") double nex, @RequestParam("ney") double ney,
-                                                             @RequestParam("swx") double swx, @RequestParam("swx") double swy) {
+                                                             @RequestParam("swx") double swx, @RequestParam("swy") double swy) {
         return ResponseEntity.ok().body(eventService.getNearbyEvents(nex, ney, swx, swy));
     }
 }

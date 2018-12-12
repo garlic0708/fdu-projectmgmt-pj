@@ -12,6 +12,8 @@ public class EventSlide {
     private String title; // event name
     @JsonView(View.SimpleEvent.class)
     private int id; // e_id
+    @JsonView(View.SimpleEvent.class)
+    private String status;
 
     public EventSlide() {}
 
@@ -43,5 +45,13 @@ public class EventSlide {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
