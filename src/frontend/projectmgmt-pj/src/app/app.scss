@@ -1,5 +1,48 @@
 // http://ionicframework.com/docs/theming/
 
+@mixin aspect-ratio-center() {
+  overflow: hidden;
+  height: 0;
+  padding-top: 56.25%;
+  position: relative;
+
+  >.aspect-ratio-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    >.flexbox-center {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.event-tag-caption {
+  background-color: #eeeeee;
+  padding: 0.25em;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: max-content;
+
+  &:not(:first-child) {
+    margin-left: 0.25em;
+  }
+
+  &:not(:last-child) {
+    margin-right: 0.25em;
+  }
+}
+
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -o-animation: $animation;
+  animation: $animation;
+}
 
 // App Global Sass
 // --------------------------------------------------

@@ -1,0 +1,5 @@
+<ion-list>
+  <button *ngFor="let item of options" ion-item (click)="resolve(item)">
+    {{text(item)}}
+  </button>
+</ion-list>

@@ -14,5 +14,11 @@
 
 
 <ion-content padding>
-
+  <ion-list>
+    <ion-item *ngFor="let notifItem of notifItems | async" (click)="doAlert(notifItem)">
+      <ion-icon name="plane" item-start></ion-icon>
+      <ion-label class="notif-content">{{notifItem.content}}</ion-label>
+      <ion-badge item-end color="danger" *ngIf="notifItem.type === 'unread'">&nbsp;</ion-badge>
+    </ion-item>
+  </ion-list>
 </ion-content>

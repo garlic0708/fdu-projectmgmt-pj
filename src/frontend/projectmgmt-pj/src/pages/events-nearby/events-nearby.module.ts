@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { EventsNearbyPage } from './events-nearby';
+import { ComponentsModule } from "../../components/components.module";
 
 @NgModule({
   declarations: [
@@ -8,6 +9,7 @@ import { EventsNearbyPage } from './events-nearby';
   ],
   imports: [
     IonicPageModule.forChild(EventsNearbyPage),
+    ComponentsModule,
   ],
 })
 export class EventsNearbyPageModule {}

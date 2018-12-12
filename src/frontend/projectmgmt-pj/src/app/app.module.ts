@@ -5,31 +5,58 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HomePageModule } from "../pages/home/home.module";
-import { EventDetailPageModule } from "../pages/event-detail/event-detail.module";
-import { EventsNearbyPageModule } from "../pages/events-nearby/events-nearby.module";
-import { NotifListPageModule } from "../pages/notif-list/notif-list.module";
-import { PersonalPageModule } from "../pages/personal/personal.module";
-import { SuperTabsModule } from "ionic2-super-tabs";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { StartupPageModule } from "../pages/startup/startup.module";
+import { MockProvider } from '../providers/mock/mock';
+import { DataProvider } from "../providers/data/data";
+import { IonicImageLoader } from "ionic-image-loader";
+import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
+import { Ng2UiAuthModule } from 'ng2-ui-auth';
+import { ImagePicker } from "@ionic-native/image-picker";
+import { CurrentUserProvider } from '../providers/current-user/current-user';
+import { LoginPageModule } from "../pages/login/login.module";
+import { AMapApiProvider } from "../providers/amap-api/amap-api";
+import { NotifProvider } from '../providers/notif/notif';
+import { ConfirmProvider } from '../providers/confirm/confirm';
+
+
 
 @NgModule({
   declarations: [
-    MyApp,
+    MyApp
   ],
   imports: [
+    IonicModule.forRoot(MyApp),
+    LoginPageModule,
     StartupPageModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicImageLoader.forRoot(),
+    HttpClientModule,
+    Ng2UiAuthModule.forRoot({
+      signupUrl: '/auth/register',
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    MyApp
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockProvider,
+      multi: true,
+    },
+    DataProvider,
+    AMapApiProvider,
+    ImagePicker,
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    LoadingCoverProvider,
+    CurrentUserProvider,
+    NotifProvider,
+    ConfirmProvider,
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

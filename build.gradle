@@ -1,9 +1,11 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
     }
 }
 
@@ -12,11 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-
-bootJar {
-    baseName = 'gs-accessing-data-mysql'
-    version =  '0.1.0'
-}
+apply plugin: 'com.palantir.docker'
 
 repositories {
     mavenCentral()
@@ -24,6 +22,8 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+group = 'fdu-projectmgmt-pj'
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -53,4 +53,10 @@ dependencies {
             'io.jsonwebtoken:jjwt-jackson:0.10.5'
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+docker {
+    name "${project.group}/${jar.baseName}"
+    files jar.archivePath
+    buildArgs(['JAR_FILE': "${jar.archiveName}"])
 }
