@@ -27,6 +27,7 @@
     "@ionic-native/image-picker": "^4.17.0",
     "@ionic-native/splash-screen": "~4.15.0",
     "@ionic-native/status-bar": "~4.15.0",
+    "@ionic/app-scripts": "^3.2.1",
     "@ionic/storage": "2.2.0",
     "@types/lodash": "^4.14.118",
     "cordova-android": "7.1.2",
@@ -53,7 +54,6 @@
     "zone.js": "0.8.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "^3.2.1",
     "typescript": "2.8.4",
     "ws": "3.3.2"
   },

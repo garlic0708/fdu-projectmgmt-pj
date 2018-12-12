@@ -61,7 +61,7 @@
     </ion-item>
     <ion-item no-lines>
       <ion-avatar item-start>
-        <img-with-request src="{{_detail.initiator.avatar}}"></img-with-request>
+        <img-with-request src="{{getAvatarUrl(_detail.initiator.id)}}"></img-with-request>
       </ion-avatar>
       <p>发起人</p>
       <h2>{{_detail.initiator.name}}</h2>

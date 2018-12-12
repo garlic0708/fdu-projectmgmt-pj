@@ -54,7 +54,7 @@ public class FileController {
         String imagePath = userService.getByUid(uid).getImage();
         if (imagePath == null || imagePath.equals(""))
             try {
-                imagePath = new ClassPathResource("static/defaultUser.img").getFile().getAbsolutePath();
+                imagePath = new ClassPathResource("static/defaultUser.jpg").getFile().getAbsolutePath();
             } catch (IOException e) {
                 return ResponseEntity.status(404).body(new ResultMessage("Failed to load image"));
             }

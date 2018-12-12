@@ -19,7 +19,7 @@
     <ion-list class="top-list" *ngFor="let personItem of _personItems">
       <div ion-item>
         <ion-avatar item-start>
-          <img-loader src="./assets/imgs/logo.png" useImg></img-loader>    <!-- TODO -->
+          <img-with-request src="{{getAvatarUrl(personItem.uid)}}"></img-with-request>
         </ion-avatar>
         <div class="checkin-name">
           {{personItem.name}}

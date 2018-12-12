@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AuthService, StorageType } from 'ng2-ui-auth';
 import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/operators";
+import { ApiRedirectProvider } from "../api-redirect/api-redirect";
+import { DataProvider } from "../data/data";
 
 /*
   Generated class for the CurrentUserProvider provider.
@@ -12,7 +13,7 @@ import { tap } from "rxjs/operators";
 */
 
 export type User = {
-  email: string, image: string, nickname: string, credit: number,
+  email: string, id: number, nickname: string, credit: number,
 };
 
 @Injectable()
@@ -25,7 +26,8 @@ export class CurrentUserProvider {
   private changeNicknameUrl = '/api/user/updateName';
   private changeAvatarUrl = '/api/user/updateImg';
 
-  constructor(public auth: AuthService, private http: HttpClient) {
+  constructor(public auth: AuthService, private http: ApiRedirectProvider,
+              private data: DataProvider,) {
     console.log('Hello CurrentUserProvider Provider');
   }
 
@@ -64,7 +66,6 @@ export class CurrentUserProvider {
     this.currentUser = {
       ...payload,
       email: payload.sub,
-      image: payload.picture,
     };
   }
 
@@ -97,7 +98,7 @@ export class CurrentUserProvider {
   }
 
   changeAvatar(imageUri: string): Promise<any> {
-    return fetch(imageUri).then(res => res.blob())
+    return this.data.getBlobFromUri(imageUri)
       .then(blob => {
         const formData = new FormData();
         formData.append('img', blob);

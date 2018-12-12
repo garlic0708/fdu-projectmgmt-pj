@@ -17,7 +17,7 @@
   <ion-list class="top-list">
     <button ion-item>
       <ion-avatar item-left>
-        <img-with-request src="{{currentUser.image}}"></img-with-request>
+        <img-with-request #avatar src="{{avatarUrl}}"></img-with-request>
       </ion-avatar>
       <h2>{{currentUser.nickname}}</h2>
       <p>账号：{{currentUser.email}}</p>

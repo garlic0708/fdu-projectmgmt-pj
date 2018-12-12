@@ -59,7 +59,6 @@ export class NewEventPage {
               private toast: ToastController,
               private tabsCtrl: SuperTabsController,) {
     this.initializeFields();
-
     [this.eventTagList] = this.loading.fetchData(this.data.getEventTagList());
   }
 
@@ -135,7 +134,8 @@ export class NewEventPage {
   selectImage() {
     this.imagePicker.getPictures({ maximumImagesCount: 1 }).then(
       ([result]) => {
-        this.eventImage = result;
+        if (result)
+          this.eventImage = result;
       }
     )
   }

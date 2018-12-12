@@ -31,9 +31,12 @@ public class JwtTokenUtil implements Serializable {
 
     private static final String CLAIM_KEY_SUB = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
-    private static final String CLAIM_KEY_PICTURE = "picture";
+    private static final String CLAIM_KEY_ID = "id";
     private static final String CLAIM_KEY_CREDIT = "credit";
     private static final String CLAIM_KEY_NICKNAME = "nickname";
+
+    @Value("${api.image.get.user}")
+    private String pictureUrl;
 
     @Autowired
     private UserRepository userRepository;
@@ -112,7 +115,7 @@ public class JwtTokenUtil implements Serializable {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_SUB, userDetails.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
-        claims.put(CLAIM_KEY_PICTURE, user.getImage());
+        claims.put(CLAIM_KEY_ID, user.getuId());
         claims.put(CLAIM_KEY_CREDIT, user.getCredit());
         claims.put(CLAIM_KEY_NICKNAME, user.getNickname());
         return generateToken(claims);
@@ -152,7 +155,7 @@ public class JwtTokenUtil implements Serializable {
         return (
                 username.equals(user.getUsername())
                         && !isTokenExpired(token)
-                        );
+        );
     }
 
     public User getUserByToken(String token) {

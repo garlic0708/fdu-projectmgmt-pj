@@ -30,7 +30,7 @@ public class EventDetail {
     private String image;
 
     private List<Tag> tags; //从数据库表tag和eventTag中获取
-    private Map<String, String> initiator; //参考下面的注释
+    private Map<String, Object> initiator; //参考下面的注释
     private int currentAttendants; //当前参加人数
 
     public EventDetail() {}
@@ -64,11 +64,11 @@ public class EventDetail {
         this.currentAttendants = currentAttendants;
     }
 
-    public Map<String, String> getInitiator() {
+    public Map<String, Object> getInitiator() {
         return initiator;
     }
 
-    public void setInitiator(Map<String, String> initiator) {
+    public void setInitiator(Map<String, Object> initiator) {
         this.initiator = initiator;
     }
 

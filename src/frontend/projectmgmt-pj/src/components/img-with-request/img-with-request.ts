@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { ApiRedirectProvider } from "../../providers/api-redirect/api-redirect";
 
 /**
  * Generated class for the ImgWithRequestComponent component.
@@ -24,13 +25,17 @@ export class ImgWithRequestComponent implements OnChanges {
     this.src$.next(this.src);
   }
 
+  reload() {
+    this.ngOnChanges()
+  }
+
   // this stream will contain the actual url that our img tag will load
   // everytime the src changes, the previous call would be canceled and the
   // new resource would be loaded
   dataUrl$ = this.src$.switchMap(url => this.loadImage(url));
 
   // we need HttpClient to load the image
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: ApiRedirectProvider) {
   }
 
   private loadImage(url: string): Observable<any> {

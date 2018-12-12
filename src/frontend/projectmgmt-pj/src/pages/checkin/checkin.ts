@@ -46,4 +46,8 @@ export class CheckinPage {
       )
   }
 
+  getAvatarUrl(userId) {
+    return this.data.getAvatarUrl(userId)
+  }
+
 }

@@ -7,10 +7,10 @@ import {
 } from '@angular/common/http';
 import { Injectable} from '@angular/core';
 import { Observable } from "rxjs";
-import { delay, mapTo } from "rxjs/operators";
-import { of } from "rxjs/observable/of";
+import { escapeRegExp } from "@angular/compiler/src/util";
 import { mockData } from "./mock-data";
-import escapeRegExp from 'lodash/escapeRegExp'
+import { of } from "rxjs/observable/of";
+import { delay, mapTo } from "rxjs/operators";
 
 /*
   Generated class for the MockProvider provider.
@@ -21,7 +21,10 @@ import escapeRegExp from 'lodash/escapeRegExp'
 @Injectable()
 export class MockProvider implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // req =  new HttpRequest(<any>req.method, `${url}${req.url}`);
+    // return next.handle(req)
     let url = req.url;
+    console.log(url);
     const idx = req.url.indexOf('?');
     if (idx !== -1)
       url = req.url.substring(0, idx);

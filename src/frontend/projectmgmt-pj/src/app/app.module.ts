@@ -5,9 +5,8 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { StartupPageModule } from "../pages/startup/startup.module";
-import { MockProvider } from '../providers/mock/mock';
 import { DataProvider } from "../providers/data/data";
 import { IonicImageLoader } from "ionic-image-loader";
 import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
@@ -18,6 +17,7 @@ import { LoginPageModule } from "../pages/login/login.module";
 import { AMapApiProvider } from "../providers/amap-api/amap-api";
 import { NotifProvider } from '../providers/notif/notif';
 import { ConfirmProvider } from '../providers/confirm/confirm';
+import { ApiRedirectProvider } from '../providers/api-redirect/api-redirect';
 
 
 
@@ -33,7 +33,8 @@ import { ConfirmProvider } from '../providers/confirm/confirm';
     IonicImageLoader.forRoot(),
     HttpClientModule,
     Ng2UiAuthModule.forRoot({
-      signupUrl: '/auth/register',
+      loginUrl: `${ApiRedirectProvider.host}/auth/login`,
+      signupUrl: `${ApiRedirectProvider.host}/auth/register`,
     }),
   ],
   bootstrap: [IonicApp],
@@ -41,11 +42,11 @@ import { ConfirmProvider } from '../providers/confirm/confirm';
     MyApp
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MockProvider,
-      multi: true,
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: MockProvider,
+    //   multi: true,
+    // },
     DataProvider,
     AMapApiProvider,
     ImagePicker,
@@ -56,6 +57,7 @@ import { ConfirmProvider } from '../providers/confirm/confirm';
     CurrentUserProvider,
     NotifProvider,
     ConfirmProvider,
+    ApiRedirectProvider,
   ]
 })
 export class AppModule {
