@@ -1,9 +1,10 @@
 package application.entity.forms;
 
+import application.entity.Address;
 import application.entity.Tag;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +13,18 @@ import java.util.Map;
  * Date: 2018/11/25.
  */
 public class EventDetail {
+    @JsonView(View.NearByEvent.class)
     private int eId;
-    private String eventname;
+    @JsonView(View.NearByEvent.class)
+    private String eventName;
     private String content;
-    private Timestamp starttime;
-    private Timestamp endtime;
-    private String address; // addressName
-    private String eventstate;
+    private Timestamp startTime;
+    private Timestamp endTime;
+    @JsonView(View.NearByEvent.class)
+    private Address address;
+    private String eventState;
     private Boolean limited;  // 如果这一个是false，下面三个limit不需要设置
-    private Integer credictLimit;
+    private Integer creditLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
     private String image;
@@ -29,17 +33,19 @@ public class EventDetail {
     private Map<String, String> initiator; //参考下面的注释
     private int currentAttendants; //当前参加人数
 
-    public EventDetail(int eId,String eventname,String content,Timestamp starttime,Timestamp endtime,String address,
-    String  eventstate,Boolean limited,Integer credictLimit,Integer upperLimit,Integer lowerLimit,String image){
+    public EventDetail() {}
+
+    public EventDetail(int eId, String eventName, String content, Timestamp startTime, Timestamp endTime, Address address,
+                       String eventState, Boolean limited, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image){
         this.eId=eId;
-        this.eventname=eventname;
+        this.eventName = eventName;
         this.content = content;
-        this.starttime = starttime;
-        this.endtime = endtime;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.address = address;
-        this.eventstate = eventstate;
+        this.eventState = eventState;
         this.limited = limited;
-        this.credictLimit = credictLimit;
+        this.creditLimit = creditLimit;
         this.upperLimit = upperLimit;
         this.lowerLimit = lowerLimit;
         this.image = image;
@@ -98,12 +104,12 @@ public class EventDetail {
         this.upperLimit = upperLimit;
     }
 
-    public Integer getCredictLimit() {
-        return credictLimit;
+    public Integer getCreditLimit() {
+        return creditLimit;
     }
 
-    public void setCredictLimit(Integer credictLimit) {
-        this.credictLimit = credictLimit;
+    public void setCreditLimit(Integer creditLimit) {
+        this.creditLimit = creditLimit;
     }
 
     public Boolean getLimited() {
@@ -114,36 +120,36 @@ public class EventDetail {
         this.limited = limited;
     }
 
-    public String getEventstate() {
-        return eventstate;
+    public String getEventState() {
+        return eventState;
     }
 
-    public void setEventstate(String eventstate) {
-        this.eventstate = eventstate;
+    public void setEventState(String eventState) {
+        this.eventState = eventState;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public Timestamp getEndtime() {
-        return endtime;
+    public Timestamp getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Timestamp endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
     }
 
-    public Timestamp getStarttime() {
-        return starttime;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Timestamp starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
     }
 
     public String getContent() {
@@ -154,12 +160,12 @@ public class EventDetail {
         this.content = content;
     }
 
-    public String getEventname() {
-        return eventname;
+    public String getEventName() {
+        return eventName;
     }
 
-    public void setEventname(String eventname) {
-        this.eventname = eventname;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
     public int geteId() {

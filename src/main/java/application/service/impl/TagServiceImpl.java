@@ -26,4 +26,11 @@ public class TagServiceImpl implements TagService {
     public List<Tag> getTagList() {
         return tagRepository.findAll();
     }
+
+    @Override
+    public void addTag(String tagName) {
+        Tag tag = new Tag();
+        tag.setTagname(tagName);
+        tagRepository.save(tag);
+    }
 }
