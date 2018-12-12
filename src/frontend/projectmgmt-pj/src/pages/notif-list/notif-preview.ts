@@ -1,6 +1,5 @@
 export interface NotifPreview {
-  type: number,
-  title: string,
+  type: 'read' | 'unread',
   content: string,
   id: number
 }

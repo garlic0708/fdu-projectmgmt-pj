@@ -17,24 +17,24 @@
   <ion-list>
     <ion-item>
       <ion-label>活动名称</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="eventName" required></ion-input>
     </ion-item>
     <ion-item class="new-event-description">
       <ion-label>活动描述</ion-label>
-      <ion-textarea></ion-textarea>
+      <ion-textarea [(ngModel)]="content"></ion-textarea>
     </ion-item>
     <ion-item>
       <ion-label>标签</ion-label>
-      <ion-select [(ngModel)]="eventTypesChosen" multiple="true">
-        <ion-option *ngFor="let item of eventTypeList | async" value="{{item.id}}">
-          <span class="event-type-caption">{{item.name}}</span>
+      <ion-select [(ngModel)]="eventTagsChosen" multiple="true">
+        <ion-option *ngFor="let item of eventTagList | async" value="{{item.id}}">
+          <span class="event-tag-caption">{{item.name}}</span>
         </ion-option>
       </ion-select>
     </ion-item>
-    <button ion-item>
+    <button ion-item (click)="selectAddress()">
       <ion-label>活动地点</ion-label>
       <div item-content>
-        <p>{{address === null ? '点击选择地点' : address}}</p>
+        <p>{{address === null ? '点击选择地点' : address.name}}</p>
       </div>
     </button>
     <ion-item>
@@ -49,14 +49,20 @@
                     max="{{timeMaxLimit}}"
                     [(ngModel)]="endTime"></ion-datetime>
     </ion-item>
+    <ion-item>
+      <ion-range [(ngModel)]="creditLimit">
+        <ion-label range-left>信用度限制</ion-label>
+        <ion-label range-right>{{creditLimit}}</ion-label>
+      </ion-range>
+    </ion-item>
     <ion-item-divider>
       <ion-checkbox [(ngModel)]="lowerBoundEnabled"></ion-checkbox>
       <ion-label>最低人数限制</ion-label>
     </ion-item-divider>
     <ion-item class="slide-from-above" [class.collapsed]="!lowerBoundEnabled">
-      <div item-content>
+      <div item-content class="stepper-container">
         <stepper [(value)]="lowerBound" [enabled]="lowerBoundEnabled"
-                 [minValue]="0"></stepper>
+                 [minValue]="1"></stepper>
       </div>
     </ion-item>
     <ion-item-divider>
@@ -64,16 +70,19 @@
       <ion-label>最高人数限制</ion-label>
     </ion-item-divider>
     <ion-item class="slide-from-above" [class.collapsed]="!upperBoundEnabled">
-      <div item-content>
+      <div item-content class="stepper-container">
         <stepper [(value)]="upperBound" [enabled]="upperBoundEnabled"
-                 [minValue]="1"></stepper>
+                 [minValue]="2"></stepper>
       </div>
     </ion-item>
-    <button ion-item (click)="chooseImage()">
+    <button ion-item (click)="selectImage()">
       <ion-thumbnail item-start>
         <img src="{{eventImage || fallBackImage}}">
       </ion-thumbnail>
       <div ion-content>选择活动图片</div>
     </button>
   </ion-list>
+  <div class="new-event-submit">
+    <button ion-button block (click)="submit()">提交</button>
+  </div>
 </ion-content>

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { App, IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { EventDetailPage } from "../event-detail/event-detail";
-import { Observable, Subject } from "rxjs";
+import { Observable} from "rxjs";
 import { DataProvider } from "../../providers/data/data";
 import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import { EventPreview } from "./event-preview";
@@ -38,7 +38,11 @@ export class HomePage {
   }
 
   goToEventDetail(id) {
-    this.appCtrl.getRootNav().push(EventDetailPage, { eventId: id })
+    this.appCtrl.getRootNavs()[0].push(EventDetailPage, { eventId: id })
+  }
+
+  getImageUrl(eventId) {
+    return this.data.getEventImageUrl(eventId)
   }
 
 }

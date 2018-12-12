@@ -1,0 +1,238 @@
+package application.service.impl;
+
+import application.entity.*;
+import application.entity.forms.AddEventForm;
+import application.entity.forms.EventDetail;
+import application.entity.forms.EventSlide;
+import application.exception.AddEventException;
+import application.repository.*;
+import application.service.EventService;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+import static application.service.impl.QuartzEventServiceImpl.JOB_GROUP;
+
+@Service
+public class EventServiceImpl implements EventService {
+    private EventRepository eventRepository;
+    private JoinEventRepository joinEventRepository;
+    private MessageRepository messageRepository;
+    private AddressRepository addressRepository;
+    private UserRepository userRepository;
+    private Scheduler scheduler;
+
+    @Value("${checkTime}")
+    private long checkTime;
+
+    @Autowired
+    public EventServiceImpl(EventRepository eventRepository,
+                            JoinEventRepository joinEventRepository,
+                            Scheduler scheduler,
+                            MessageRepository messageRepository,
+                            AddressRepository addressRepository,
+                            UserRepository userRepository){
+        this.eventRepository = eventRepository;
+        this.joinEventRepository = joinEventRepository;
+        this.scheduler = scheduler;
+        this.messageRepository = messageRepository;
+        this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public EventDetail getEventDetailById(int eid) {
+        Event event=eventRepository.findByEId(eid);
+        Integer aId=event.getAddress();
+        Address address=addressRepository.findByAddrId(aId);
+        EventDetail eventDetail=new EventDetail(eid,event.getEventName(),event.getContent(), event.getStartTime(),
+                event.getEndTime(),address.getAddressname(),event.getEventState(),event.getLimited(),event.getCreditLimit(),
+                event.getUpperLimit(),event.getLowerLimit(),event.getImage()
+        );
+
+        return eventDetail;
+    }
+
+
+    /**
+     * 拿一个到三个数据， 拿后三个
+     *
+     * @return
+     */
+    @Override
+    public List<EventSlide> getHomeSlides(){
+        List<Event> events=eventRepository.getEvents(3);
+        List<EventSlide> eventSlides=new LinkedList<>();
+        for (int i=0;i<3;i++) {
+            String path=events.get(i).getImage();
+            String title=events.get(i).getEventName();
+            int id=events.get(i).geteId();
+            EventSlide eventSlide = new EventSlide(path,title,id);
+            eventSlides.add(eventSlide);
+        }
+        return eventSlides;
+    }
+
+    /**
+     * 拿后十个
+     *
+     * @return
+     */
+    @Override
+    public List<EventSlide> getHomeFlow(){
+        List<Event> events=eventRepository.getEvents(10);
+        List<EventSlide> eventSlides=new LinkedList<>();
+        for (int i=0;i<10;i++) {
+            String path=events.get(i).getImage();
+            String title=events.get(i).getEventName();
+            int id=events.get(i).geteId();
+            EventSlide eventSlide = new EventSlide(path,title,id);
+            eventSlides.add(eventSlide);
+        }
+        return eventSlides;    }
+
+    @Override
+    public List<Integer> getParticipants(int eid) {
+        return joinEventRepository.getParticipantsByEId(eid);
+    }
+
+    @Override
+    public void autoCancel(int eid) {
+        try {
+            Event event = eventRepository.findByEId(eid);
+            List<Integer> list = getParticipants(eid);
+
+            if (event.getLimited() && event.getLowerLimit() > list.size()) {
+                event.setEventState("canceled");
+
+                for (Integer uid: list) {
+                    Message message = new Message();
+                    message.setSender(0);
+                    message.setReceiver(uid);
+                    message.setContent("对不起，由于您参加的这个活动在规定时间内没有达到人数最低要求，" +
+                            "系统已自动取消该活动，给您生活娱乐带来了很大的不便，请您谅解！");
+                    message.setMessagestate("Unread");
+                    messageRepository.save(message);
+                }
+
+                eventRepository.save(event);
+                scheduler.deleteJob(JobKey.jobKey(eid + " markAsStarted", JOB_GROUP));
+                scheduler.deleteJob(JobKey.jobKey(eid + " markAsEnded", JOB_GROUP));
+            }
+
+        }
+       catch (Exception e) {
+            System.out.println(e.getMessage());
+       }
+    }
+
+    @Override
+    public void markAsStarted(int eid) {
+        Event event = eventRepository.findByEId(eid);
+        event.setEventState("started");
+        eventRepository.save(event);
+    }
+
+    @Override
+    public void markAsEnded(int eid) {
+        Event event = eventRepository.findByEId(eid);
+        event.setEventState("ended");
+        eventRepository.save(event);
+
+        //调整信用度
+        updateCredit(eid);
+    }
+
+    @Override
+    public Event addEvent(AddEventForm form, int uid) throws AddEventException{
+        Address address = new Address();
+        address.setAddressname(form.getAddressName());
+        address.setPositionX(form.getAddressPx());
+        address.setPositionY(form.getAddressPy());
+        address = addressRepository.save(address);
+
+        Date start = form.getStartTime();
+        Date end = form.getEndTime();
+        Date now = new Date();
+
+        if (now.getTime() + checkTime > start.getTime() || start.getTime() > end.getTime())
+            throw new AddEventException("StartTime or endTime is wrong");
+
+        else {
+            Event event = new Event();
+            event.setEventName(form.getEventName());
+            event.setContent(form.getContent());
+            event.setStartTime(form.getStartTime());
+            event.setEndTime(form.getEndTime());
+            event.setAddress(address.getAddrId());
+            event.setInitiator(uid);
+            event.setEventState("notStarted");
+            if (form.getUpperLimit() == null || form.getLowerLimit() == null) {
+                event.setLimited(false);
+            }
+            else {
+                event.setLimited(true);
+                event.setLowerLimit(form.getLowerLimit());
+                event.setUpperLimit(form.getUpperLimit());
+                event.setCreditLimit(form.getCreditLimit());
+            }
+            event.setImage(form.getImage());
+
+            event = eventRepository.save(event);
+
+            // 为创建者添加参与情况
+            JoinEvent joinEvent = new JoinEvent();
+            joinEvent.seteId(event.geteId());
+            joinEvent.setuId(uid);
+            joinEvent.setJeState(JoinEvent.INITIATOR);
+            joinEventRepository.save(joinEvent);
+
+            return event;
+        }
+    }
+
+    @Override
+    public Event getById(int eid) {
+        return eventRepository.findByEId(eid);
+    }
+
+    @Override
+    public List<Event> getEventsJoined(int uid) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public List<Event> getEventsReleased(int uid) {
+        //TODO
+        return null;
+    }
+
+    private void updateCredit(int eid) {
+        List<JoinEvent> joinEvents = joinEventRepository.getParticipantsByEId2(eid);
+        User user;
+        for (JoinEvent joinEvent: joinEvents) {
+            if (Objects.equals(joinEvent.getJeState(), JoinEvent.PARTICIPATED)) { //只是参加，没有签到
+                user = userRepository.findByUId(joinEvent.getuId());
+                int credit = user.getVredict();
+                credit = credit-1 >= 0 ? credit-1 : 0;
+                user.setVredict(credit);
+                userRepository.save(user);
+            }
+            else if (Objects.equals(joinEvent.getJeState(), JoinEvent.CHECK)) {
+                user = userRepository.findByUId(joinEvent.getuId());
+                int credit = user.getVredict();
+                credit = credit+1 >= 100 ? credit+1 : 100;
+                user.setVredict(credit);
+                userRepository.save(user);
+            }
+        }
+    }
+}

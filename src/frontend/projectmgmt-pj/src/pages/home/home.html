@@ -20,7 +20,7 @@
                  (click)="goToEventDetail(slideItem.id)">
         <!--<div class="aspect-ratio-inner">-->
         <div class="flexbox-center">
-          <img-loader src="{{slideItem.path}}" useImg></img-loader>
+          <img-with-request src="{{getImageUrl(slideItem.id)}}"></img-with-request>
         </div>
         <p class="slides-title">{{slideItem.title}}</p>
         <!--</div>-->
@@ -33,7 +33,7 @@
       <div class="flow-item-image">
         <div class="aspect-ratio-inner">
           <div class="flexbox-center">
-            <img-loader src="{{flowItem.path}}" useImg></img-loader>
+            <img-with-request src="{{getImageUrl(flowItem.id)}}"></img-with-request>
           </div>
         </div>
       </div>

@@ -16,26 +16,25 @@
 <ion-content padding>
 
   <div *ngIf="personItems | async as _personItems">
-    <ion-list class="top-list" *ngFor="let personItem of _personItems.person">
-      <div ion-item [navPush]="userInfoPage">
-        <ion-avatar item-left>
+    <ion-list class="top-list" *ngFor="let personItem of _personItems">
+      <div ion-item>
+        <ion-avatar item-start>
           <img-loader src="./assets/imgs/logo.png" useImg></img-loader>    <!-- TODO -->
         </ion-avatar>
-        <div style="float:left">
+        <div class="checkin-name">
           {{personItem.name}}
         </div>
 
-        <button ion-button (click)="change(personItem)" style="position: absolute;right: 30px;"
-                *ngIf="personItem.type==0">签到
-        </button>
-        <button ion-button color='danger' (click)="change(personItem)" style="position: absolute;right: 30px;"
-                *ngIf="personItem.type==1">取消
+        <button item-end ion-button (click)="change(personItem)" [color]="personItem.checked ? 'danger' : 'normal'"
+                class="checkin-button" [disabled]="personItem.loading">
+          <ng-container *ngIf="personItem.loading">
+            <ion-spinner name="ios-small"></ion-spinner>&nbsp;
+          </ng-container>
+          {{personItem.checked ? '取消' : '签到'}}
         </button>
 
       </div>
     </ion-list>
   </div>
-
-  <button ion-button (click)="todo()">提交</button>
 
 </ion-content>

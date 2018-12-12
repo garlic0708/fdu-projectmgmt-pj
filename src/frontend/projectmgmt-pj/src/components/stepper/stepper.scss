@@ -3,7 +3,11 @@ stepper {
     align-items: center;
   }
 
-  .stepper-input {
+  .stepper-input input {
     text-align: center;
+  }
+
+  .col {
+    margin: 5px;
   }
 }

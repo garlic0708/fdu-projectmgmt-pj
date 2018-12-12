@@ -7,18 +7,40 @@ page-event-detail {
     margin-bottom: 0;
   }
 
-  .event-type-caption-container {
+  .event-tag-caption-container {
     margin-top: 0.5rem;
   }
 
-  .event-attendants-number {
+  .event-participants-number {
     p, h2 {
       text-align: center;
       margin: 0.5rem 0;
     }
+
+    p {
+      font-size: .9em;
+    }
   }
 
-  .event-attendants-number:not(:last-child) {
+  .event-participants-number:not(:last-child) {
     border-right: solid 1px #eeeeee;
+  }
+}
+
+.event-detail-popover {
+  .list {
+    margin-bottom: 0;
+  }
+
+  .item {
+    padding-left: 0;
+  }
+
+  .item-inner {
+    padding-right: 0;
+  }
+
+  .label {
+    margin: 13px;
   }
 }

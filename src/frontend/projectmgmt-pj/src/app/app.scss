@@ -22,7 +22,7 @@
   }
 }
 
-.event-type-caption {
+.event-tag-caption {
   background-color: #eeeeee;
   padding: 0.25em;
   margin-top: 0;
@@ -36,6 +36,12 @@
   &:not(:last-child) {
     margin-right: 0.25em;
   }
+}
+
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -o-animation: $animation;
+  animation: $animation;
 }
 
 // App Global Sass

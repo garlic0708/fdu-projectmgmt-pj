@@ -3,22 +3,43 @@ page-new-event {
     padding-left: 0;
   }
 
+  .range {
+    padding-left: 0;
+  }
+
   .label-md {
     padding-left: 8px;
   }
 
   .new-event-description {
-    height: 150px;
+    height: 30vh;
   }
 
   .slide-from-above {
     height: 65px;
     transition: all 0.5s;
+
+    .item-inner {
+      padding-right: 0 !important;
+    }
+
+    .label-md {
+      max-width: 0;
+      margin: 0;
+    }
+
+    .stepper-container {
+      width: 100%;
+    }
   }
 
   .slide-from-above.collapsed {
     min-height: 0;
     height: 0;
+  }
+
+  .new-event-submit {
+    margin: 5px;
   }
 }
 

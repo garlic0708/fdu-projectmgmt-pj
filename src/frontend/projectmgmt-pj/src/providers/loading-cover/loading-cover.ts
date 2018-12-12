@@ -20,12 +20,12 @@ export class LoadingCoverProvider {
     const subjects = ob.map(() => new Subject());
     const loadingView = this.loading.create({ content: '加载中……' });
     loadingView.present();
-    // noinspection TypeScriptValidateJSTypes
     zip.apply(null, ob).subscribe(data => {
       loadingView.dismiss();
       data.forEach((v, idx) => {
         console.log(v, idx);
-        subjects[idx].next(v)
+        subjects[idx].next(v);
+        subjects[idx].complete()
       })
     });
     return subjects;

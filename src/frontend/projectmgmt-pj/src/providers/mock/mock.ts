@@ -1,12 +1,11 @@
 import {
-  HTTP_INTERCEPTORS,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
   HttpResponse
 } from '@angular/common/http';
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { Observable } from "rxjs";
 import { delay, mapTo } from "rxjs/operators";
 import { of } from "rxjs/observable/of";
@@ -22,13 +21,10 @@ import escapeRegExp from 'lodash/escapeRegExp'
 @Injectable()
 export class MockProvider implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // if (req.url.startsWith("http"))
-    //   return next.handle(req);
-    // console.log(req);
     let url = req.url;
     const idx = req.url.indexOf('?');
-    if(idx!==-1)
-      url=req.url.substring(0,idx);
+    if (idx !== -1)
+      url = req.url.substring(0, idx);
     const key = `${req.method} ${url}`;
     const mockDatum = mockData[
       Object.keys(mockData).find(k => {

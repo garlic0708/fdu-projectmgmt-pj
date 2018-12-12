@@ -11,11 +11,13 @@ import { MockProvider } from '../providers/mock/mock';
 import { DataProvider } from "../providers/data/data";
 import { IonicImageLoader } from "ionic-image-loader";
 import { LoadingCoverProvider } from '../providers/loading-cover/loading-cover';
-import { ComponentsModule } from "../components/components.module";
+import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ImagePicker } from "@ionic-native/image-picker";
-import { LocationSearchPageModule } from "../pages/location-search/location-search.module";
-import { ShowEventLocationPageModule } from "../pages/show-event-location/show-event-location.module";
+import { CurrentUserProvider } from '../providers/current-user/current-user';
+import { LoginPageModule } from "../pages/login/login.module";
 import { AMapApiProvider } from "../providers/amap-api/amap-api";
+import { NotifProvider } from '../providers/notif/notif';
+import { ConfirmProvider } from '../providers/confirm/confirm';
 
 
 
@@ -25,12 +27,14 @@ import { AMapApiProvider } from "../providers/amap-api/amap-api";
   ],
   imports: [
     IonicModule.forRoot(MyApp),
+    LoginPageModule,
     StartupPageModule,
-    LocationSearchPageModule,
-    ShowEventLocationPageModule,
     BrowserModule,
     IonicImageLoader.forRoot(),
     HttpClientModule,
+    Ng2UiAuthModule.forRoot({
+      signupUrl: '/auth/register',
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -49,6 +53,9 @@ import { AMapApiProvider } from "../providers/amap-api/amap-api";
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     LoadingCoverProvider,
+    CurrentUserProvider,
+    NotifProvider,
+    ConfirmProvider,
   ]
 })
 export class AppModule {

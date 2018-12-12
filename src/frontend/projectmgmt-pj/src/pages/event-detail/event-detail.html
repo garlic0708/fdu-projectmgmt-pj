@@ -8,53 +8,75 @@
 
   <ion-navbar>
     <ion-title>event-detail</ion-title>
+    <ion-buttons end *ngIf="detail | async as _detail">
+      <button ion-button icon-only *ngIf="getPopoverOptions(_detail).length" (click)="presentPopover(_detail, $event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
+
   <ng-container *ngIf="detail | async as _detail">
     <div class="event-image">
       <div class="aspect-ratio-inner">
         <div class="flexbox-center">
-          <img-loader src="{{_detail.image}}" useImg></img-loader>
+          <img-with-request src="{{imageUrl}}"></img-with-request>
         </div>
       </div>
     </div>
     <h1 class="detail-name">{{_detail.name}}</h1>
-    <p class="event-type-caption-container">
-      <span class="event-type-caption" *ngFor="let eventType of _detail.types">
-        {{eventType.name}}</span>
+    <p class="event-tag-caption-container">
+      <span class="event-tag-caption" *ngFor="let eventTag of _detail.tags">
+        {{eventTag.name}}</span>
     </p>
-    <button ion-button (click)="goToRegister(_detail.id)">签到</button>
-    <button ion-item no-lines detail-push>
+    <ng-container [ngSwitch]="getDisplayStatus(_detail)">
+      <button ion-button full *ngSwitchCase="'canCheck'" color="secondary" (click)="goToCheckin()">活动已开始，点击进入签到页面
+      </button>
+      <button ion-button full *ngSwitchCase="'aboutToCheck'" color="secondary" disabled>活动尚未开始，开始后可点击进行签到</button>
+      <button ion-button full *ngSwitchCase="'canJoin'" [disabled]="joining" (click)="joinEvent()">
+        <ng-container *ngIf="joining">
+          <ion-spinner></ion-spinner>&nbsp;
+        </ng-container>
+        加入活动
+      </button>
+      <button ion-button full *ngSwitchCase="'joined'" disabled>已加入</button>
+      <button ion-button full *ngSwitchCase="'full'" disabled>人数已满</button>
+      <button ion-button full *ngSwitchCase="'notEnoughCredit'" disabled>信用度不足，无法加入</button>
+      <button ion-button full *ngSwitchCase="'alreadyStarted'" disabled>活动已开始</button>
+      <button ion-button full *ngSwitchCase="'ended'" color="light" disabled>活动已结束</button>
+      <button ion-button full *ngSwitchCase="'canceled'" color="light" disabled>活动已取消</button>
+    </ng-container>
+    <button ion-item no-lines detail-push (click)="goToLocation(_detail.address)">
       <ion-icon name="pin" item-start></ion-icon>
-      {{_detail.address}}
+      {{_detail.address.name}}
     </button>
     <ion-item no-lines>
       <ion-icon name="time" item-start></ion-icon>
-      <p>{{formatTime(_detail.startTime)}}</p><hr>
+      <p>{{formatTime(_detail.startTime)}}</p>
+      <hr>
       <p>{{formatTime(_detail.endTime)}}</p>
     </ion-item>
     <ion-item no-lines>
       <ion-avatar item-start>
-        <img-loader src="{{_detail.initiator.avatar}}" useImg></img-loader>
+        <img-with-request src="{{_detail.initiator.avatar}}"></img-with-request>
       </ion-avatar>
       <p>发起人</p>
       <h2>{{_detail.initiator.name}}</h2>
     </ion-item>
     <ion-grid>
       <ion-row>
-        <ion-col class="event-attendants-number" *ngIf="_detail.lowerBound !== null">
+        <ion-col class="event-participants-number" *ngIf="_detail.lowerBound !== null">
           <p>最低人数限制</p>
           <h2>{{_detail.lowerBound}}</h2>
         </ion-col>
-        <ion-col class="event-attendants-number">
+        <ion-col class="event-participants-number">
           <p>当前参加人数</p>
           <h2>{{_detail.currentAttendants}}</h2>
         </ion-col>
-        <ion-col class="event-attendants-number" *ngIf="_detail.upperBound !== null">
+        <ion-col class="event-participants-number" *ngIf="_detail.upperBound !== null">
           <p>最高人数限制</p>
           <h2>{{_detail.upperBound}}</h2>
         </ion-col>
