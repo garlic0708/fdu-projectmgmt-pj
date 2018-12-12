@@ -23,7 +23,7 @@ export class EventSummaryComponent {
   @Input() eventItems: Observable<EventPreview[]>;
   @Output() eventClicked = new EventEmitter<number>();
 
-  constructor() {
+  constructor(private data: DataProvider,) {
   }
 
   showNotStarted() {
@@ -44,6 +44,10 @@ export class EventSummaryComponent {
 
   clickEvent(id) {
     this.eventClicked.emit(id)
+  }
+
+  getImageUrl(eventId) {
+    return this.data.getEventImageUrl(eventId)
   }
 
 }

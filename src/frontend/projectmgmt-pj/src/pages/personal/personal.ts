@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   AlertController,
   App,
@@ -17,6 +17,7 @@ import { EventsReleasedPage } from "../events-released/events-released";
 import { ChangePasswordPage } from "../change-password/change-password";
 import { ImagePicker } from "@ionic-native/image-picker";
 import { ConfirmProvider } from "../../providers/confirm/confirm";
+import { ImgWithRequestComponent } from "../../components/img-with-request/img-with-request";
 
 @Component({
   templateUrl: 'personal-popover.html',
@@ -54,6 +55,8 @@ export class PersonalPage {
 
   currentUser: User;
 
+  @ViewChild('avatar') avatar: ImgWithRequestComponent;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private appCtrl: App,
               private data: DataProvider,
@@ -89,16 +92,21 @@ export class PersonalPage {
       popover.dismiss();
       if (value === "avatar") {
         this.imagePicker.getPictures({ maximumImagesCount: 1 }).then(([result]) => {
-          const loading = this.loading.create({ content: '加载中……' });
-          loading.present();
-          this.currentUserProvider.changeAvatar(result)
-            .then(
-              () => loading.dismiss(),
-              () => {
-                this.toast.create({ message: '网络错误', duration: 1500 }).present();
-                loading.dismiss()
-              },
-            )
+          if (result) {
+            const loading = this.loading.create({ content: '加载中……' });
+            loading.present();
+            this.currentUserProvider.changeAvatar(result)
+              .then(
+                () => {
+                  this.avatar.reload();
+                  loading.dismiss();
+                },
+                () => {
+                  this.toast.create({ message: '网络错误', duration: 1500 }).present();
+                  loading.dismiss()
+                },
+              )
+          }
         })
       } else {
         this.alert.create({
@@ -135,5 +143,9 @@ export class PersonalPage {
 
   logout() {
     this.currentUserProvider.logout().subscribe(() => this.appCtrl.getRootNavs()[0].setRoot(LoginPage))
+  }
+
+  get avatarUrl() {
+    return this.data.getAvatarUrl(this.currentUser.id)
   }
 }

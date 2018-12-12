@@ -86,9 +86,9 @@ public class EventServiceImpl implements EventService {
 
         Integer initiator = event.getInitiator();
         User user = userRepository.findByUId(initiator);
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("name", user.getNickname());
-        map.put("avatar", user.getImage());
+        map.put("id", user.getuId());
         eventDetail.setInitiator(map);
 
         List<JoinEvent> joinEventList = joinEventRepository.findByEId(eid);

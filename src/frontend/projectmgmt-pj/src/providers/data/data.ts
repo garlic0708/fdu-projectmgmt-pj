@@ -7,6 +7,7 @@ import { AddEventForm } from "../../pages/new-event/add-event-form";
 import { EventPoint } from "../../components/amap/event_point";
 import { EventDetail, JoinedStatus } from "../../pages/event-detail/event-detail";
 import { map } from "rxjs/operators/map";
+import { ApiRedirectProvider } from "../api-redirect/api-redirect";
 
 /*
   Generated class for the DataProvider provider.
@@ -25,7 +26,7 @@ export class DataProvider {
   private markNotifAsReadUrl = '/api/notif/read';
   private joinEventUrl = '/api/user/join';
   private quitEventUrl = '/api/user/quit';
-  private cancelAnEventUrl: '/api/event/cancel';
+  private cancelAnEventUrl = '/api/event/cancel';
   private eventsJoinedUrl = '/api/user/joined';
   private eventsReleasedUrl = '/api/user/released';
   private checkinListUrl = '/api/event/checkin';
@@ -35,8 +36,9 @@ export class DataProvider {
 
   private addEventUrl = '/api/event/add';
   private eventImageUrl = '/api/eventImg/get';
+  private avatarUrl = '/api/userImg/get';
 
-  constructor(public http: HttpClient) {
+  constructor(public http: ApiRedirectProvider) {
     console.log('Hello DataProvider Provider');
   }
 
@@ -50,7 +52,9 @@ export class DataProvider {
         return {
           detail: {
             name: d.detail.eventName,
-            tags,
+            tags: tags.map(t => {
+              return { id: t.tId, name: t.tagname }
+            }),
             initiator,
             startTime,
             endTime,
@@ -82,12 +86,16 @@ export class DataProvider {
     return this.http.get<EventPreview[]>(this.flowUrl)
   }
 
-  getEventTagList(): Observable<any> {
-    return this.http.get(this.eventTagListUrl)
+  getEventTagList(): Observable<any[]> {
+    return this.http.get<any[]>(this.eventTagListUrl).map(list => list.map(
+      v => {
+        return { id: v.tId, name: v.tagname, }
+      }
+    ))
   }
 
   addEvent(imageUri: string, payload: AddEventForm): Promise<any> {
-    return fetch(imageUri).then(res => res.blob())
+    return this.getBlobFromUri(imageUri)
       .then(blob => {
         const formData = new FormData();
         formData.append('file', blob);
@@ -167,6 +175,22 @@ export class DataProvider {
 
   getEventImageUrl(eventId): string {
     return `${this.eventImageUrl}/${eventId}`
+  }
+
+  getAvatarUrl(userId): string {
+    return `${this.avatarUrl}/${userId}`
+  }
+
+  getBlobFromUri(uri): Promise<Blob> {
+    return new Promise<Blob>(resolve => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', uri, true);
+      xhr.responseType = 'blob';
+      xhr.onload = function (e) {
+        resolve(this.response)
+      };
+      xhr.send()
+    })
   }
 
 }

@@ -16,7 +16,6 @@ import { CheckinPage } from "../checkin/checkin";
 import { Poi } from "../../components/amap/poi";
 import { ShowEventLocationPage } from "../show-event-location/show-event-location";
 import { CurrentUserProvider, User } from "../../providers/current-user/current-user";
-import { not } from "rxjs/util/not";
 import { tap } from "rxjs/operators";
 import { ConfirmProvider } from "../../providers/confirm/confirm";
 
@@ -83,6 +82,7 @@ export class EventDetailPage {
 
   detail: Observable<EventDetail>;
   imageUrl: string;
+  avatarUrl: string;
   eventId: number;
 
   joined: JoinedStatus;
@@ -188,6 +188,10 @@ export class EventDetailPage {
       popover.dismiss();
       this.quitOrCancelEvent(value);
     })
+  }
+
+  getAvatarUrl(userId) {
+    return this.data.getAvatarUrl(userId)
   }
 
 }
