@@ -9,6 +9,10 @@ import java.sql.Timestamp;
  */
 @Entity
 public class Event {
+    public static final String NOTSTARTED = "notStarted";
+    public static final String STARTED = "started";
+    public static final String ENDED = "ended";
+    public static final String CANCELED = "canceled";
     @GeneratedValue
     private int eId;
     private String eventName;

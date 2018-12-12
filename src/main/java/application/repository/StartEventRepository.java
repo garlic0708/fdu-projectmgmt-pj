@@ -27,4 +27,6 @@ public interface StartEventRepository extends CrudRepository<StartEvent, Long> {
      */
     @Query(value = "select u_id from startevent where e_id=eID", nativeQuery = true)
     List<StartEvent> listUsers(int eID);
+
+    List<StartEvent> findByUId(int uid);
 }

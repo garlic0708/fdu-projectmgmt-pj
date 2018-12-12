@@ -9,7 +9,7 @@ import application.entity.userSecurity.UpdatePasswordForm;
 import application.entity.userSecurity.VerificationToken;
 import application.exception.RegisterException;
 import application.exception.UpdatePasswordException;
-import application.exception.VerificationExecption;
+import application.exception.VerificationException;
 import application.service.AuthService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -30,6 +30,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Value("${jwt.header}")
     private String tokenHeader;
+
+    @Value(("${resultMessage.error.auth.login}"))
+    private String loginErrorMessage;
+    @Value("${resultMessage.success.auth.register}")
+    private String registerSuccessMessage;
+    @Value("${resultMessage.success.auth.registrationConfirm}")
+    private String registrationConfirmSuccessMessage;
+    @Value("${resultMessage.success.auth.update}")
+    private String updateSuccessMessage;
 
     private AuthService authService;
     private final ApplicationEventPublisher eventPublisher;
@@ -52,7 +61,7 @@ public class AuthController {
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
         }
         catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body(new ResultMessage("Bad email or password"));
+            return ResponseEntity.status(401).body(new ResultMessage(loginErrorMessage));
         }
     }
 
@@ -78,7 +87,7 @@ public class AuthController {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent
                     (request, verificationToken, request.getLocale()));
             LOGGER.info("complete publish event");
-            ResponseEntity body = ResponseEntity.ok().body(new ResultMessage("register success"));
+            ResponseEntity body = ResponseEntity.ok().body(new ResultMessage(registerSuccessMessage));
             LOGGER.info(body.toString());
             return body;
         }
@@ -91,9 +100,9 @@ public class AuthController {
     public ResponseEntity<?> registrationConfirm(@RequestParam("token") String token) {
         try {
             authService.registrationConfirm(token);
-            return ResponseEntity.ok(new ResultMessage("registration confirm success"));
+            return ResponseEntity.ok(new ResultMessage(registrationConfirmSuccessMessage));
         }
-        catch (VerificationExecption e) {
+        catch (VerificationException e) {
             return ResponseEntity.status(424).body(new ResultMessage(e.getMessage()));
         }
     }
@@ -102,7 +111,7 @@ public class AuthController {
     public ResponseEntity<?> updatePass(@RequestBody UpdatePasswordForm upf) throws UpdatePasswordException {
         try {
             authService.updatePassword(upf);
-            return ResponseEntity.ok(new ResultMessage("update success"));
+            return ResponseEntity.ok(new ResultMessage(updateSuccessMessage));
         }
         catch (UpdatePasswordException e) {
             return ResponseEntity.status(423).body(new ResultMessage(e.getMessage()));

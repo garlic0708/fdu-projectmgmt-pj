@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface TagService {
     List<Tag> getTagList();
+
+    void addTag(String tagName);
 }

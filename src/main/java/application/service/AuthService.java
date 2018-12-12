@@ -5,7 +5,7 @@ import application.entity.userSecurity.UpdatePasswordForm;
 import application.entity.userSecurity.VerificationToken;
 import application.exception.RegisterException;
 import application.exception.UpdatePasswordException;
-import application.exception.VerificationExecption;
+import application.exception.VerificationException;
 
 /**
  * Creator: DreamBoy
@@ -13,7 +13,7 @@ import application.exception.VerificationExecption;
  */
 public interface AuthService {
     VerificationToken register(User userToAdd) throws RegisterException;
-    void registrationConfirm(String token) throws VerificationExecption;
+    void registrationConfirm(String token) throws VerificationException;
     void updatePassword(UpdatePasswordForm upf)  throws UpdatePasswordException;
     String login(String email, String password);
     String refresh(String oldToken);

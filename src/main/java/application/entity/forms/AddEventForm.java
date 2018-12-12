@@ -3,6 +3,7 @@ package application.entity.forms;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Creator: DreamBoy
@@ -15,28 +16,34 @@ public class AddEventForm {
     private Timestamp startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ssZ")
     private Timestamp endTime;
-    private String addressName;
+    private String poiId;
+    private String addressName; // eg. 高科苑
+    private String addressLocation; //eg. 蔡伦路1433弄
     private double addressPx;
     private double addressPy;
     private Integer creditLimit;
     private Integer upperLimit;
     private Integer lowerLimit;
     private String image;
+    private List<Integer> tags;
 
     public AddEventForm() {}
 
-    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime, String addressName, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image) {
+    public AddEventForm(String eventName, String content, Timestamp startTime, Timestamp endTime,String poiId, String addressName, String addressLocation, double addressPx, double addressPy, Integer creditLimit, Integer upperLimit, Integer lowerLimit, String image, List<Integer> tags) {
         this.eventName = eventName;
         this.content = content;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.poiId = poiId;
         this.addressName = addressName;
+        this.addressLocation = addressLocation;
         this.addressPx = addressPx;
         this.addressPy = addressPy;
         this.creditLimit = creditLimit;
         this.upperLimit = upperLimit;
         this.lowerLimit = lowerLimit;
         this.image = image;
+        this.tags = tags;
     }
 
     public String getImage() {
@@ -125,5 +132,29 @@ public class AddEventForm {
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
+    }
+
+    public List<Integer> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Integer> tags) {
+        this.tags = tags;
+    }
+
+    public String getPoiId() {
+        return poiId;
+    }
+
+    public void setPoiId(String poiId) {
+        this.poiId = poiId;
+    }
+
+    public String getAddressLocation() {
+        return addressLocation;
+    }
+
+    public void setAddressLocation(String addressLocation) {
+        this.addressLocation = addressLocation;
     }
 }

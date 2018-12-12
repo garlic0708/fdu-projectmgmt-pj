@@ -12,6 +12,7 @@ public class JoinEvent {
     public static final String INITIATOR = "initiator";
     public static final String PARTICIPATED = "participated";
     public static final String CHECK = "check";
+    public static final String NOTJOINED = "notJoined";
     private int jeId;
     private Integer uId;
     private Integer eId;

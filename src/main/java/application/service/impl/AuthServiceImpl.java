@@ -8,7 +8,7 @@ import application.entity.userSecurity.UpdatePasswordForm;
 import application.entity.userSecurity.VerificationToken;
 import application.exception.RegisterException;
 import application.exception.UpdatePasswordException;
-import application.exception.VerificationExecption;
+import application.exception.VerificationException;
 import application.repository.UserRepository;
 import application.repository.VerificationTokenRepository;
 import application.service.AuthService;
@@ -45,6 +45,9 @@ public class AuthServiceImpl implements AuthService {
     @Value("${emailList}")
     private String[] emails;
 
+    @Value("${defaultNickname}")
+    private String defaultNickname;
+
     @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
@@ -73,6 +76,8 @@ public class AuthServiceImpl implements AuthService {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setEmail(userToAdd.getEmail());
         verificationToken.setPassword(encoder.encode(userToAdd.getPassword()));
+        if (userToAdd.getNickname() == null || userToAdd.getNickname().equals(""))
+            verificationToken.setNickname(defaultNickname);
         verificationToken.setNickname(userToAdd.getNickname());
         verificationToken.setImage(userToAdd.getImage());
         verificationToken.setVredict(100);
@@ -81,12 +86,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void registrationConfirm(String token) throws VerificationExecption {
+    public void registrationConfirm(String token) throws VerificationException {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken == null)
-            throw new VerificationExecption("Invalid token");
+            throw new VerificationException("Invalid token");
         else if (verificationToken.getExpiryDate().before(Date.from(Instant.now())))
-            throw new VerificationExecption("Token has expired");
+            throw new VerificationException("Token has expired");
         else {
             User user = new User();
             user.setEmail(verificationToken.getEmail());
@@ -94,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
             user.setNickname(verificationToken.getNickname());
 //            user.setImage(verificationToken.getImage());
 //            user.setRole(Role.USER);
-            user.setVredict(verificationToken.getVredict());
+            user.setCredit(verificationToken.getVredict());
             verificationTokenRepository.delete(verificationToken);
             userRepository.save(user);
         }

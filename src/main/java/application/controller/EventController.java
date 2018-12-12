@@ -3,13 +3,17 @@ package application.controller;
 import application.component.JwtTokenUtil;
 import application.entity.forms.AddEventForm;
 import application.entity.Event;
+import application.entity.forms.EventDetail;
 import application.entity.forms.ResultMessage;
 import application.entity.User;
+import application.entity.forms.View;
 import application.exception.AddEventException;
+import application.exception.CancelEventException;
 import application.service.EventService;
 import application.service.FileService;
 import application.service.QuartzEventService;
 import application.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -40,6 +46,9 @@ public class EventController {
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+
+    @Value("${imagePathTitle}")
+    private String imagePathTitle;
 
     @Autowired
     public EventController(EventService eventService,
@@ -67,8 +76,8 @@ public class EventController {
 
         //得到文件路径和文件名
         String fileName = file.getOriginalFilename();
-        String filePath = httpServletRequest.getSession().getServletContext().getRealPath(
-                String.format("/%s/", Calendar.getInstance().getTime()).replace(":", "-"));
+        String filePath = String.format("%s/%s/", imagePathTitle,
+                Calendar.getInstance().getTime()).replace(":", "-");
 
         try {
             if (user != null) {
@@ -77,7 +86,7 @@ public class EventController {
                 addEventForm.setImage(filePath+fileName);
                 Event event = eventService.addEvent(addEventForm, user.getuId());
                 quartzEventService.addEventJob(event);
-                return ResponseEntity.ok(new ResultMessage("Add event success"));
+                return ResponseEntity.ok(new ResultMessage(event.geteId()+""));
             }
             else {
                 return ResponseEntity.status(424).body(new ResultMessage("Add event failed, no such user"));
@@ -91,9 +100,25 @@ public class EventController {
         }
     }
 
+    @RequestMapping(value = "${api.event.cancel}/{eid}", method = RequestMethod.PUT)
+    public ResponseEntity<?> cancelEvent(HttpServletRequest httpServletRequest,
+                                         @PathVariable("eid") int eid) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+
+        try {
+            eventService.cancelEvent(user.getuId(), eid);
+            return ResponseEntity.ok().body(new ResultMessage("Cancle event success"));
+        }catch (CancelEventException e) {
+            return ResponseEntity.status(427).body(new ResultMessage(e.getMessage()));
+        }
+    }
+
     @RequestMapping(value = "${api.event.detail}/{eid}", method = RequestMethod.GET)
-    public ResponseEntity<?> getEventDetail(@PathVariable("eid") int eid) {
-        return ResponseEntity.ok().body(eventService.getEventDetailById(eid));
+    public ResponseEntity<?> getEventDetail(HttpServletRequest httpServletRequest, @PathVariable("eid") int eid) {
+        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
+        User user = jwtTokenUtil.getUserByToken(token);
+        return ResponseEntity.ok().body(eventService.getEventDetailById(eid, user.getuId()));
     }
 
     @RequestMapping(value = "${api.event.home-slides}", method = RequestMethod.GET)
@@ -107,7 +132,14 @@ public class EventController {
     }
 
     @RequestMapping(value = "${api.event.checkin}/{eid}", method = RequestMethod.GET)
-    public ResponseEntity<?> checkIn(@PathVariable("eid") int eid) {
+    public ResponseEntity<?> getCheckIn(@PathVariable("eid") int eid) {
         return ResponseEntity.ok().body(userService.getUserCheckIn(eid));
+    }
+
+    @RequestMapping(value = "${api.event.nearby}", method = RequestMethod.GET)
+    @JsonView(View.NearByEvent.class)
+    public ResponseEntity<List<EventDetail>> getNearbyEvents(@RequestParam("nex") double nex, @RequestParam("ney") double ney,
+                                                             @RequestParam("swx") double swx, @RequestParam("swy") double swy) {
+        return ResponseEntity.ok().body(eventService.getNearbyEvents(nex, ney, swx, swy));
     }
 }

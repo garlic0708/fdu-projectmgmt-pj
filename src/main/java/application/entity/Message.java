@@ -8,11 +8,13 @@ import javax.persistence.*;
  */
 @Entity
 public class Message {
+    public static final String READ = "read";
+    public static final String UNREAD = "unread";
     private int mId;
     private Integer sender;
     private Integer receiver;
     private String content;
-    private String messagestate; // read、 unread
+    private String messageState; // read、 unread
 
     @Id
     @GeneratedValue
@@ -57,12 +59,12 @@ public class Message {
 
     @Basic
     @Column(name = "messagestate")
-    public String getMessagestate() {
-        return messagestate;
+    public String getMessageState() {
+        return messageState;
     }
 
-    public void setMessagestate(String messagestate) {
-        this.messagestate = messagestate;
+    public void setMessageState(String messagestate) {
+        this.messageState = messagestate;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class Message {
         if (sender != null ? !sender.equals(message.sender) : message.sender != null) return false;
         if (receiver != null ? !receiver.equals(message.receiver) : message.receiver != null) return false;
         if (content != null ? !content.equals(message.content) : message.content != null) return false;
-        if (messagestate != null ? !messagestate.equals(message.messagestate) : message.messagestate != null)
+        if (messageState != null ? !messageState.equals(message.messageState) : message.messageState != null)
             return false;
 
         return true;
@@ -88,7 +90,7 @@ public class Message {
         result = 31 * result + (sender != null ? sender.hashCode() : 0);
         result = 31 * result + (receiver != null ? receiver.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (messagestate != null ? messagestate.hashCode() : 0);
+        result = 31 * result + (messageState != null ? messageState.hashCode() : 0);
         return result;
     }
 }

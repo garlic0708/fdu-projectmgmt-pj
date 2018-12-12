@@ -69,7 +69,7 @@ public interface EventRepository extends CrudRepository<Event, Long> {
      * @return 活动列表
      */
     @Query(value = "SELECT * FROM event INNER JOIN address on event.address = address.addr_id " +
-            "WHERE positionX > ? AND positionY > ? AND positionX < ? AND positionY < ?" ,nativeQuery = true)
+            "WHERE positionX < ? AND positionY < ? AND positionX > ? AND positionY > ? AND eventstate = 'notStarted'" ,nativeQuery = true)
     List<Event> getEventsInASquare(double x1, double y1, double x2, double y2);
 
     /**
