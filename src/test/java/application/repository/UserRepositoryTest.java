@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -33,8 +35,9 @@ public class UserRepositoryTest {
         User user2 = new User();
         user2.setNickname("hxt");
         userRepository.save(user2);
+        List<User> users = userRepository.allStudents();
 
-        assertEquals(userRepository.allStudents().size(),2 );
+        assertEquals(users.get(users.size()-1).getNickname(),"hxt" );
     }
 
 

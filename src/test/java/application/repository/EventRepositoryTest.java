@@ -175,9 +175,10 @@ public class EventRepositoryTest {
         eventRepository.save(event2);
 
         List<Event> list = eventRepository.listEvents();
-        Event test1 = list.get(0);
-        Event test2 = list.get(1);
-        Event test3 = list.get(2);
+        int size = list.size();
+        Event test1 = list.get(size-3);
+        Event test2 = list.get(size-2);
+        Event test3 = list.get(size-1);
         assertEquals(test1.getContent(), "Play football");
         assertEquals(test2.getContent(), "Play basketball");
         assertEquals(test3.getContent(), "Let's play basketball");
