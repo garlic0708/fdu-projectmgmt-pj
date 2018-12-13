@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -55,8 +53,8 @@ public class UserController {
 
     @RequestMapping(value = "${api.user.updateName}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateName(HttpServletRequest httpServletRequest,@RequestParam("nickname") String nickname) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         userService.updateName(user.getuId(), nickname);
         return ResponseEntity.ok().body(new ResultMessage("Update nickname success"));
@@ -65,8 +63,8 @@ public class UserController {
     @RequestMapping(value = "${api.user.updateImg}", method = RequestMethod.POST)
     public ResponseEntity<?> updateImg(HttpServletRequest httpServletRequest,
                                        @RequestParam("img") MultipartFile img) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
        try {
            userService.updateImg(user, img);
@@ -81,8 +79,8 @@ public class UserController {
 
     @RequestMapping(value = "${api.user.join}/{eid}", method = RequestMethod.PUT)
     public ResponseEntity<?> joinEvent(HttpServletRequest httpServletRequest,@PathVariable("eid") String eid) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         try {
             userService.joinEvent(user.getuId(), Integer.parseInt(eid));
@@ -95,8 +93,8 @@ public class UserController {
 
     @RequestMapping(value = "${api.user.quit}/{eid}", method = RequestMethod.PUT)
     public ResponseEntity<?> quitEvent(HttpServletRequest httpServletRequest,@PathVariable("eid") String eid) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         userService.quitEvent(user.getuId(), Integer.parseInt(eid));
         return ResponseEntity.ok().body(new ResultMessage("Quit event success"));
@@ -119,8 +117,8 @@ public class UserController {
     @RequestMapping(value = "${api.user.joined}", method = RequestMethod.GET)
     @JsonView(View.SimpleEvent.class)
     public ResponseEntity<List<EventSlide>> getJoinedEvent(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         return ResponseEntity.ok().body(eventService.getEventsJoined(user.getuId()));
     }
@@ -128,17 +126,23 @@ public class UserController {
     @RequestMapping(value = "${api.user.released}", method = RequestMethod.GET)
     @JsonView(View.SimpleEvent.class)
     public ResponseEntity<List<EventSlide>> getReleasedEvent(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         return ResponseEntity.ok().body(eventService.getEventsReleased(user.getuId()));
     }
 
     @RequestMapping(value = "${api.user.getDetail}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserDetail(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         return ResponseEntity.ok().body(userService.getByEmail(user.getEmail()));
+    }
+
+    @RequestMapping(value = "${api.user.current}", method = RequestMethod.GET)
+    @JsonView(View.UserView.class)
+    public ResponseEntity<User> getCurrentUser() {
+        return ResponseEntity.ok(jwtTokenUtil.getCurrentUser());
     }
 }

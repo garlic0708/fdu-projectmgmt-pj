@@ -1,6 +1,8 @@
 package application.entity;
 
+import application.entity.forms.View;
 import application.entity.userSecurity.Role;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 
@@ -10,10 +12,14 @@ import javax.persistence.*;
  */
 @Entity
 public class User {
+    @JsonView(View.UserView.class)
     private int uId;
+    @JsonView(View.UserView.class)
     private String email;
     private String password;
+    @JsonView(View.UserView.class)
     private String nickname;
+    @JsonView(View.UserView.class)
     private Integer credit;
     private String image;
     private Role role;

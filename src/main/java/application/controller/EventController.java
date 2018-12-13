@@ -26,8 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Creator: DreamBoy
@@ -67,8 +65,8 @@ public class EventController {
     public ResponseEntity<?> addEvent(HttpServletRequest httpServletRequest,
                                       @RequestParam("file") MultipartFile file,
                                       @RequestParam("addEventForm") String strAddEventForm) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         String fileContentType = file.getContentType();
         if (fileContentType == null || !fileContentType.startsWith("image/"))
@@ -103,8 +101,8 @@ public class EventController {
     @RequestMapping(value = "${api.event.cancel}/{eid}", method = RequestMethod.PUT)
     public ResponseEntity<?> cancelEvent(HttpServletRequest httpServletRequest,
                                          @PathVariable("eid") int eid) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         try {
             eventService.cancelEvent(user.getuId(), eid);
@@ -116,8 +114,8 @@ public class EventController {
 
     @RequestMapping(value = "${api.event.detail}/{eid}", method = RequestMethod.GET)
     public ResponseEntity<?> getEventDetail(HttpServletRequest httpServletRequest, @PathVariable("eid") int eid) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
         return ResponseEntity.ok().body(eventService.getEventDetailById(eid, user.getuId()));
     }
 

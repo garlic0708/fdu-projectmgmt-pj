@@ -52,13 +52,15 @@ public class FileController {
     @RequestMapping(value = "${api.image.get.user}/{uid}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserImage(@PathVariable("uid") int uid) {
         String imagePath = userService.getByUid(uid).getImage();
-        if (imagePath == null || imagePath.equals(""))
+        if (imagePath == null || imagePath.equals("")) {
             try {
-                imagePath = new ClassPathResource("static/defaultUser.jpg").getFile().getAbsolutePath();
+                imagePath = new ClassPathResource("static/defaultUser.jpg").getFile().getPath();
             } catch (IOException e) {
+                LOGGER.info(e.getMessage());
                 e.printStackTrace();
-                return ResponseEntity.status(404).body(new ResultMessage("Failed to load image"));
+                return ResponseEntity.status(427).body(new ResultMessage("Failed to load image"));
             }
+        }
         return getImgByPath(imagePath);
     }
 
