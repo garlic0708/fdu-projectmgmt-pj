@@ -11,8 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @RunWith(SpringRunner.class)
@@ -251,5 +250,21 @@ public class EventRepositoryTest {
         eventRepository.save(event1);
         Event test = eventRepository.findByEId(id);
         assertEquals(test.getEventName(), "Football");
+    }
+
+    @Test
+    @Rollback
+    public void search() {
+        Event event = new Event();
+        event.setEventName("Basketball");
+        event = eventRepository.save(event);
+        Event event1 = new Event();
+        event1.setEventName("Football");
+        event1 = eventRepository.save(event1);
+        List<Event> test = eventRepository.findByEventNameContainsOrContentContains("ball", "ball");
+        Event finalEvent = event;
+        assertTrue(test.stream().anyMatch(e -> finalEvent.geteId() == e.geteId()));
+        Event finalEvent1 = event1;
+        assertTrue(test.stream().anyMatch(e -> finalEvent1.geteId() == e.geteId()));
     }
 }

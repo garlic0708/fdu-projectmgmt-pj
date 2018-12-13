@@ -26,6 +26,8 @@ export class CurrentUserProvider {
   private changeNicknameUrl = '/api/user/updateName';
   private changeAvatarUrl = '/api/user/updateImg';
   private getCurrentUserUrl = '/api/user/current';
+  private requestResetPasswordUrl = '/auth/requestReset';
+  private resetPasswordUrl = '/auth/reset';
 
   constructor(public auth: AuthService, private http: ApiRedirectProvider,
               private data: DataProvider,) {
@@ -107,6 +109,17 @@ export class CurrentUserProvider {
         formData.append('img', blob);
         return this.http.post(this.changeAvatarUrl, formData).toPromise()
       })
+  }
+
+  requestResetPassword(email: string): Observable<any> {
+    return this.http.put(this.requestResetPasswordUrl, null,
+      { params: { email } })
+  }
+
+  resetPassword(token: string, email: string, newPassword: string): Observable<any> {
+    return this.http.post(this.resetPasswordUrl, {
+      email, oldPassword: token, newPassword,
+    })
   }
 
 }

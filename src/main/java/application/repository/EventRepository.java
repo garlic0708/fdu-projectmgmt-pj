@@ -3,6 +3,7 @@ package application.repository;
 import application.entity.Event;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -62,6 +63,7 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
     /**
      * 通过两组xy坐标，找到在该坐标内的活动列表
+     *
      * @param x1
      * @param y1
      * @param x2
@@ -69,15 +71,16 @@ public interface EventRepository extends CrudRepository<Event, Long> {
      * @return 活动列表
      */
     @Query(value = "SELECT * FROM event INNER JOIN address on event.address = address.addr_id " +
-            "WHERE positionX < ? AND positionY < ? AND positionX > ? AND positionY > ? AND eventstate = 'notStarted'" ,nativeQuery = true)
+            "WHERE positionX < ? AND positionY < ? AND positionX > ? AND positionY > ? AND eventstate = 'notStarted'", nativeQuery = true)
     List<Event> getEventsInASquare(double x1, double y1, double x2, double y2);
 
     /**
      * 取后num个event
+     *
      * @param num
      * @return
      */
-    @Query(value = "SELECT * FROM event  ORDER BY e_id DESC LIMIT ?" ,nativeQuery = true)
+    @Query(value = "SELECT * FROM event  ORDER BY e_id DESC LIMIT ?", nativeQuery = true)
     List<Event> getEvents(int num);
 
     /**
@@ -108,4 +111,13 @@ public interface EventRepository extends CrudRepository<Event, Long> {
      */
     @Override
     void delete(Event event);
+
+    /**
+     * 模糊查询
+     *
+     * @param search1
+     * @param search2
+     * @return
+     */
+    List<Event> findByEventNameContainsOrContentContains(String search1, String search2);
 }

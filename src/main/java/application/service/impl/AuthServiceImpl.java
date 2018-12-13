@@ -2,18 +2,25 @@ package application.service.impl;
 
 
 import application.component.JwtTokenUtil;
+import application.component.RegistrationListener;
 import application.entity.User;
+import application.entity.userSecurity.PasswordReset;
 import application.entity.userSecurity.Role;
 import application.entity.userSecurity.UpdatePasswordForm;
 import application.entity.userSecurity.VerificationToken;
 import application.exception.RegisterException;
 import application.exception.UpdatePasswordException;
 import application.exception.VerificationException;
+import application.repository.ResetPasswordRepository;
 import application.repository.UserRepository;
 import application.repository.VerificationTokenRepository;
 import application.service.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Random;
 
 
 /**
@@ -38,15 +46,24 @@ public class AuthServiceImpl implements AuthService {
     private JwtTokenUtil jwtTokenUtil;
     private UserRepository userRepository;
     private VerificationTokenRepository verificationTokenRepository;
+    private final JavaMailSender mailSender;
+    private ResetPasswordRepository resetPasswordRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationListener.class);
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
-
     @Value("${emailList}")
     private String[] emails;
-
     @Value("${defaultNickname}")
     private String defaultNickname;
+    @Value("${verifyCodes}")
+    private String verifyCodes;
+    @Value("${verifySize}")
+    private int verifySize;
+    @Value("${spring.mail.username}")
+    private String username;
+    @Value("${messages.resetPass}")
+    private String resetPassMessage;
 
     @Autowired
     public AuthServiceImpl(
@@ -54,16 +71,20 @@ public class AuthServiceImpl implements AuthService {
             UserDetailsService userDetailsService,
             JwtTokenUtil jwtTokenUtil,
             UserRepository userRepository,
-            VerificationTokenRepository verificationTokenRepository) {
+            VerificationTokenRepository verificationTokenRepository,
+            ResetPasswordRepository resetPasswordRepository,
+            JavaMailSender mailSender) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
+        this.resetPasswordRepository = resetPasswordRepository;
+        this.mailSender = mailSender;
     }
 
     @Override
-    public VerificationToken register(User userToAdd) throws RegisterException{
+    public VerificationToken register(User userToAdd) throws RegisterException {
         final String email = userToAdd.getEmail();
         if (!validateEmailFormat(email))
             throw new RegisterException("Email format is wrong");
@@ -92,7 +113,9 @@ public class AuthServiceImpl implements AuthService {
             throw new VerificationException("Invalid token");
         else if (verificationToken.getExpiryDate().before(Date.from(Instant.now())))
             throw new VerificationException("Token has expired");
-        else {
+        else if (userRepository.findByEmail(verificationToken.getEmail()) != null) {
+            throw new VerificationException("You have registered");
+        } else {
             User user = new User();
             user.setEmail(verificationToken.getEmail());
             user.setPassword(verificationToken.getPassword());
@@ -106,22 +129,33 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void updatePassword(UpdatePasswordForm upf) throws UpdatePasswordException{
+    public void updatePassword(UpdatePasswordForm upf, boolean isReset) throws UpdatePasswordException {
         final String email = upf.getEmail();
         final String oldPass = upf.getOldPassword();
         final String newPass = upf.getNewPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-
         if (!userRepository.findByEmail(email).isPresent())
             throw new UpdatePasswordException("No such user");
         User user = userRepository.findByEmail(email).get();
-        if (!encoder.matches(oldPass, user.getPassword()))
-            throw new UpdatePasswordException("Password is wrong");
+
+        PasswordReset passwordReset = null;
+        if (isReset) { //如果是reset
+            passwordReset = resetPasswordRepository.findByUid(user.getuId());
+            if (passwordReset == null || !oldPass.equals(passwordReset.getCode()))
+                throw new UpdatePasswordException("Verify code is wrong");
+        } else {
+            if (!oldPass.equals(user.getPassword()))
+                throw new UpdatePasswordException("Password is wrong");
+        }
+
         if (newPass == null || newPass.equals(""))
             throw new UpdatePasswordException("New password can not be empty");
         user.setPassword(encoder.encode(newPass));
         userRepository.save(user);
+        if (isReset) {
+            resetPasswordRepository.delete(passwordReset);
+        }
     }
 
     @Override
@@ -144,12 +178,48 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    @Override
+    public User reset(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null) {
+            PasswordReset passwordReset = resetPasswordRepository.findByUid(user.getuId());
+            if (passwordReset != null)
+                resetPasswordRepository.delete(passwordReset);
+            passwordReset = new PasswordReset();
+            passwordReset.setUid(user.getuId());
+            String code = generateVerifyCode(verifySize, verifyCodes);
+            passwordReset.setCode(code);
+
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(username);
+            simpleMailMessage.setTo(email);
+            simpleMailMessage.setSubject("Reset password");
+            simpleMailMessage.setText(resetPassMessage.replace("%code%", code));
+            LOGGER.info(simpleMailMessage.toString());
+            mailSender.send(simpleMailMessage);
+
+            resetPasswordRepository.save(passwordReset);
+        }
+        return user;
+    }
+
+
+    private String generateVerifyCode(int verifySize, String sources) {
+        int codesLen = sources.length();
+        Random rand = new Random(System.currentTimeMillis());
+        StringBuilder verifyCode = new StringBuilder(verifySize);
+        for (int i = 0; i < verifySize; i++) {
+            verifyCode.append(sources.charAt(rand.nextInt(codesLen - 1)));
+        }
+        return verifyCode.toString();
+    }
+
     private boolean validateEmailFormat(String email) {
         return (email.matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*"));
     }
 
     private boolean validateEmailSource(String email) {
-        for (String sourceEmail: emails) {
+        for (String sourceEmail : emails) {
             if (email.endsWith(sourceEmail))
                 return true;
         }

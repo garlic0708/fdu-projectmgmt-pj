@@ -63,4 +63,11 @@ public interface EventService {
      * @return
      */
     List<EventSlide> getEventsReleased(int uid);
+
+    /**
+     * 搜索活动
+     * @param search
+     * @return
+     */
+    List<EventSlide> searchEvents(String search, int page);
 }
