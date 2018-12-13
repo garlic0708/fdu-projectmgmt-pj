@@ -49,7 +49,7 @@ public class TagServiceTest {
     @Rollback
     public void getTagList() throws Exception {
         List<Tag> tags = tagService.getTagList();
-        assertEquals(tags.get(0).getTagname(), "testTag");
+        assertEquals(tags.get(tags.size()-1).getTagname(), "testTag");
     }
 
     @After

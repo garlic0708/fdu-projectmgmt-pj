@@ -49,6 +49,8 @@ public class EventServiceTest {
     private List<Tag> tags;
     private List<EventTag> eventTags;
 
+    private User user;
+
     @Before
     public void setUp() {
         events = new LinkedList<>();
@@ -56,6 +58,10 @@ public class EventServiceTest {
         users = new LinkedList<>();
         tags = new LinkedList<>();
         eventTags = new LinkedList<>();
+
+        user = new User();
+        user.setNickname("测试");
+        user = userRepository.save(user);
 
         Tag tag1 = new Tag();
         tag1.setTagname("tag1");
@@ -89,8 +95,6 @@ public class EventServiceTest {
         users.add(u3);
 
         address=new Address();
-        address.setAddressName("Shanghai");
-        address = new Address();
         address.setAddressName("Shanghai");
         address.setPositionX(10.0);
         address.setPositionY(15.8);
@@ -196,18 +200,18 @@ public class EventServiceTest {
 
     }
 
-//    @Test
-//    @Rollback
-//    public void getEventDetailById(){
-//        int eid=events.get(0).geteId();
-//        EventDetail eventDetail=eventService.getEventDetailById(eid, 0);
-//        assertEquals(eventDetail.getAddress(),"Shanghai");
-//        assertEquals(eventDetail.getContent(),"content1");
-//        assertEquals(eventDetail.getCreditLimit(),new Integer(10));
-//        assertEquals(eventDetail.getImage(),"path/image1");
-//        assertEquals(eventDetail.getEventState(),"end");
-//
-//    }
+    @Test
+    @Rollback
+    public void getEventDetailById(){
+        int eid=events.get(0).geteId();
+        EventDetail eventDetail= (EventDetail) eventService.getEventDetailById(eid, user.getuId()).get("detail");
+        assertEquals(eventDetail.getAddress().getAddressName(),"Shanghai");
+        assertEquals(eventDetail.getContent(),"content1");
+        assertEquals(eventDetail.getCreditLimit(),new Integer(10));
+        assertEquals(eventDetail.getImage(),"path/image1");
+        assertEquals(eventDetail.getEventState(),"end");
+
+    }
 
     @Test
     @Rollback
@@ -237,20 +241,22 @@ public class EventServiceTest {
 
     @After
     public void tearDown() {
-        for (int i = 0; i < events.size(); i++) {
-            eventRepository.delete(events.get(i));
+        userRepository.delete(user);
+
+        for (Event event : events) {
+            eventRepository.delete(event);
         }
-        for (int i = 0; i < users.size(); i++) {
-            userRepository.delete(users.get(i));
+        for (User user1 : users) {
+            userRepository.delete(user1);
         }
-        for (int i = 0; i < joinEvents.size(); i++) {
-            joinEventRepository.delete(joinEvents.get(i));
+        for (JoinEvent joinEvent : joinEvents) {
+            joinEventRepository.delete(joinEvent);
         }
-        for (int i = 0; i < tags.size(); i++) {
-            tagRepository.delete(tags.get(i));
+        for (Tag tag : tags) {
+            tagRepository.delete(tag);
         }
-        for (int i = 0; i < eventTags.size(); i++) {
-            eventTagRepository.delete(eventTags.get(i));
+        for (EventTag eventTag : eventTags) {
+            eventTagRepository.delete(eventTag);
         }
         addressRepository.delete(address);
 
