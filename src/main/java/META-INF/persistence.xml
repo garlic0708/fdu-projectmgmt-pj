@@ -12,6 +12,7 @@
         <class>application.entity.User</class>
         <class>application.entity.Event</class>
         <class>application.entity.userSecurity.VerificationToken</class>
+        <class>application.entity.userSecurity.PasswordReset</class>
         <properties>
             <property name="toplink.jdbc.url" value="jdbc:mysql://101.132.75.236:3306/yueya?CharsetEncode=utf8"/>
             <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
