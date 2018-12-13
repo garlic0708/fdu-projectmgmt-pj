@@ -76,9 +76,17 @@ export class LoginPage {
   register() {
     console.log(this.registerGroup.value);
     const { email, password, nickname } = this.registerGroup.value;
+    const cover = this.loading.create({ content: '登录中……' });
+    cover.present();
     this.currentUser.register(email, password, nickname).then(
-      () => console.log("yes"),
-      (msg) => console.log("no", msg),
+      () => {
+        this.toast.create({ message: '注册成功，请前往邮箱点击验证链接后登录', duration: 1500 }).present();
+        cover.dismissAll()
+      },
+      () => {
+        this.toast.create({ message: '网络错误', duration: 1500 }).present();
+        cover.dismissAll()
+      },
     )
   }
 

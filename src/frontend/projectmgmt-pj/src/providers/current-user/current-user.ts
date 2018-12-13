@@ -25,6 +25,7 @@ export class CurrentUserProvider {
   private changePasswordUrl = '/auth/update';
   private changeNicknameUrl = '/api/user/updateName';
   private changeAvatarUrl = '/api/user/updateImg';
+  private getCurrentUserUrl = '/api/user/current';
 
   constructor(public auth: AuthService, private http: ApiRedirectProvider,
               private data: DataProvider,) {
@@ -62,11 +63,13 @@ export class CurrentUserProvider {
   }
 
   private setCurrentUser() {
-    const payload = this.auth.getPayload();
-    this.currentUser = {
-      ...payload,
-      email: payload.sub,
-    };
+    this.http.get<any>(this.getCurrentUserUrl)
+      .subscribe(user => {
+        const { uId, ...rest } = user;
+        if (!this.currentUser)
+          this.currentUser = { id: uId, ...rest };
+        else Object.assign(this.currentUser, { id: uId, ...rest })
+      })
   }
 
   register(email: string, password: string, nickname?: string): Promise<any> {
@@ -94,7 +97,7 @@ export class CurrentUserProvider {
     formData.append('nickname', nickname);
     console.log(formData);
     return this.http.put(this.changeNicknameUrl, formData)
-      .pipe(tap(() => this.currentUser.nickname = nickname))
+      .pipe(tap(() => this.setCurrentUser()))
   }
 
   changeAvatar(imageUri: string): Promise<any> {
