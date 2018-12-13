@@ -1,12 +1,9 @@
 package application.controller;
 
 import application.component.JwtTokenUtil;
-import application.entity.forms.AddEventForm;
+import application.entity.forms.*;
 import application.entity.Event;
-import application.entity.forms.EventDetail;
-import application.entity.forms.ResultMessage;
 import application.entity.User;
-import application.entity.forms.View;
 import application.exception.AddEventException;
 import application.exception.CancelEventException;
 import application.service.EventService;
@@ -139,5 +136,11 @@ public class EventController {
     public ResponseEntity<List<EventDetail>> getNearbyEvents(@RequestParam("nex") double nex, @RequestParam("ney") double ney,
                                                              @RequestParam("swx") double swx, @RequestParam("swy") double swy) {
         return ResponseEntity.ok().body(eventService.getNearbyEvents(nex, ney, swx, swy));
+    }
+
+    @RequestMapping(value = "${api.event.search}", method = RequestMethod.GET)
+    public ResponseEntity<List<EventSlide>> searchEvents(@RequestParam("search") String search,
+                                                         @RequestParam("page") int page) {
+        return ResponseEntity.ok(eventService.searchEvents(search, page));
     }
 }

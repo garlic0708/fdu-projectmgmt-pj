@@ -27,4 +27,15 @@ page-home {
     flex: 0 0 48%;
     margin: 10px 1%;
   }
+
+  .home-search-result {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+  }
+
+  .home-hidden {
+    display: none;
+  }
 }

@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { App, IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { App, InfiniteScroll, IonicPage, NavController, NavParams, Refresher, Slides } from 'ionic-angular';
 import { EventDetailPage } from "../event-detail/event-detail";
-import { Observable} from "rxjs";
+import { Observable } from "rxjs";
 import { DataProvider } from "../../providers/data/data";
 import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 import { EventPreview } from "./event-preview";
+import { tap } from "rxjs/operators";
 
 /**
  * Generated class for the HomePage page.
@@ -23,14 +24,29 @@ export class HomePage {
   slideItems: Observable<EventPreview[]>;
   flowItems: Observable<EventPreview[]>;
 
+  searchItems: EventPreview[] = [];
+  searchPage = 1;
+  searchValue = '';
+  searchHasMore = true;
+
   @ViewChild(Slides) slides: Slides;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private appCtrl: App,
               private data: DataProvider,
               private loading: LoadingCoverProvider) {
-    [this.slideItems, this.flowItems] =
+    this.reload();
+  }
+
+  private reload(refresher?: Refresher) {
+    const [slideItems, flowItems] =
       this.loading.fetchData(this.data.getHomeSlides(), this.data.getHomeFlow());
+    this.slideItems = slideItems.pipe(
+      tap(() => {
+        if (refresher) refresher.complete()
+      })
+    );
+    this.flowItems = flowItems;
   }
 
   ionViewDidLoad() {
@@ -43,6 +59,28 @@ export class HomePage {
 
   getImageUrl(eventId) {
     return this.data.getEventImageUrl(eventId)
+  }
+
+  search(e) {
+    this.searchPage = 1;
+    this.searchValue = e.target.value;
+    if (e.target.value)
+      this.data.searchEvents(e.target.value, this.searchPage)
+        .subscribe(data => this.searchItems = data);
+    else this.searchItems = [];
+  }
+
+  loadMore(scroll: InfiniteScroll) {
+    this.searchPage += 1;
+    if (this.searchValue)
+      this.data.searchEvents(this.searchValue, this.searchPage)
+        .subscribe((data: EventPreview[]) => {
+          if (!data.length) {
+            this.searchHasMore = false;
+          }
+          this.searchItems = this.searchItems.concat(data);
+          scroll.complete()
+        })
   }
 
 }

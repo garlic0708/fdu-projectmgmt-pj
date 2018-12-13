@@ -21,6 +21,7 @@ export class DataProvider {
   private detailUrl = '/api/event/detail';
   private slidesUrl = '/api/event/home-slides';
   private flowUrl = '/api/event/home-flow';
+  private searchEventsUrl = '/api/event/search';
   private eventTagListUrl = '/api/tag/list';
   private notifListUrl = '/api/notif/notif-list';
   private markNotifAsReadUrl = '/api/notif/read';
@@ -84,6 +85,11 @@ export class DataProvider {
 
   getHomeFlow(): Observable<EventPreview[]> {
     return this.http.get<EventPreview[]>(this.flowUrl)
+  }
+
+  searchEvents(search, page): Observable<EventPreview[]> {
+    return this.http.get<EventPreview[]>(this.searchEventsUrl,
+      { params: { search, page } })
   }
 
   getEventTagList(): Observable<any[]> {

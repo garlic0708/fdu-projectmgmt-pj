@@ -55,6 +55,7 @@ api:
     cancel: api/event/cancel
     checkin: api/event/checkin
     nearby: api/event/nearby
+    search: api/event/search
   tag:
     add: api/tag/add
     list: api/tag/list

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static application.service.impl.QuartzEventServiceImpl.JOB_GROUP;
 
@@ -43,6 +44,8 @@ public class EventServiceImpl implements EventService {
     @Value("${messages.cancelEvent.user.initiator}")
     private String cancelEventUserInitiatorMessage;
 
+    private final static int SEARCH_PER_PAGE = 10;
+
     @Autowired
     public EventServiceImpl(EventRepository eventRepository,
                             JoinEventRepository joinEventRepository,
@@ -52,7 +55,7 @@ public class EventServiceImpl implements EventService {
                             UserRepository userRepository,
                             EventTagRepository eventTagRepository,
                             TagRepository tagRepository,
-                            StartEventRepository startEventRepository){
+                            StartEventRepository startEventRepository) {
         this.eventRepository = eventRepository;
         this.joinEventRepository = joinEventRepository;
         this.scheduler = scheduler;
@@ -66,12 +69,12 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Map<String, Object> getEventDetailById(int eid, int uid) {
-        Event event=eventRepository.findByEId(eid);
-        Integer aId=event.getAddress();
-        Address address=addressRepository.findByAddrId(aId);
-        EventDetail eventDetail=new EventDetail(eid,event.getEventName(),event.getContent(), event.getStartTime(),
-                event.getEndTime(),address,event.getEventState(),event.getLimited(),event.getCreditLimit(),
-                event.getUpperLimit(),event.getLowerLimit(),event.getImage()
+        Event event = eventRepository.findByEId(eid);
+        Integer aId = event.getAddress();
+        Address address = addressRepository.findByAddrId(aId);
+        EventDetail eventDetail = new EventDetail(eid, event.getEventName(), event.getContent(), event.getStartTime(),
+                event.getEndTime(), address, event.getEventState(), event.getLimited(), event.getCreditLimit(),
+                event.getUpperLimit(), event.getLowerLimit(), event.getImage()
         );
 
         List<EventTag> eventTagList = eventTagRepository.findByEId(eid);
@@ -113,14 +116,14 @@ public class EventServiceImpl implements EventService {
      * @return
      */
     @Override
-    public List<EventSlide> getHomeSlides(){
-        List<Event> events=eventRepository.getEvents(3);
-        List<EventSlide> eventSlides=new LinkedList<>();
-        for (int i=0;i<events.size();i++) {
-            String path=events.get(i).getImage();
-            String title=events.get(i).getEventName();
-            int id=events.get(i).geteId();
-            EventSlide eventSlide = new EventSlide(path,title,id);
+    public List<EventSlide> getHomeSlides() {
+        List<Event> events = eventRepository.getEvents(3);
+        List<EventSlide> eventSlides = new LinkedList<>();
+        for (int i = 0; i < events.size(); i++) {
+            String path = events.get(i).getImage();
+            String title = events.get(i).getEventName();
+            int id = events.get(i).geteId();
+            EventSlide eventSlide = new EventSlide(path, title, id);
             eventSlides.add(eventSlide);
         }
         return eventSlides;
@@ -132,17 +135,18 @@ public class EventServiceImpl implements EventService {
      * @return
      */
     @Override
-    public List<EventSlide> getHomeFlow(){
-        List<Event> events=eventRepository.getEvents(10);
-        List<EventSlide> eventSlides=new LinkedList<>();
-        for (int i=0;i<events.size();i++) {
-            String path=events.get(i).getImage();
-            String title=events.get(i).getEventName();
-            int id=events.get(i).geteId();
-            EventSlide eventSlide = new EventSlide(path,title,id);
+    public List<EventSlide> getHomeFlow() {
+        List<Event> events = eventRepository.getEvents(10);
+        List<EventSlide> eventSlides = new LinkedList<>();
+        for (int i = 0; i < events.size(); i++) {
+            String path = events.get(i).getImage();
+            String title = events.get(i).getEventName();
+            int id = events.get(i).geteId();
+            EventSlide eventSlide = new EventSlide(path, title, id);
             eventSlides.add(eventSlide);
         }
-        return eventSlides;    }
+        return eventSlides;
+    }
 
     @Override
     public List<Integer> getParticipants(int eid) {
@@ -158,11 +162,11 @@ public class EventServiceImpl implements EventService {
             if (event.getLimited() && event.getLowerLimit() > list.size()) {
                 event.setEventState(Event.CANCELED);
 
-                for (Integer ouid: list) {
+                for (Integer ouid : list) {
                     if (ouid != eid)
-                        sendMessage(0, ouid, cancelEventTimeOthersMessage.replace("%event%", "("+ event.getEventName() + ")"));
+                        sendMessage(0, ouid, cancelEventTimeOthersMessage.replace("%event%", "(" + event.getEventName() + ")"));
                     else
-                        sendMessage(0, ouid, cancelEventTimeInitiatorMessage.replace("%event%", "("+ event.getEventName() + ")"));
+                        sendMessage(0, ouid, cancelEventTimeInitiatorMessage.replace("%event%", "(" + event.getEventName() + ")"));
                 }
 
                 eventRepository.save(event);
@@ -170,10 +174,9 @@ public class EventServiceImpl implements EventService {
                 scheduler.deleteJob(JobKey.jobKey(eid + " markAsEnded", JOB_GROUP));
             }
 
-        }
-       catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-       }
+        }
     }
 
     @Override
@@ -194,7 +197,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event addEvent(AddEventForm form, int uid) throws AddEventException{
+    public Event addEvent(AddEventForm form, int uid) throws AddEventException {
         String poiId = form.getPoiId();
         Address address;
         if (poiId == null || ((address = addressRepository.findByPoiId(poiId)) == null)) {
@@ -230,8 +233,7 @@ public class EventServiceImpl implements EventService {
 
             if (ul == null && ll == null) { // 上限和下限都没有时，才设置limited为false
                 event.setLimited(false);
-            }
-            else  {
+            } else {
                 event.setLimited(true);
                 if (ul != null)
                     event.setUpperLimit(ul);
@@ -262,7 +264,7 @@ public class EventServiceImpl implements EventService {
 
             // 添加event-tag
             List<Integer> tags = form.getTags();
-            for (int i: tags) {
+            for (int i : tags) {
                 if (tagRepository.findByTId(i) != null) {
                     EventTag eventTag = new EventTag();
                     eventTag.seteId(event.geteId());
@@ -285,16 +287,15 @@ public class EventServiceImpl implements EventService {
 
         List<Integer> list = getParticipants(eid);
 
-        for (Integer ouid: list) {
+        for (Integer ouid : list) {
             if (ouid != eid)
-                sendMessage(0, ouid, cancelEventUserOthersMessage.replace("%event%", "("+ event.getEventName() + ")"));
+                sendMessage(0, ouid, cancelEventUserOthersMessage.replace("%event%", "(" + event.getEventName() + ")"));
         }
         try {
             //TODO
             scheduler.deleteJob(JobKey.jobKey(eid + " markAsStarted", JOB_GROUP));
             scheduler.deleteJob(JobKey.jobKey(eid + " markAsEnded", JOB_GROUP));
-        }
-        catch (SchedulerException e) {
+        } catch (SchedulerException e) {
             e.printStackTrace();
         }
         eventRepository.save(event);
@@ -304,7 +305,7 @@ public class EventServiceImpl implements EventService {
     public List<EventDetail> getNearbyEvents(double x1, double y1, double x2, double y2) {
         List<Event> events = eventRepository.getEventsInASquare(x1, y1, x2, y2);
         List<EventDetail> details = new ArrayList<>();
-        for (Event event: events) {
+        for (Event event : events) {
             EventDetail detail = new EventDetail();
             detail.seteId(event.geteId());
             detail.setEventName(event.getEventName());
@@ -323,7 +324,7 @@ public class EventServiceImpl implements EventService {
     public List<EventSlide> getEventsJoined(int uid) {
         List<JoinEvent> joinEvents = joinEventRepository.findByUId(uid);
         List<EventSlide> slides = new ArrayList<>();
-        for (JoinEvent joinEvent: joinEvents) {
+        for (JoinEvent joinEvent : joinEvents) {
             if (!joinEvent.getJeState().equals(JoinEvent.INITIATOR)) {
                 Event event = eventRepository.findByEId(joinEvent.geteId());
                 EventSlide slide = new EventSlide();
@@ -340,7 +341,7 @@ public class EventServiceImpl implements EventService {
     public List<EventSlide> getEventsReleased(int uid) {
         List<Event> events = eventRepository.findByInitiator(uid);
         List<EventSlide> slides = new ArrayList<>();
-        for (Event event: events) {
+        for (Event event : events) {
             EventSlide slide = new EventSlide();
             slide.setId(event.geteId());
             slide.setTitle(event.getEventName());
@@ -351,21 +352,32 @@ public class EventServiceImpl implements EventService {
         return slides;
     }
 
+    @Override
+    public List<EventSlide> searchEvents(String search, int page) {
+        List<Event> events = eventRepository
+                .findByEventNameContainsOrContentContains(search, search);
+        List<EventSlide> slides = events.stream()
+                .filter(e -> !e.getEventState().equals("canceled"))
+                .map(e -> new EventSlide(null, e.getEventName(), e.geteId()))
+                .collect(Collectors.toList());
+        return slides.subList(Math.min(slides.size(), (page - 1) * SEARCH_PER_PAGE),
+                        Math.min(slides.size(), page * SEARCH_PER_PAGE));
+    }
+
     private void updateCredit(int eid) {
         List<JoinEvent> joinEvents = joinEventRepository.getParticipantsByEId2(eid);
         User user;
-        for (JoinEvent joinEvent: joinEvents) {
+        for (JoinEvent joinEvent : joinEvents) {
             if (Objects.equals(joinEvent.getJeState(), JoinEvent.PARTICIPATED)) { //只是参加，没有签到
                 user = userRepository.findByUId(joinEvent.getuId());
                 int credit = user.getCredit();
-                credit = credit-1 >= 0 ? credit-1 : 0;
+                credit = credit - 1 >= 0 ? credit - 1 : 0;
                 user.setCredit(credit);
                 userRepository.save(user);
-            }
-            else if (Objects.equals(joinEvent.getJeState(), JoinEvent.CHECK)) {
+            } else if (Objects.equals(joinEvent.getJeState(), JoinEvent.CHECK)) {
                 user = userRepository.findByUId(joinEvent.getuId());
                 int credit = user.getCredit();
-                credit = credit+1 >= 100 ? credit+1 : 100;
+                credit = credit + 1 >= 100 ? credit + 1 : 100;
                 user.setCredit(credit);
                 userRepository.save(user);
             }

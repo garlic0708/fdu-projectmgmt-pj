@@ -106,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void updatePassword(UpdatePasswordForm upf) throws UpdatePasswordException{
+    public void updatePassword(UpdatePasswordForm upf, boolean requireCheck) throws UpdatePasswordException{
         final String email = upf.getEmail();
         final String oldPass = upf.getOldPassword();
         final String newPass = upf.getNewPassword();
@@ -116,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
         if (!userRepository.findByEmail(email).isPresent())
             throw new UpdatePasswordException("No such user");
         User user = userRepository.findByEmail(email).get();
-        if (!encoder.matches(oldPass, user.getPassword()))
+        if (requireCheck && !encoder.matches(oldPass, user.getPassword()))
             throw new UpdatePasswordException("Password is wrong");
         if (newPass == null || newPass.equals(""))
             throw new UpdatePasswordException("New password can not be empty");

@@ -11,6 +11,7 @@ page-login {
   $login-rectangle-bg: black;
   $login-input-bg: rgba(192, 192, 192, .2);
   $login-error-text-color: red;
+  $login-reset-password-bottom: 5vh;
 
   @keyframes login-expand-first-time {
     0% {
@@ -198,6 +199,17 @@ page-login {
       &.login-toggle .label {
         text-align: right;
       }
+    }
+  }
+
+  .login-reset-password {
+    position: absolute;
+    width: 100%;
+    bottom: $login-reset-password-bottom;
+    text-align: center;
+
+    a {
+      color: white;
     }
   }
 }

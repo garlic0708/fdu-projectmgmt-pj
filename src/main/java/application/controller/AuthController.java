@@ -110,7 +110,7 @@ public class AuthController {
     @RequestMapping(value = "${jwt.route.authentication.updatePass}", method = RequestMethod.POST)
     public ResponseEntity<?> updatePass(@RequestBody UpdatePasswordForm upf) throws UpdatePasswordException {
         try {
-            authService.updatePassword(upf);
+            authService.updatePassword(upf, true);
             return ResponseEntity.ok(new ResultMessage(updateSuccessMessage));
         }
         catch (UpdatePasswordException e) {

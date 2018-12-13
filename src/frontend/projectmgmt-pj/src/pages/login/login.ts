@@ -3,6 +3,7 @@ import { IonicPage, LoadingController, NavController, NavParams, ToastController
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { CurrentUserProvider } from "../../providers/current-user/current-user";
 import { StartupPage } from "../startup/startup";
+import { ResetPasswordPage } from "../reset-password/reset-password";
 
 /**
  * Generated class for the LoginPage page.
@@ -114,6 +115,10 @@ export class LoginPage {
     if (error) return error;
     if (LoginPage.formControlHasError(this.registerGroup, 'passwordsNotMatch'))
       return '两次输入的密码不一致'
+  }
+
+  resetPassword() {
+    this.navCtrl.push(ResetPasswordPage)
   }
 
 }
