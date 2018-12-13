@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { CurrentUserProvider } from "../../providers/current-user/current-user";
+import { LoadingCoverProvider } from "../../providers/loading-cover/loading-cover";
 
 /**
  * Generated class for the ResetPasswordPage page.
@@ -18,9 +20,13 @@ export class ResetPasswordPage {
 
   group: FormGroup;
   gotToken = false;
+  gettingToken = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private fb: FormBuilder,) {
+              private fb: FormBuilder,
+              private currentUser: CurrentUserProvider,
+              private toast: ToastController,
+              private loading: LoadingCoverProvider,) {
     this.group = this.fb.group({
       email: new FormControl('', [Validators.email, Validators.required]),
       verificationToken: new FormControl('', Validators.required),
@@ -39,11 +45,33 @@ export class ResetPasswordPage {
   }
 
   getToken() {
-    this.gotToken = true;
+    this.gettingToken = true;
+    this.currentUser.requestResetPassword(this.group.controls['email'].value)
+      .finally(() => this.gettingToken = false)
+      .subscribe(() => {
+          this.gotToken = true;
+          this.toast.create({
+            message:
+              '验证码已发送到您的邮箱', duration: 1500
+          }).present();
+        },
+        () => this.toast.create({ message: '网络错误', duration: 1500 }).present())
   }
 
   submit() {
-
+    const { verificationToken, email, newPassword } = this.group.value;
+    const [loading] =
+      this.loading.fetchData(this.currentUser.resetPassword(verificationToken, email, newPassword));
+    loading.subscribe(
+      () => {
+        this.toast.create({
+          message:
+            '重置密码完成，请重新登录', duration: 1500
+        }).present();
+        this.navCtrl.pop()
+      },
+      () => this.toast.create({ message: '网络错误', duration: 1500 }).present()
+    )
   }
 
 }

@@ -179,7 +179,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void reset(String email) {
+    public User reset(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user != null) {
             PasswordReset passwordReset = resetPasswordRepository.findByUid(user.getuId());
@@ -200,6 +200,7 @@ public class AuthServiceImpl implements AuthService {
 
             resetPasswordRepository.save(passwordReset);
         }
+        return user;
     }
 
 

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -53,14 +54,13 @@ public class AuthController {
 
     @RequestMapping(value = "${jwt.route.authentication.login}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
-            @RequestBody JwtAuthenticationRequest authenticationRequest)  {
+            @RequestBody JwtAuthenticationRequest authenticationRequest) {
         try {
             final String token = authService.login(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
             // Return the token
             return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-        }
-        catch (BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body(new ResultMessage(loginErrorMessage));
         }
     }
@@ -70,7 +70,7 @@ public class AuthController {
             HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String refreshedToken = authService.refresh(token);
-        if(refreshedToken == null) {
+        if (refreshedToken == null) {
             return ResponseEntity.badRequest().body(null);
         } else {
             return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
@@ -78,7 +78,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
-    public ResponseEntity<?> register(javax.servlet.http.HttpServletRequest request, @RequestBody User addedUser)  {
+    public ResponseEntity<?> register(javax.servlet.http.HttpServletRequest request, @RequestBody User addedUser) {
         LOGGER.info(addedUser.toString());
         try {
             VerificationToken verificationToken = authService.register(addedUser);
@@ -90,8 +90,7 @@ public class AuthController {
             ResponseEntity body = ResponseEntity.ok().body(new ResultMessage(registerSuccessMessage));
             LOGGER.info(body.toString());
             return body;
-        }
-        catch (RegisterException e) {
+        } catch (RegisterException e) {
             return ResponseEntity.status(422).body(new ResultMessage(e.getMessage()));
         }
     }
@@ -101,8 +100,7 @@ public class AuthController {
         try {
             authService.registrationConfirm(token);
             return ResponseEntity.ok(new ResultMessage(registrationConfirmSuccessMessage));
-        }
-        catch (VerificationException e) {
+        } catch (VerificationException e) {
             return ResponseEntity.status(424).body(new ResultMessage(e.getMessage()));
         }
     }
@@ -112,8 +110,7 @@ public class AuthController {
         try {
             authService.updatePassword(upf, false);
             return ResponseEntity.ok(new ResultMessage(updateSuccessMessage));
-        }
-        catch (UpdatePasswordException e) {
+        } catch (UpdatePasswordException e) {
             return ResponseEntity.status(423).body(new ResultMessage(e.getMessage()));
         }
     }
@@ -123,15 +120,17 @@ public class AuthController {
         try {
             authService.updatePassword(upf, true);
             return ResponseEntity.ok(new ResultMessage("Reset password success"));
-        }
-        catch (UpdatePasswordException e) {
+        } catch (UpdatePasswordException e) {
             return ResponseEntity.status(423).body(new ResultMessage(e.getMessage()));
         }
     }
 
     @RequestMapping(value = "${jwt.route.authentication.requestResetPass}", method = RequestMethod.PUT)
     public ResponseEntity<?> requestResetPass(@RequestParam("email") String email) {
-        authService.reset(email);
-        return ResponseEntity.ok().body(new ResultMessage("Request success"));
+        if (authService.reset(email) != null)
+            return ResponseEntity.ok().body(new ResultMessage("Request success"));
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResultMessage("No such user"));
     }
 }

@@ -18,5 +18,5 @@ public interface AuthService {
     String login(String email, String password);
     String refresh(String oldToken);
 
-    void reset(String email);
+    User reset(String email);
 }
