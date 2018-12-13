@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,33 +47,33 @@ public class FileController {
     @RequestMapping(value = "${api.image.get.event}/{eid}", method = RequestMethod.GET)
     public ResponseEntity<?> getEventImage(@PathVariable("eid") int eid) {
         String imagePath = eventService.getById(eid).getImage();
-        return getImgByPath(imagePath);
+        try {
+            return getImgByPath(fileService.getImage(imagePath));
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(427).body(new ResultMessage("Failed to load image"));
+        }
     }
 
     @RequestMapping(value = "${api.image.get.user}/{uid}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserImage(@PathVariable("uid") int uid) {
         String imagePath = userService.getByUid(uid).getImage();
-        if (imagePath == null || imagePath.equals("")) {
-            try {
-                imagePath = new ClassPathResource("static/defaultUser.jpg").getFile().getPath();
-            } catch (IOException e) {
-                LOGGER.info(e.getMessage());
-                e.printStackTrace();
-                return ResponseEntity.status(427).body(new ResultMessage("Failed to load image"));
-            }
-        }
-        return getImgByPath(imagePath);
-    }
-
-    private ResponseEntity<?> getImgByPath(String imagePath) {
+        byte[] binaryImage;
         try {
-            byte[] image = fileService.getImage(imagePath);
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
-        }
-        catch (Exception e) {
+            if (imagePath == null || imagePath.equals(""))
+                binaryImage = FileCopyUtils.copyToByteArray(
+                        new ClassPathResource("static/defaultUser.jpg").getInputStream());
+            else binaryImage = fileService.getImage(imagePath);
+        } catch (Exception e) {
             LOGGER.info(e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(427).body(new ResultMessage("Failed to load image"));
         }
+        return getImgByPath(binaryImage);
+    }
+
+    private ResponseEntity<?> getImgByPath(byte[] image) {
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
     }
 }
