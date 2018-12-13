@@ -139,12 +139,12 @@ public class AuthServiceImpl implements AuthService {
             throw new UpdatePasswordException("No such user");
         User user = userRepository.findByEmail(email).get();
 
+        PasswordReset passwordReset = null;
         if (isReset) { //如果是reset
-            PasswordReset passwordReset = resetPasswordRepository.findByUid(user.getuId());
-            if (!oldPass.equals(passwordReset.getCode()))
+            passwordReset = resetPasswordRepository.findByUid(user.getuId());
+            if (passwordReset == null || !oldPass.equals(passwordReset.getCode()))
                 throw new UpdatePasswordException("Verify code is wrong");
-        }
-        else {
+        } else {
             if (!oldPass.equals(user.getPassword()))
                 throw new UpdatePasswordException("Password is wrong");
         }
@@ -153,6 +153,9 @@ public class AuthServiceImpl implements AuthService {
             throw new UpdatePasswordException("New password can not be empty");
         user.setPassword(encoder.encode(newPass));
         userRepository.save(user);
+        if (isReset) {
+            resetPasswordRepository.delete(passwordReset);
+        }
     }
 
     @Override
@@ -179,7 +182,10 @@ public class AuthServiceImpl implements AuthService {
     public void reset(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user != null) {
-            PasswordReset passwordReset = new PasswordReset();
+            PasswordReset passwordReset = resetPasswordRepository.findByUid(user.getuId());
+            if (passwordReset != null)
+                resetPasswordRepository.delete(passwordReset);
+            passwordReset = new PasswordReset();
             passwordReset.setUid(user.getuId());
             String code = generateVerifyCode(verifySize, verifyCodes);
             passwordReset.setCode(code);
@@ -197,7 +203,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    private  String generateVerifyCode(int verifySize, String sources) {
+    private String generateVerifyCode(int verifySize, String sources) {
         int codesLen = sources.length();
         Random rand = new Random(System.currentTimeMillis());
         StringBuilder verifyCode = new StringBuilder(verifySize);

@@ -10,5 +10,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface ResetPasswordRepository extends CrudRepository<PasswordReset, Long> {
     PasswordReset findByPrId(long id);
 
-    PasswordReset findByUid(long uid);
+    PasswordReset findByUid(int uid);
 }
