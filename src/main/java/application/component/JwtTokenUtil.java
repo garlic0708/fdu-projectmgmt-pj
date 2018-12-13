@@ -4,12 +4,14 @@ import application.entity.User;
 import application.entity.userSecurity.JwtUser;
 import application.repository.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -31,15 +33,9 @@ public class JwtTokenUtil implements Serializable {
 
     private static final String CLAIM_KEY_SUB = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
-    private static final String CLAIM_KEY_ID = "id";
-    private static final String CLAIM_KEY_CREDIT = "credit";
-    private static final String CLAIM_KEY_NICKNAME = "nickname";
 
     @Value("${api.image.get.user}")
     private String pictureUrl;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -111,13 +107,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(UserDetails userDetails) {
-        User user = ((JwtUser) userDetails).getUser();
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_SUB, userDetails.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
-        claims.put(CLAIM_KEY_ID, user.getuId());
-        claims.put(CLAIM_KEY_CREDIT, user.getCredit());
-        claims.put(CLAIM_KEY_NICKNAME, user.getNickname());
         return generateToken(claims);
     }
 
@@ -158,7 +150,7 @@ public class JwtTokenUtil implements Serializable {
         );
     }
 
-    public User getUserByToken(String token) {
-        return userRepository.findByEmail(getUsernameFromToken(token)).orElse(null);
+    public User getCurrentUser() {
+        return ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 }

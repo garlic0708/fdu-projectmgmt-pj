@@ -8,4 +8,6 @@ public class View {
     public interface NearByEvent {}
 
     public interface SimpleEvent{}
+
+    public interface UserView {}
 }

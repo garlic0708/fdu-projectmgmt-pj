@@ -68,6 +68,7 @@ api:
     checkOut: api/user/checkOut
     updateName: api/user/updateName
     updateImg: api/user/updateImg
+    current: api/user/current
   image:
     get:
       event: api/eventImg/get

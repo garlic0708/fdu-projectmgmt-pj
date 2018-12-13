@@ -39,16 +39,16 @@ public class MessageController {
 
     @RequestMapping(value = "${api.notify.list}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserDetail(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         return ResponseEntity.ok().body(messageService.getMessagesByUid(user.getuId()));
     }
 
     @RequestMapping(value = "${api.notify.read}/{mid}", method = RequestMethod.PUT)
     public ResponseEntity<?> readMessage(@PathVariable("mid") String mid, HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(tokenHeader).substring(tokenHead.length());
-        User user = jwtTokenUtil.getUserByToken(token);
+
+        User user = jwtTokenUtil.getCurrentUser();
 
         try {
             messageService.readMessage(user.getuId(), Integer.parseInt(mid));
