@@ -56,6 +56,7 @@ public class FileController {
             try {
                 imagePath = new ClassPathResource("static/defaultUser.jpg").getFile().getAbsolutePath();
             } catch (IOException e) {
+                e.printStackTrace();
                 return ResponseEntity.status(404).body(new ResultMessage("Failed to load image"));
             }
         return getImgByPath(imagePath);
