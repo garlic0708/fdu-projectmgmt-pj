@@ -26,14 +26,15 @@ public class MailConfig {
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setProtocol("smtp");
-        javaMailSender.setHost("smtp.163.com");
-        javaMailSender.setPort(25);
-        javaMailSender.setUsername("mindmap03@163.com");
-        javaMailSender.setPassword("mindmap03");
+        javaMailSender.setHost("smtp.126.com");
+        javaMailSender.setPort(465);
+        javaMailSender.setUsername("fdu_ss_web@126.com");
+        javaMailSender.setPassword("fduss123");
         Properties javaMailProperties = javaMailSender.getJavaMailProperties();
 
         javaMailProperties.put("mail.smtp.auth", "true");
         javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return javaMailSender;
     }
 }

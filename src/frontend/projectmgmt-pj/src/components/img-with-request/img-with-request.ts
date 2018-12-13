@@ -32,7 +32,9 @@ export class ImgWithRequestComponent implements OnChanges {
   // this stream will contain the actual url that our img tag will load
   // everytime the src changes, the previous call would be canceled and the
   // new resource would be loaded
-  dataUrl$ = this.src$.switchMap(url => this.loadImage(url));
+  dataUrl$ = this.src$
+    .filter(url => !!url)
+    .switchMap(url => this.loadImage(url));
 
   // we need HttpClient to load the image
   constructor(private httpClient: ApiRedirectProvider) {

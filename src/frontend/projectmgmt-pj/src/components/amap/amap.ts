@@ -179,7 +179,7 @@ export class AMapComponent implements OnInit {
         console.log('set zoom and center when positioning self');
         this.onMapMoved.emit()
       }
-    });
+    }, err => console.log(err));
   }
 
   getItems(ev: any) {
