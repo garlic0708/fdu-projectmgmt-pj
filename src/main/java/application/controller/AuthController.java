@@ -53,7 +53,7 @@ public class AuthController {
 
     @RequestMapping(value = "${jwt.route.authentication.login}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
-            @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
+            @RequestBody JwtAuthenticationRequest authenticationRequest)  {
         try {
             final String token = authService.login(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
@@ -67,7 +67,7 @@ public class AuthController {
 
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(
-            HttpServletRequest request) throws AuthenticationException{
+            HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String refreshedToken = authService.refresh(token);
         if(refreshedToken == null) {
@@ -78,7 +78,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "${jwt.route.authentication.register}", method = RequestMethod.POST)
-    public ResponseEntity<?> register(javax.servlet.http.HttpServletRequest request, @RequestBody User addedUser) throws AuthenticationException {
+    public ResponseEntity<?> register(javax.servlet.http.HttpServletRequest request, @RequestBody User addedUser)  {
         LOGGER.info(addedUser.toString());
         try {
             VerificationToken verificationToken = authService.register(addedUser);
@@ -108,13 +108,30 @@ public class AuthController {
     }
 
     @RequestMapping(value = "${jwt.route.authentication.updatePass}", method = RequestMethod.POST)
-    public ResponseEntity<?> updatePass(@RequestBody UpdatePasswordForm upf) throws UpdatePasswordException {
+    public ResponseEntity<?> updatePass(@RequestBody UpdatePasswordForm upf) {
         try {
-            authService.updatePassword(upf);
+            authService.updatePassword(upf, false);
             return ResponseEntity.ok(new ResultMessage(updateSuccessMessage));
         }
         catch (UpdatePasswordException e) {
             return ResponseEntity.status(423).body(new ResultMessage(e.getMessage()));
         }
+    }
+
+    @RequestMapping(value = "${jwt.route.authentication.resetPass}", method = RequestMethod.POST)
+    public ResponseEntity<?> resetPass(@RequestBody UpdatePasswordForm upf) {
+        try {
+            authService.updatePassword(upf, true);
+            return ResponseEntity.ok(new ResultMessage("Reset password success"));
+        }
+        catch (UpdatePasswordException e) {
+            return ResponseEntity.status(423).body(new ResultMessage(e.getMessage()));
+        }
+    }
+
+    @RequestMapping(value = "${jwt.route.authentication.requestResetPass}", method = RequestMethod.PUT)
+    public ResponseEntity<?> requestResetPass(@RequestParam("email") String email) {
+        authService.reset(email);
+        return ResponseEntity.ok().body(new ResultMessage("Request success"));
     }
 }
