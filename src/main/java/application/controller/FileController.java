@@ -7,15 +7,15 @@ import application.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +34,12 @@ public class FileController {
     private FileService fileService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
+    @Value("${download.resource}")
+    private String downloadResource;
+
+    @Value("${download.filename}")
+    private String downloadFilename;
 
     @Autowired
     public FileController(EventService eventService,
@@ -59,11 +65,10 @@ public class FileController {
     @RequestMapping(value = "${api.image.get.user}/{uid}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserImage(@PathVariable("uid") int uid) {
         String imagePath = userService.getByUid(uid).getImage();
-        byte[] binaryImage;
+        Resource binaryImage;
         try {
             if (imagePath == null || imagePath.equals(""))
-                binaryImage = FileCopyUtils.copyToByteArray(
-                        new ClassPathResource("static/defaultUser.jpg").getInputStream());
+                binaryImage = new ClassPathResource("static/defaultUser.jpg");
             else binaryImage = fileService.getImage(imagePath);
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
@@ -73,7 +78,17 @@ public class FileController {
         return getImgByPath(binaryImage);
     }
 
-    private ResponseEntity<?> getImgByPath(byte[] image) {
+    @GetMapping(value = "${download}")
+    public ResponseEntity<?> downloadFile() {
+        Resource resource = new ClassPathResource(downloadResource);
+        return ResponseEntity
+                .ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s",
+                        downloadFilename))
+                .body(resource);
+    }
+
+    private ResponseEntity<?> getImgByPath(Resource image) {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
     }
 }
