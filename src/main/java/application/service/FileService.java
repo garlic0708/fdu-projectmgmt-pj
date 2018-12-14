@@ -1,5 +1,7 @@
 package application.service;
 
+import org.springframework.core.io.Resource;
+
 import java.io.IOException;
 
 /**
@@ -9,5 +11,5 @@ import java.io.IOException;
 public interface FileService {
     void uploadFile(byte[] file, String filePath, String fileName) throws IOException;
 
-    byte[] getImage(String imagePath) throws Exception;
+    Resource getImage(String imagePath) throws Exception;
 }

@@ -80,6 +80,11 @@ api:
     list: api/notif/notif-list
     read: api/notif/read
 
+download:
+  url: download
+  resource: static/pj.apk
+  filename: pj.apk
+
 # result messages
 resultMessage:
   error:
