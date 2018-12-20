@@ -36,7 +36,6 @@ export class AMapComponent implements OnInit {
   private currentPOI: Poi = null;
   private address: { formattedAddress: string, pois: Poi[] } = null;
   private searchNum: number;
-  private focus_marker = null;
 
   map: any;
 
