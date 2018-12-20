@@ -18,6 +18,7 @@ import { AMapApiProvider } from "../providers/amap-api/amap-api";
 import { NotifProvider } from '../providers/notif/notif';
 import { ConfirmProvider } from '../providers/confirm/confirm';
 import { ApiRedirectProvider } from '../providers/api-redirect/api-redirect';
+import { Geolocation } from "@ionic-native/geolocation";
 
 
 
@@ -57,6 +58,7 @@ import { ApiRedirectProvider } from '../providers/api-redirect/api-redirect';
     CurrentUserProvider,
     NotifProvider,
     ConfirmProvider,
+    Geolocation,
     ApiRedirectProvider,
   ]
 })

@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from "../pages/login/login";
 import { StartupPage } from "../pages/startup/startup";
 import { CurrentUserProvider } from "../providers/current-user/current-user";
+import { Geolocation } from "@ionic-native/geolocation";
 
 
 @Component({
@@ -20,6 +21,7 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     private currentUser: CurrentUserProvider,
+    private geolocation: Geolocation,
   ) {
     this.currentUser.refresh().then(() => this.rootPage = StartupPage,
       () => this.rootPage = LoginPage);
@@ -33,6 +35,13 @@ export class MyApp {
       this.statusBar.overlaysWebView(false);
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
+
+      this.geolocation.getCurrentPosition({
+        enableHighAccuracy: false,
+        timeout: 15000,
+        maximumAge: 0
+      }).then(resp => console.log(resp),
+        err => console.log(err))
     });
   }
 }

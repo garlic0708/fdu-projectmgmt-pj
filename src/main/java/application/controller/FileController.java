@@ -78,7 +78,7 @@ public class FileController {
         return getImgByPath(binaryImage);
     }
 
-    @GetMapping(value = "${download}")
+    @GetMapping(value = "${download.url}")
     public ResponseEntity<?> downloadFile() {
         Resource resource = new ClassPathResource(downloadResource);
         return ResponseEntity
