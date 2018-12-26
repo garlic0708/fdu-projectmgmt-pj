@@ -8,10 +8,12 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
+    static final String[] ALLOWED_ORIGINS = {"file://", "http://localhost:8100"};
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("file://", "http://localhost:8100")
+                .allowedOrigins(ALLOWED_ORIGINS)
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS")
                 .maxAge(3600);

@@ -85,6 +85,11 @@ download:
   resource: static/pj.apk
   filename: pj.apk
 
+webSocket:
+  stomp: /websocket
+  prefix: /queue
+  newNotif: /notif
+
 # result messages
 resultMessage:
   error:
