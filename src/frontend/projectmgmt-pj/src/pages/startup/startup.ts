@@ -45,7 +45,13 @@ export class StartupPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad StartupPage');
     this.notif.loadNotif();
+    this.notif.startListening();
     this.superTabsCtrl.enableTabSwipe('nearby', false,)
+  }
+
+  ionViewWillUnload() {
+    console.log('ionViewWillUnload StartupPage');
+    this.notif.stopListening()
   }
 
 }

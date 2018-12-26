@@ -1,5 +1,6 @@
 package application.service.impl;
 
+import application.controller.event.OnNewNotificationEvent;
 import application.entity.*;
 import application.entity.forms.AddEventForm;
 import application.entity.forms.EventDetail;
@@ -13,6 +14,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,6 +33,8 @@ public class EventServiceImpl implements EventService {
     private TagRepository tagRepository;
     private StartEventRepository startEventRepository;
     private Scheduler scheduler;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Value("${checkTime}")
     private long checkTime;
@@ -55,7 +59,7 @@ public class EventServiceImpl implements EventService {
                             UserRepository userRepository,
                             EventTagRepository eventTagRepository,
                             TagRepository tagRepository,
-                            StartEventRepository startEventRepository) {
+                            StartEventRepository startEventRepository, ApplicationEventPublisher eventPublisher) {
         this.eventRepository = eventRepository;
         this.joinEventRepository = joinEventRepository;
         this.scheduler = scheduler;
@@ -65,6 +69,7 @@ public class EventServiceImpl implements EventService {
         this.eventTagRepository = eventTagRepository;
         this.tagRepository = tagRepository;
         this.startEventRepository = startEventRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -288,7 +293,7 @@ public class EventServiceImpl implements EventService {
         List<Integer> list = getParticipants(eid);
 
         for (Integer ouid : list) {
-            if (ouid != eid)
+            if (ouid != uid)
                 sendMessage(0, ouid, cancelEventUserOthersMessage.replace("%event%", "(" + event.getEventName() + ")"));
         }
         try {
@@ -390,6 +395,7 @@ public class EventServiceImpl implements EventService {
         message.setReceiver(receiver);
         message.setContent(content);
         message.setMessageState("Unread");
-        messageRepository.save(message);
+        message = messageRepository.save(message);
+        eventPublisher.publishEvent(new OnNewNotificationEvent(message));
     }
 }

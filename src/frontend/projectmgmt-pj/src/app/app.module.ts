@@ -18,8 +18,7 @@ import { AMapApiProvider } from "../providers/amap-api/amap-api";
 import { NotifProvider } from '../providers/notif/notif';
 import { ConfirmProvider } from '../providers/confirm/confirm';
 import { ApiRedirectProvider } from '../providers/api-redirect/api-redirect';
-import { Geolocation } from "@ionic-native/geolocation";
-
+import { StompRService } from '@stomp/ng2-stompjs';
 
 
 @NgModule({
@@ -58,8 +57,8 @@ import { Geolocation } from "@ionic-native/geolocation";
     CurrentUserProvider,
     NotifProvider,
     ConfirmProvider,
-    Geolocation,
     ApiRedirectProvider,
+    StompRService,
   ]
 })
 export class AppModule {
