@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ApiRedirectProvider extends HttpClient {
 
+  // public static host = 'http://101.132.75.236:8899';
   // public static host = 'http://garlic-xu.info:8899';
   public static host = 'http://localhost:8090';
 

@@ -4,6 +4,8 @@ import application.config.task.EventJob;
 import application.entity.Event;
 import application.service.QuartzEventService;
 import org.quartz.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.Date;
 public class QuartzEventServiceImpl implements QuartzEventService {
     static final String JOB_GROUP = "event_job_group";
     private static final String TRIGGER_GROUP = "event_trigger_group";
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuartzEventServiceImpl.class);
 
     @Value("${checkTime}")
     private long checkTime;
@@ -54,6 +57,7 @@ public class QuartzEventServiceImpl implements QuartzEventService {
                 Trigger autoCancelTrigger = TriggerBuilder.newTrigger().
                         withIdentity(event.geteId()+" autoCancel", TRIGGER_GROUP).startAt(cancelDate).build();
                 scheduler.scheduleJob(autoCancelJob, autoCancelTrigger);
+                LOGGER.debug("Auto cancel job scheduled at {0}", cancelDate);
             }
 
             JobDetail markAsStartedJob = JobBuilder.newJob(EventJob.class).
@@ -61,12 +65,14 @@ public class QuartzEventServiceImpl implements QuartzEventService {
             Trigger markAsStartedTrigger = TriggerBuilder.newTrigger().
                     withIdentity(event.geteId()+" markAsStarted", TRIGGER_GROUP).startAt(startDate).build();
             scheduler.scheduleJob(markAsStartedJob, markAsStartedTrigger);
+            LOGGER.debug("Mark as start job scheduled at {0}", startDate);
 
             JobDetail markAsEndedJob = JobBuilder.newJob(EventJob.class).
                     withIdentity(event.geteId() + " markAsEnded", JOB_GROUP).usingJobData(markAsEndedJobDataMap).build();
             Trigger markAsEndedTrigger = TriggerBuilder.newTrigger().
                     withIdentity(event.geteId()+" markAsEnded", TRIGGER_GROUP).startAt(endDate).build();
             scheduler.scheduleJob(markAsEndedJob, markAsEndedTrigger);
+            LOGGER.debug("Mark as ended job scheduled at {0}", endDate);
         }
        catch (Exception e) {
             e.printStackTrace();

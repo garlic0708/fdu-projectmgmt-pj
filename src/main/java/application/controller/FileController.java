@@ -74,6 +74,8 @@ public class FileController {
             if (imagePath == null || imagePath.equals(""))
                 binaryImage = new ClassPathResource("static/defaultUser.jpg");
             else binaryImage = fileService.getImage(imagePath);
+        } catch (NoSuchFileException e) {
+            binaryImage = new ClassPathResource("static/defaultUser.jpg");
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
             e.printStackTrace();

@@ -1,10 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { AMapApiProvider } from "../../providers/amap-api/amap-api";
 import { Poi } from "./poi";
 
 declare var AMap;
-const geoLocationIcon = '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png';
-
 export type CardContent = {
   title: string;
   content?: string;
@@ -39,7 +36,7 @@ export class AMapComponent implements OnInit {
 
   map: any;
 
-  constructor(private aMapData: AMapApiProvider,) {
+  constructor() {
     console.log('Hello AMapComponent Component');
     this.searchNum = 0;
   }
@@ -198,7 +195,7 @@ export class AMapComponent implements OnInit {
     console.log(this.map.getAdcode());
     if (this.searchBarValue && this.searchBarValue.trim() != '') {
       this.itemTipLoading = true;
-      this.aMapData.getSearchList(this.searchBarValue, this.map.getAdcode(), this.inputTipPage).subscribe(tips => {
+      this.getSearchList().then(tips => {
         if (tips.length === 0) this.inputTipTriggerFlag = false;
         console.log(tips);
         this.inputTipList = this.inputTipList.concat(tips);
@@ -206,6 +203,16 @@ export class AMapComponent implements OnInit {
         console.log('after concat', this.inputTipList)
       })
     }
+  }
+
+  private getSearchList(): Promise<Poi[]> {
+    const placeSearch = new AMap.PlaceSearch({ city: this.map.getAdcode() });
+    return new Promise<Poi[]>((resolve, reject) => {
+      placeSearch.search(this.searchBarValue, (status, result) => {
+        if (status === 'complete') resolve(result.poiList.pois);
+        else reject(status);
+      })
+    });
   }
 
   loadMoreItems() {

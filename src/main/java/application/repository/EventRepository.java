@@ -80,7 +80,8 @@ public interface EventRepository extends CrudRepository<Event, Long> {
      * @param num
      * @return
      */
-    @Query(value = "SELECT * FROM event  ORDER BY e_id DESC LIMIT ?", nativeQuery = true)
+    @Query(value = "SELECT * FROM event where eventstate = 'notStarted' " +
+            "ORDER BY e_id DESC LIMIT ?", nativeQuery = true)
     List<Event> getEvents(int num);
 
     /**
