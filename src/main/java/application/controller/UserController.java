@@ -61,8 +61,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "${api.user.updateImg}", method = RequestMethod.POST)
-    public ResponseEntity<?> updateImg(HttpServletRequest httpServletRequest,
-                                       @RequestParam("img") MultipartFile img) {
+    public ResponseEntity<?> updateImg(@RequestParam("img") MultipartFile img) {
 
         User user = jwtTokenUtil.getCurrentUser();
 
@@ -72,13 +71,13 @@ public class UserController {
        }
         catch (UpdateUserImgException e) {
             e.printStackTrace();
-            return ResponseEntity.status(429).body(new ResultMessage(e.getMessage()));
+            return ResponseEntity.status(400).body(new ResultMessage(e.getMessage()));
         }
     }
 
 
     @RequestMapping(value = "${api.user.join}/{eid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> joinEvent(HttpServletRequest httpServletRequest,@PathVariable("eid") String eid) {
+    public ResponseEntity<?> joinEvent(@PathVariable("eid") String eid) {
 
         User user = jwtTokenUtil.getCurrentUser();
 
@@ -87,7 +86,7 @@ public class UserController {
             return ResponseEntity.ok().body(new ResultMessage("Join event success"));
         }
         catch (JoinEventException e) {
-            return ResponseEntity.status(425).body(new ResultMessage(e.getMessage()));
+            return ResponseEntity.status(400).body(new ResultMessage(e.getMessage()));
         }
     }
 

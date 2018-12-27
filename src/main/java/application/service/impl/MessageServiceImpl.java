@@ -24,7 +24,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> getMessagesByUid(int uid) {
-        return messageRepository.findByReceiver(uid);
+        return messageRepository.findByReceiverReversed(uid);
     }
 
     public void readMessage(int uid, int mid) throws ReadMessageException {

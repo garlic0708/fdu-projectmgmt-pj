@@ -59,15 +59,14 @@ public class EventController {
     }
 
     @RequestMapping(value = "${api.event.add}", method = RequestMethod.POST)
-    public ResponseEntity<?> addEvent(HttpServletRequest httpServletRequest,
-                                      @RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> addEvent(@RequestParam("file") MultipartFile file,
                                       @RequestParam("addEventForm") String strAddEventForm) {
 
         User user = jwtTokenUtil.getCurrentUser();
 
         String fileContentType = file.getContentType();
         if (fileContentType == null || !fileContentType.startsWith("image/"))
-            return ResponseEntity.status(425).body(new ResultMessage("Img required"));
+            return ResponseEntity.status(400).body(new ResultMessage("Img required"));
 
         //得到文件路径和文件名
         String fileName = file.getOriginalFilename();
@@ -84,20 +83,19 @@ public class EventController {
                 return ResponseEntity.ok(new ResultMessage(event.geteId()+""));
             }
             else {
-                return ResponseEntity.status(424).body(new ResultMessage("Add event failed, no such user"));
+                return ResponseEntity.status(403).body(new ResultMessage("Add event failed, no such user"));
             }
         }
         catch (AddEventException e) {
-            return ResponseEntity.status(424).body(new ResultMessage(e.getMessage()));
+            return ResponseEntity.status(400).body(new ResultMessage(e.getMessage()));
         }
         catch (IOException e) {
-            return ResponseEntity.status(425).body(new ResultMessage("Add event failed"));
+            return ResponseEntity.status(500).body(new ResultMessage("Add event failed"));
         }
     }
 
     @RequestMapping(value = "${api.event.cancel}/{eid}", method = RequestMethod.PUT)
-    public ResponseEntity<?> cancelEvent(HttpServletRequest httpServletRequest,
-                                         @PathVariable("eid") int eid) {
+    public ResponseEntity<?> cancelEvent(@PathVariable("eid") int eid) {
 
         User user = jwtTokenUtil.getCurrentUser();
 
@@ -105,12 +103,12 @@ public class EventController {
             eventService.cancelEvent(user.getuId(), eid);
             return ResponseEntity.ok().body(new ResultMessage("Cancle event success"));
         }catch (CancelEventException e) {
-            return ResponseEntity.status(427).body(new ResultMessage(e.getMessage()));
+            return ResponseEntity.status(400).body(new ResultMessage(e.getMessage()));
         }
     }
 
     @RequestMapping(value = "${api.event.detail}/{eid}", method = RequestMethod.GET)
-    public ResponseEntity<?> getEventDetail(HttpServletRequest httpServletRequest, @PathVariable("eid") int eid) {
+    public ResponseEntity<?> getEventDetail(@PathVariable("eid") int eid) {
 
         User user = jwtTokenUtil.getCurrentUser();
         return ResponseEntity.ok().body(eventService.getEventDetailById(eid, user.getuId()));

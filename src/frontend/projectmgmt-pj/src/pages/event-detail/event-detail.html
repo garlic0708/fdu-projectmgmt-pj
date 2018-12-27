@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>event-detail</ion-title>
+    <ion-title>活动详情</ion-title>
     <ion-buttons end *ngIf="detail | async as _detail">
       <button ion-button icon-only *ngIf="getPopoverOptions(_detail).length" (click)="presentPopover(_detail, $event)">
         <ion-icon name="more"></ion-icon>

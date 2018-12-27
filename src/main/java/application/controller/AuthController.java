@@ -101,7 +101,7 @@ public class AuthController {
             authService.registrationConfirm(token);
             return ResponseEntity.ok(new ResultMessage(registrationConfirmSuccessMessage));
         } catch (VerificationException e) {
-            return ResponseEntity.status(424).body(new ResultMessage(e.getMessage()));
+            return ResponseEntity.status(400).body(new ResultMessage(e.getMessage()));
         }
     }
 

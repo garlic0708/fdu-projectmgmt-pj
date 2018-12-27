@@ -55,7 +55,7 @@ public class MessageController {
             return ResponseEntity.ok().body(new ResultMessage("Read message success"));
         }
         catch (ReadMessageException e) {
-            return ResponseEntity.status(428).body(new ResultMessage(e.getMessage()));
+            return ResponseEntity.status(400).body(new ResultMessage(e.getMessage()));
         }
     }
 }

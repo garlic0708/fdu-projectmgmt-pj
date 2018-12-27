@@ -4,6 +4,7 @@ import application.entity.Message;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
@@ -19,6 +20,12 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
      * @param uid
      * @return
      */
+    default List<Message> findByReceiverReversed(int uid) {
+        List<Message> messages = findByReceiver(uid);
+        Collections.reverse(messages);
+        return messages;
+    }
+
     List<Message> findByReceiver(int uid);
 
     /**

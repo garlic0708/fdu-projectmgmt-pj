@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
             throw new VerificationException("Invalid token");
         else if (verificationToken.getExpiryDate().before(Date.from(Instant.now())))
             throw new VerificationException("Token has expired");
-        else if (userRepository.findByEmail(verificationToken.getEmail()) != null) {
+        else if (userRepository.findByEmail(verificationToken.getEmail()).isPresent()) {
             throw new VerificationException("You have registered");
         } else {
             User user = new User();
