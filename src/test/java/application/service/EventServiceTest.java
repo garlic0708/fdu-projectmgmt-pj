@@ -138,65 +138,14 @@ public class EventServiceTest {
         eventTag = eventTagRepository.save(eventTag);
         eventTags.add(eventTag);
 
-        event = new Event();
-        event.setEventName("event2");
-        event.setImage("path/image2");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event3");
-        event.setImage("path/image3");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event4");
-        event.setImage("path/image4");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event5");
-        event.setImage("path/image5");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event6");
-        event.setImage("path/image6");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event7");
-        event.setImage("path/image7");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event8");
-        event.setImage("path/image8");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event9");
-        event.setImage("path/image9");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event10");
-        event.setImage("path/image10");
-        event = eventRepository.save(event);
-        events.add(event);
-
-        event = new Event();
-        event.setEventName("event11");
-        event.setImage("path/image11");
-        event = eventRepository.save(event);
-        events.add(event);
+        for (int i = 2; i <= 11; i++) {
+            event = new Event();
+            event.setEventName("event" + i);
+            event.setImage("path/image" + i);
+            event.setEventState("notStarted");
+            event = eventRepository.save(event);
+            events.add(event);
+        }
 
     }
 
