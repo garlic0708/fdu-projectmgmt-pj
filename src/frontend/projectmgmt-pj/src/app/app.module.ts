@@ -14,7 +14,6 @@ import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ImagePicker } from "@ionic-native/image-picker";
 import { CurrentUserProvider } from '../providers/current-user/current-user';
 import { LoginPageModule } from "../pages/login/login.module";
-import { AMapApiProvider } from "../providers/amap-api/amap-api";
 import { NotifProvider } from '../providers/notif/notif';
 import { ConfirmProvider } from '../providers/confirm/confirm';
 import { ApiRedirectProvider } from '../providers/api-redirect/api-redirect';
@@ -48,7 +47,6 @@ import { StompRService } from '@stomp/ng2-stompjs';
     //   multi: true,
     // },
     DataProvider,
-    AMapApiProvider,
     ImagePicker,
     StatusBar,
     SplashScreen,

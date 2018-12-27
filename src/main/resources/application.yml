@@ -45,7 +45,7 @@ jwt:
       requestResetPass: auth/requestReset
 
 # check time
-checkTime: 180000
+checkTime: 3600000
 
 # Other api routes
 api:
