@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>new-event</ion-title>
+    <ion-title>新建活动</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -59,10 +59,11 @@
       <ion-checkbox [(ngModel)]="lowerBoundEnabled"></ion-checkbox>
       <ion-label>最低人数限制</ion-label>
     </ion-item-divider>
-    <ion-item class="slide-from-above" [class.collapsed]="!lowerBoundEnabled">
+    <ion-item class="slide-from-above with-p" [class.collapsed]="!lowerBoundEnabled">
       <div item-content class="stepper-container">
         <stepper [(value)]="lowerBound" [enabled]="lowerBoundEnabled"
                  [minValue]="1"></stepper>
+        <p>活动开始前一小时，若人数未满下限则自动取消</p>
       </div>
     </ion-item>
     <ion-item-divider>

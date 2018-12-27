@@ -111,7 +111,7 @@ messages:
       others: "对不起，您参加的这个活动 %event% 已经被发起人取消，给您生活娱乐带来了很大的不便，请您谅解！"
   resetPass:  "请在重置密码界面输入验证码,\n 你的验证码为： %code%"
 
-imagePathTitle: "D:\\test\\img\\"
+imagePathTitle: "event-images"
 
 verifyCodes: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
 verifySize: 6

@@ -71,7 +71,7 @@ export class NotifProvider {
     this.stomp.subscribe(this.subscriptionUrl)
       .subscribe(m => {
         const notif = JSON.parse(m.body);
-        this.notificationList.push({
+        this.notificationList.unshift({
           id: notif.mId,
           content: notif.content,
           type: notif.messageState.toLowerCase(),

@@ -20,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.NoSuchFileException;
 
 /**
  * Creator: DreamBoy
@@ -55,10 +57,12 @@ public class FileController {
         String imagePath = eventService.getById(eid).getImage();
         try {
             return getImgByPath(fileService.getImage(imagePath));
+        } catch (NoSuchFileException e) {
+            return getImgByPath(new ClassPathResource("static/no-image.jpg"));
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(427).body(new ResultMessage("Failed to load image"));
+            return ResponseEntity.status(404).body(new ResultMessage("Failed to load image"));
         }
     }
 
@@ -73,7 +77,7 @@ public class FileController {
         } catch (Exception e) {
             LOGGER.info(e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(427).body(new ResultMessage("Failed to load image"));
+            return ResponseEntity.status(404).body(new ResultMessage("Failed to load image"));
         }
         return getImgByPath(binaryImage);
     }

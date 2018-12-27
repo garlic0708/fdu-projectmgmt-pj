@@ -1,7 +1,6 @@
 package application.config;
 
 import application.component.JwtTokenUtil;
-import application.entity.userSecurity.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -61,6 +60,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor =
                         MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    @SuppressWarnings("ConstantConditions")
                     String token = accessor.getNativeHeader("token").get(0);
                     String username = jwtTokenUtil.getUsernameFromToken(token);
                     UserDetails user = userDetailsService.loadUserByUsername(username);
@@ -68,7 +68,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         accessor.setUser(
                                 new UsernamePasswordAuthenticationToken(user,
                                         null, user.getAuthorities()));
+                        return message;
                     }
+                    return null;
                 }
                 return message;
             }
